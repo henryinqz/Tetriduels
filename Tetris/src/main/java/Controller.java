@@ -8,15 +8,15 @@ public class Controller {
 
     public static void moveLeft(Block blockCurrent) {
         if (blockCurrent.intX - BoardPanel.intMove >= 0) { // Check if furthest left block can make move without passing column 0
-            blockCurrent.intX -= BoardPanel.intBlockSize; // Move left
+            blockCurrent.intX -= BoardPanel.intMove; // Move left
         } else if (blockCurrent.intCurrentCoords[0][0] == 0 && blockCurrent.intCurrentCoords[1][0] == 0 && blockCurrent.intCurrentCoords[2][0] == 0 && blockCurrent.intCurrentCoords[3][0] == 0) { // Check if block coord array is empty in column 0
             if (blockCurrent.intCurrentCoords[0][1] == 0 && blockCurrent.intCurrentCoords[1][1] == 0 && blockCurrent.intCurrentCoords[2][1] == 0 && blockCurrent.intCurrentCoords[3][1] == 0) { // Check if block coord array is empty in column 1
                 if (blockCurrent.intX + BoardPanel.intBlockSize >= 0) { // Check if furthest left block can make move without passing column 0
-                    blockCurrent.intX -= BoardPanel.intBlockSize; // Move left
+                    blockCurrent.intX -= BoardPanel.intMove; // Move left
                 }
             }
             if (blockCurrent.intX >= 0) { // Check if furthest left block can make move without passing column 0
-                blockCurrent.intX -= BoardPanel.intBlockSize; // Move left
+                blockCurrent.intX -= BoardPanel.intMove; // Move left
             }
         }
     }
@@ -26,15 +26,30 @@ public class Controller {
         } else if (blockCurrent.intCurrentCoords[0][3] == 0 && blockCurrent.intCurrentCoords[1][3] == 0 && blockCurrent.intCurrentCoords[2][3] == 0 && blockCurrent.intCurrentCoords[3][3] == 0) { // Check if block coord array is empty in column 3
             if (blockCurrent.intCurrentCoords[0][2] == 0 && blockCurrent.intCurrentCoords[1][2] == 0 && blockCurrent.intCurrentCoords[2][2] == 0 && blockCurrent.intCurrentCoords[3][2] == 0) { // Check if block coord array is empty in column 2
                 if (blockCurrent.intX + (BoardPanel.intBlockSize * 3) <= BoardPanel.intXMax) { // Check if furthest left block can make move without passing column 10
-                    blockCurrent.intX += BoardPanel.intBlockSize; // Move right
+                    blockCurrent.intX += BoardPanel.intMove; // Move right
                 }
             }
             if (blockCurrent.intX + (BoardPanel.intBlockSize * 4) <= BoardPanel.intXMax) { // Check if furthest left block can make move without passing column 10
-                blockCurrent.intX += BoardPanel.intBlockSize; // Move right
+                blockCurrent.intX += BoardPanel.intMove; // Move right
             }
         }
 
     }
+    public static void moveDown(Block blockCurrent) {
+        if (blockCurrent.intY + BoardPanel.intMove + (BoardPanel.intBlockSize * 4) <= BoardPanel.intYMax) { // Check if lowest block can make move w/o exiting board
+            blockCurrent.intY += BoardPanel.intMove; // Move down
+        } else if (blockCurrent.intCurrentCoords[3][0] == 0 && blockCurrent.intCurrentCoords[3][1] == 0 && blockCurrent.intCurrentCoords[3][2] == 0 && blockCurrent.intCurrentCoords[3][3] == 0) { // Check if block coord array is empty in row 3
+            if (blockCurrent.intCurrentCoords[2][0] == 0 && blockCurrent.intCurrentCoords[2][1] == 0 && blockCurrent.intCurrentCoords[2][2] == 0 && blockCurrent.intCurrentCoords[2][3] == 0) { // Check if block coord array is empty in row 2
+                if (blockCurrent.intY + (BoardPanel.intBlockSize * 3) <= BoardPanel.intYMax) { // Check if lowest block can make move w/o exiting board
+                    blockCurrent.intY += BoardPanel.intMove; // Move down
+                }
+            }
+            if (blockCurrent.intY + (BoardPanel.intBlockSize * 4) <= BoardPanel.intYMax) { // Check if lowest block can make move w/o exiting board
+                blockCurrent.intY += BoardPanel.intMove; // Move down
+            }
+        }
+    }
+
     public static void rotate(Block blockCurrent, String strDirection) {
         blockCurrent.rotatePiece(strDirection);
     }

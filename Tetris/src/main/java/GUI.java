@@ -39,11 +39,9 @@ public class GUI implements ActionListener, KeyListener {
 
     // KeyListener
     public void keyTyped(KeyEvent evt) {
-        System.out.println("Test2");
     }
     public void keyPressed(KeyEvent evt) {
         int intKeyCode = evt.getKeyCode();
-        System.out.println("Test");
         switch (intKeyCode) { // Left/right movement
             case KeyEvent.VK_LEFT: // Left arrow
                 Controller.moveLeft(BoardPanel.blockCurrent); // Move block left
@@ -51,7 +49,11 @@ public class GUI implements ActionListener, KeyListener {
             case KeyEvent.VK_RIGHT: // Right arrow
                 Controller.moveRight(BoardPanel.blockCurrent);
                 break;
+            case KeyEvent.VK_DOWN: // Down arrow
+                Controller.moveDown(BoardPanel.blockCurrent);
+                break;
         }
+
         if (blnRotateLeftHeld == false) { // Only activate once (disable holding rotate button)
             if (evt.getKeyCode() == KeyEvent.VK_UP) {
                 Controller.rotate(BoardPanel.blockCurrent, "left");
