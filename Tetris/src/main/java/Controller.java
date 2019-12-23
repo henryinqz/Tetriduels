@@ -9,8 +9,12 @@ public class Controller {
     public static void moveLeft(Block blockCurrent) {
         if (blockCurrent.intX - BoardPanel.intMove >= 0) { // Check if furthest left block can make move without passing column 0
             blockCurrent.intX -= BoardPanel.intBlockSize; // Move left
-        } else if (blockCurrent.intCurrentCoords[0][0] == 0 && blockCurrent.intCurrentCoords[1][0] == 0 &&
-                blockCurrent.intCurrentCoords[2][0] == 0 && blockCurrent.intCurrentCoords[3][0] == 0) { // Check if block coord array is empty in column 0
+        } else if (blockCurrent.intCurrentCoords[0][0] == 0 && blockCurrent.intCurrentCoords[1][0] == 0 && blockCurrent.intCurrentCoords[2][0] == 0 && blockCurrent.intCurrentCoords[3][0] == 0) { // Check if block coord array is empty in column 0
+            if (blockCurrent.intCurrentCoords[0][1] == 0 && blockCurrent.intCurrentCoords[1][1] == 0 && blockCurrent.intCurrentCoords[2][1] == 0 && blockCurrent.intCurrentCoords[3][1] == 0) { // Check if block coord array is empty in column 1
+                if (blockCurrent.intX + BoardPanel.intBlockSize >= 0) { // Check if furthest left block can make move without passing column 0
+                    blockCurrent.intX -= BoardPanel.intBlockSize; // Move left
+                }
+            }
             if (blockCurrent.intX >= 0) { // Check if furthest left block can make move without passing column 0
                 blockCurrent.intX -= BoardPanel.intBlockSize; // Move left
             }
