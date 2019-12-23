@@ -2,8 +2,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
-public class GUI implements ActionListener {
+public class GUI implements ActionListener, KeyListener {
     // PROPERTIES
     JFrame theframe = new JFrame("Tetris");
     JPanel mainPanel = new JPanel();
@@ -32,7 +34,33 @@ public class GUI implements ActionListener {
         }
     }
 
+    // KeyListener
+    public void keyTyped(KeyEvent evt) {
+        System.out.println("Test2");
+    }
+    public void keyPressed(KeyEvent evt) {
+        int intKeyCode = evt.getKeyCode();
+        System.out.println("Test");
+        switch (intKeyCode) {
+            case KeyEvent.VK_LEFT: // Left arrow
+                Controller.moveLeft(BoardPanel.blockCurrent); // Move block left
+                break;
+            case KeyEvent.VK_RIGHT: // Right arrow
+                Controller.moveRight(BoardPanel.blockCurrent);
+                break;
+            case KeyEvent.VK_UP: // Up arrow
+                Controller.rotate(BoardPanel.blockCurrent, "left");
+                break;
+            case KeyEvent.VK_Z: // Z key
+                Controller.rotate(BoardPanel.blockCurrent, "right");
+                break;
+        }
+    }
+
+    public void keyReleased(KeyEvent evt) {
+    }
     // CONSTRUCTOR
+
     public GUI() {
         //mainPanel.setPreferredSize(new Dimension(1280, 720));
         this.boardPanel.setPreferredSize(new Dimension(BoardPanel.intXMax + 400, BoardPanel.intYMax));
@@ -66,6 +94,7 @@ public class GUI implements ActionListener {
         this.theframe.setResizable(false);
         this.theframe.setLocationRelativeTo(null);
         this.theframe.setVisible(true);
+        this.theframe.addKeyListener(this);
 
         this.thetimer.start();
 
