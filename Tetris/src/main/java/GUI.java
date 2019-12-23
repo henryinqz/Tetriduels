@@ -9,7 +9,7 @@ public class GUI implements ActionListener {
     JPanel mainPanel = new JPanel();
     BoardPanel boardPanel = new BoardPanel();
 
-    Timer thetimer = new Timer(1000/60, this); //60FPS
+    Timer thetimer = new Timer(1000 / 60, this); //60FPS
 
     // METHODS
     public void actionPerformed(ActionEvent evt) {
@@ -21,7 +21,8 @@ public class GUI implements ActionListener {
     // CONSTRUCTOR
     public GUI() {
         //mainPanel.setPreferredSize(new Dimension(1280, 720));
-        boardPanel.setPreferredSize(new Dimension(1280, 720));
+        boardPanel.setPreferredSize(new Dimension(BoardPanel.intXMax, BoardPanel.intYMax));
+        //Block JBlock = new Block(Block.JBlock);
 
         theframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         theframe.setContentPane(boardPanel);
@@ -32,10 +33,5 @@ public class GUI implements ActionListener {
 
         thetimer.start();
 
-    }
-
-    // MAIN METHOD
-    public static void main(String[] args) {
-        new GUI();
     }
 }
