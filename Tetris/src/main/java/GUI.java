@@ -19,6 +19,9 @@ public class GUI implements ActionListener, KeyListener {
 
     Timer thetimer = new Timer(1000 / 60, this); //60FPS
 
+    boolean blnRotateLeftHeld = false;
+    boolean blnRotateRightHeld = false;
+
     // METHODS
     public void actionPerformed(ActionEvent evt) {
         if (evt.getSource() == thetimer) {
@@ -41,23 +44,34 @@ public class GUI implements ActionListener, KeyListener {
     public void keyPressed(KeyEvent evt) {
         int intKeyCode = evt.getKeyCode();
         System.out.println("Test");
-        switch (intKeyCode) {
+        switch (intKeyCode) { // Left/right movement
             case KeyEvent.VK_LEFT: // Left arrow
                 Controller.moveLeft(BoardPanel.blockCurrent); // Move block left
                 break;
             case KeyEvent.VK_RIGHT: // Right arrow
                 Controller.moveRight(BoardPanel.blockCurrent);
                 break;
-            case KeyEvent.VK_UP: // Up arrow
+        }
+        if (blnRotateLeftHeld == false) { // Only activate once (disable holding rotate button)
+            if (evt.getKeyCode() == KeyEvent.VK_UP) {
                 Controller.rotate(BoardPanel.blockCurrent, "left");
-                break;
-            case KeyEvent.VK_Z: // Z key
+                blnRotateLeftHeld = true;
+            }
+        }
+        if (blnRotateRightHeld == false) { // Only activate once (disable holding rotate button)
+            if (evt.getKeyCode() == KeyEvent.VK_Z) {
                 Controller.rotate(BoardPanel.blockCurrent, "right");
-                break;
+                blnRotateRightHeld = true;
+            }
         }
     }
 
     public void keyReleased(KeyEvent evt) {
+        if (blnRotateLeftHeld == true && evt.getKeyCode() == KeyEvent.VK_UP) { // Reenable rotate button after release
+            blnRotateLeftHeld = false;
+        } else if (blnRotateRightHeld == true && evt.getKeyCode() == KeyEvent.VK_Z) {
+            blnRotateRightHeld = false;
+        }
     }
     // CONSTRUCTOR
 
@@ -94,6 +108,7 @@ public class GUI implements ActionListener, KeyListener {
         this.theframe.setResizable(false);
         this.theframe.setLocationRelativeTo(null);
         this.theframe.setVisible(true);
+        this.theframe.setFocusable(true);
         this.theframe.addKeyListener(this);
 
         this.thetimer.start();
