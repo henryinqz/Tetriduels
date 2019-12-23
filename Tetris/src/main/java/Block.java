@@ -60,7 +60,10 @@ public class Block {
             colBlock = new Color(160, 0, 240); // Purple
         } else if (intType == OBlock) {
             intCoordsArray = new int[][][] {
-                    {{1,1,0,0},{1,1,0,0},{0,0,0,0},{0,0,0,0}} // All direction
+                    {{0,1,1,0},{0,1,1,0},{0,0,0,0},{0,0,0,0}}, // All directions are same
+                    {{0,1,1,0},{0,1,1,0},{0,0,0,0},{0,0,0,0}},
+                    {{0,1,1,0},{0,1,1,0},{0,0,0,0},{0,0,0,0}},
+                    {{0,1,1,0},{0,1,1,0},{0,0,0,0},{0,0,0,0}}
             };
             colBlock = new Color(240, 240, 1); // Yellow
         }

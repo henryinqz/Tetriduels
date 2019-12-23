@@ -7,9 +7,9 @@ public class BoardPanel extends JPanel {
     public static final int intBlockSize = 25; // Block size (25*25px)
     public static int intXMax = intBlockSize * 10; // 10 blocks wide
     public static int intYMax = intBlockSize * 20; // 20 blocks tall
-    public static int[][] intGrid = new int[intXMax/ intBlockSize][intYMax/ intBlockSize]; // 10x20 array grid of board
+    public static int[][] intGrid = new int[intXMax/intBlockSize][intYMax/intBlockSize]; // 10x20 array grid of board
 
-    public Block IBlock;
+    public Block blockCurrent;
 
     // METHODS
     public void paintComponent(Graphics g) {
@@ -17,14 +17,15 @@ public class BoardPanel extends JPanel {
         super.paintComponent(g2); // Clear previous drawings (Windows only); super JPanel (original) paintComponent method
 
         //Block
-        g2.setColor(IBlock.colBlock);
+        g2.setColor(blockCurrent.colBlock);
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
-                if (IBlock.intCurrentCoords[i][j] != 0){
+                if (blockCurrent.intCurrentCoords[i][j] != 0){
+                    intGrid[i][j] = 1; // Array to determine where each block piece is
                     g2.fillRect(j * intBlockSize, i * intBlockSize, intBlockSize, intBlockSize);
                     g2.setColor(Color.WHITE); // Outline
                     g2.drawRect(j * intBlockSize, i * intBlockSize, intBlockSize, intBlockSize);
-                    g2.setColor(IBlock.colBlock);
+                    g2.setColor(blockCurrent.colBlock);
                 }
             }
         }
@@ -42,6 +43,7 @@ public class BoardPanel extends JPanel {
     // CONSTRUCTOR
     public BoardPanel() {
         super();
-        IBlock = new Block(Block.IBlock);
+        //IBlock = new Block(Block.IBlock);
+        blockCurrent = Controller.generateBlock();
     }
 }
