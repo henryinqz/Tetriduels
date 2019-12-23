@@ -9,8 +9,11 @@ public class GUI implements ActionListener {
     JPanel mainPanel = new JPanel();
     BoardPanel boardPanel = new BoardPanel();
 
+    // Debug buttons
     JButton butRotateLeft = new JButton("Rotate Left");
     JButton butRotateRight = new JButton("Rotate Right");
+    JButton butMoveLeft = new JButton("Move Left");
+    JButton butMoveRight = new JButton("Move Right");
 
     Timer thetimer = new Timer(1000 / 60, this); //60FPS
 
@@ -22,6 +25,10 @@ public class GUI implements ActionListener {
             Controller.rotate(BoardPanel.blockCurrent, "left");
         } else if (evt.getSource() == butRotateRight) {
             Controller.rotate(BoardPanel.blockCurrent, "right");
+        } else if (evt.getSource() == butMoveLeft) {
+            Controller.moveLeft(BoardPanel.blockCurrent);
+        } else if (evt.getSource() == butMoveRight) {
+            Controller.moveRight(BoardPanel.blockCurrent);
         }
     }
 
@@ -32,7 +39,7 @@ public class GUI implements ActionListener {
         this.boardPanel.setLayout(null);
         //Block JBlock = new Block(Block.JBlock);
 
-        //Debug buttons (
+        //Debug buttons
         this.butRotateLeft.addActionListener(this);
         this.butRotateLeft.setSize(110,30);
         this.butRotateLeft.setLocation(BoardPanel.intXMax + 50, 50);
@@ -42,6 +49,16 @@ public class GUI implements ActionListener {
         this.butRotateRight.setSize(110,30);
         this.butRotateRight.setLocation(BoardPanel.intXMax + 50, 90);
         this.boardPanel.add(butRotateRight);
+
+        this.butMoveLeft.addActionListener(this);
+        this.butMoveLeft.setSize(110,30);
+        this.butMoveLeft.setLocation(BoardPanel.intXMax + 170, 50);
+        this.boardPanel.add(butMoveLeft);
+
+        this.butMoveRight.addActionListener(this);
+        this.butMoveRight.setSize(110,30);
+        this.butMoveRight.setLocation(BoardPanel.intXMax + 170, 90);
+        this.boardPanel.add(butMoveRight);
 
         this.theframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.theframe.setContentPane(boardPanel);
