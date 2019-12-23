@@ -9,7 +9,7 @@ public class BoardPanel extends JPanel {
     public static int intYMax = intBlockSize * 20; // 20 blocks tall
     public static int[][] intGrid = new int[intXMax/intBlockSize][intYMax/intBlockSize]; // 10x20 array grid of board
 
-    public Block blockCurrent;
+    public static Block blockCurrent;
 
     // METHODS
     public void paintComponent(Graphics g) {
@@ -22,10 +22,12 @@ public class BoardPanel extends JPanel {
             for (int j = 0; j < 4; j++) {
                 if (blockCurrent.intCurrentCoords[i][j] != 0){
                     intGrid[i][j] = 1; // Array to determine where each block piece is
-                    g2.fillRect(j * intBlockSize, i * intBlockSize, intBlockSize, intBlockSize);
+                    g2.fillRect(blockCurrent.intX + j * intBlockSize, blockCurrent.intY + i * intBlockSize, intBlockSize, intBlockSize);
                     g2.setColor(Color.WHITE); // Outline
-                    g2.drawRect(j * intBlockSize, i * intBlockSize, intBlockSize, intBlockSize);
+                    g2.drawRect(blockCurrent.intX + j * intBlockSize, blockCurrent.intY + i * intBlockSize, intBlockSize, intBlockSize);
                     g2.setColor(blockCurrent.colBlock);
+                } else {
+                    intGrid[i][j] = 0;
                 }
             }
         }

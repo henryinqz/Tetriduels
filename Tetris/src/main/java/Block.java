@@ -8,6 +8,10 @@ public class Block {
     public int intRotation = 0; // 0=up, 1=left, 2=down, 3=right
     public Color colBlock;
 
+    // Spawning coordinates
+    public int intX = BoardPanel.intBlockSize * 3; // Spawn 4 blocks over on x axis
+    public int intY = BoardPanel.intBlockSize * 0; // Spawn at top of board
+
     // METHODS
     private void makePiece(int intType) {
         if (intType == IBlock) {
@@ -20,25 +24,25 @@ public class Block {
             colBlock = new Color(1, 240, 240); // Cyan
         } else if (intType == LBlock) {
             intCoordsArray = new int[][][] {
-                    {{0,1,0,0},{0,1,0,0},{0,1,1,0},{0,0,0,0}}, // Up
-                    {{0,0,1,0},{1,1,1,0},{0,0,0,0},{0,0,0,0}}, //Left
-                    {{1,1,0,0},{0,1,0,0},{0,1,0,0},{0,0,0,0}}, // Down
-                    {{0,0,0,0},{1,1,1,0},{1,0,0,0},{0,0,0,0}}  //Right
+                    {{0,0,1,0},{1,1,1,0},{0,0,0,0},{0,0,0,0}}, // Up
+                    {{1,1,0,0},{0,1,0,0},{0,1,0,0},{0,0,0,0}}, // Left
+                    {{0,0,0,0},{1,1,1,0},{1,0,0,0},{0,0,0,0}},  // Down
+                    {{0,1,0,0},{0,1,0,0},{0,1,1,0},{0,0,0,0}} // Right
             };
             colBlock = new Color(240, 160, 0); // Orange
         } else if (intType == JBlock) {
             intCoordsArray = new int[][][] {
-                    {{0,1,0,0},{0,1,0,0},{1,1,0,0},{0,0,0,0}}, // Up
-                    {{0,0,0,0},{1,1,1,0},{0,0,1,0},{0,0,0,0}}, //Left
-                    {{0,1,1,0},{0,1,0,0},{0,1,0,0},{0,0,0,0}}, // Down
-                    {{0,0,0,0},{1,0,0,0},{1,1,1,0},{0,0,0,0}}  //Right
+                    {{1,0,0,0},{1,1,1,0},{0,0,0,0},{0,0,0,0}},  // Up
+                    {{0,1,0,0},{0,1,0,0},{1,1,0,0},{0,0,0,0}}, // Left
+                    {{0,0,0,0},{1,1,1,0},{0,0,1,0},{0,0,0,0}}, // Down
+                    {{0,1,1,0},{0,1,0,0},{0,1,0,0},{0,0,0,0}} // Right
             };
             colBlock = new Color(0, 1, 240); // Blue
         } else if (intType == SBlock) {
             intCoordsArray = new int[][][] {
-                    {{0,0,0,0},{0,1,1,0},{1,1,0,0},{0,0,0,0}}, // Up
+                    {{0,1,1,0},{1,1,0,0},{0,0,0,0},{0,0,0,0}}, // Up
                     {{1,0,0,0},{1,1,0,0},{0,1,0,0},{0,0,0,0}},  // Left
-                    {{0,1,1,0},{1,1,0,0},{0,0,0,0},{0,0,0,0}}, // Down
+                    {{0,0,0,0},{0,1,1,0},{1,1,0,0},{0,0,0,0}}, // Down
                     {{0,1,0,0},{0,1,1,0},{0,0,1,0},{0,0,0,0}}  // Right
             };
             colBlock = new Color(0, 240, 0); // Green
@@ -69,7 +73,7 @@ public class Block {
         }
         intCurrentCoords = intCoordsArray[intRotation]; // Set 2D array of current coordinates. Default value when making piece is up (intRotation=0)
     }
-    public void rotate(String strDirection) {
+    public void rotatePiece(String strDirection) {
         if (strDirection.equalsIgnoreCase("left")) { // left rotation
             if (intRotation != 3) {
                 intRotation++;

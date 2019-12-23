@@ -19,9 +19,9 @@ public class GUI implements ActionListener {
         if (evt.getSource() == thetimer) {
             this.boardPanel.repaint();
         } else if (evt.getSource() == butRotateLeft) {
-
+            Controller.rotate(BoardPanel.blockCurrent, "left");
         } else if (evt.getSource() == butRotateRight) {
-
+            Controller.rotate(BoardPanel.blockCurrent, "right");
         }
     }
 
@@ -32,6 +32,7 @@ public class GUI implements ActionListener {
         this.boardPanel.setLayout(null);
         //Block JBlock = new Block(Block.JBlock);
 
+        //Debug buttons (
         this.butRotateLeft.addActionListener(this);
         this.butRotateLeft.setSize(110,30);
         this.butRotateLeft.setLocation(BoardPanel.intXMax + 50, 50);
@@ -39,7 +40,7 @@ public class GUI implements ActionListener {
 
         this.butRotateRight.addActionListener(this);
         this.butRotateRight.setSize(110,30);
-        this.butRotateRight.setLocation(BoardPanel.intXMax + 50, 120);
+        this.butRotateRight.setLocation(BoardPanel.intXMax + 50, 90);
         this.boardPanel.add(butRotateRight);
 
         this.theframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

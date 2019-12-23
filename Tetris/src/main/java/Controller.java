@@ -1,9 +1,11 @@
 public class Controller {
-    public void moveLeft() {
-        
+    public void moveLeft(Block blockCurrent) {
     }
     public void moveRight() {
 
+    }
+    public static void rotate(Block blockCurrent, String strDirection) {
+        blockCurrent.rotatePiece(strDirection);
     }
 
     public static Block generateBlock() { // Generate a new Tetromino (
