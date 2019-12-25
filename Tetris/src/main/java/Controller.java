@@ -79,16 +79,30 @@ public class Controller {
            } else if (blockCurrent.intType == Block.JBlock || blockCurrent.intType == Block.LBlock || blockCurrent.intType == Block.SBlock || blockCurrent.intType == Block.ZBlock || blockCurrent.intType == Block.TBlock) { // J,L,S,Z,T Blocks
                moveLeft(blockCurrent); // Move block left
            }
-        } else if (blockCurrent.intX == (BoardPanel.intBlockSize * 7)) { // IBlock wallkick check for for right wall
+        } else if (blockCurrent.intX == (BoardPanel.intBlockSize * 7)) { // IBlock wallkick check for right wall
             if (blockCurrent.intRotation == 3) { // Right rotation (IBlock)
                moveLeft(blockCurrent); // Move block left
            }
         }
         // Wallkick: Bottom wall
         if (blockCurrent.intY == (BoardPanel.intBlockSize*18)) {
-            System.out.println("got it");
+            if (blockCurrent.intType == Block.IBlock) { // IBlock
+                System.out.println("18");
+                if (blockCurrent.intRotation == 0) { // Up rotation position (IBlock)
+                    moveUp(blockCurrent); // Move block up twice
+                    moveUp(blockCurrent);
+                }
+            } else if (blockCurrent.intType == Block.JBlock || blockCurrent.intType == Block.LBlock || blockCurrent.intType == Block.SBlock || blockCurrent.intType == Block.ZBlock || blockCurrent.intType == Block.TBlock) { // J,L,S,Z,T Blocks
+                moveUp(blockCurrent); // Move block right
+            }
+        } else if (blockCurrent.intY == (BoardPanel.intBlockSize*17)) { // IBlock wallkick check for bottom wall
+            System.out.println("17");
+            if (blockCurrent.intType == Block.IBlock) { // IBlock
+                if (blockCurrent.intRotation == 2) { // Down rotation position (IBlock)
+                    moveUp(blockCurrent); // Move block up
+                }
+            }
         }
-
        blockCurrent.rotatePiece(strDirection); // Rotate piece
     }
 
