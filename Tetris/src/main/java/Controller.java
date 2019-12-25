@@ -42,9 +42,23 @@ public class Controller {
             }
         }
     }
+    public static void moveUp(Block blockCurrent) { // Should only be used for bottom floor wallkick
+        if (blockCurrent.intY - BoardPanel.intMove >= 0) { // Check if highest block can make move w/o exiting board
+            blockCurrent.intY -= BoardPanel.intMove; // Move up
+        } else if (blockCurrent.intCurrentCoords[0][0] == 0 && blockCurrent.intCurrentCoords[0][1] == 0 && blockCurrent.intCurrentCoords[0][2] == 0 && blockCurrent.intCurrentCoords[0][3] == 0) { // Check if block coord array is empty in row 0
+            if (blockCurrent.intCurrentCoords[1][0] == 0 && blockCurrent.intCurrentCoords[1][1] == 0 && blockCurrent.intCurrentCoords[1][2] == 0 && blockCurrent.intCurrentCoords[1][3] == 0) { // Check if block coord array is empty in row 1
+                if (blockCurrent.intY - (BoardPanel.intBlockSize * 3) <= 0) { // Check if lowest block can make move w/o exiting board
+                    blockCurrent.intY -= BoardPanel.intMove; // Move up
+                }
+            }
+            if (blockCurrent.intY >= 0) { // Check if highest block can make move w/o exiting board
+                blockCurrent.intY -= BoardPanel.intMove; // Move up
+            }
+        }
+    }
 
     public static void rotate(Block blockCurrent, String strDirection) {
-       // Wallkick (prevents rotation from sending block out of screen)
+       // Wallkick: Side walls (prevents rotation from sending block out of screen)
         if (blockCurrent.intX < (BoardPanel.intBlockSize * 0)) { // Wallkick checks for left wall
            if (blockCurrent.intType == Block.IBlock) { // IBlock
                if (blockCurrent.intRotation == 1) { // Left rotation position (IBlock)
@@ -65,11 +79,16 @@ public class Controller {
            } else if (blockCurrent.intType == Block.JBlock || blockCurrent.intType == Block.LBlock || blockCurrent.intType == Block.SBlock || blockCurrent.intType == Block.ZBlock || blockCurrent.intType == Block.TBlock) { // J,L,S,Z,T Blocks
                moveLeft(blockCurrent); // Move block left
            }
-       } else if (blockCurrent.intX == (BoardPanel.intBlockSize * 7)) { // IBlock wallkick check for for right wall
-           if (blockCurrent.intRotation == 3) { // Right rotation (IBlock)
+        } else if (blockCurrent.intX == (BoardPanel.intBlockSize * 7)) { // IBlock wallkick check for for right wall
+            if (blockCurrent.intRotation == 3) { // Right rotation (IBlock)
                moveLeft(blockCurrent); // Move block left
            }
-       }
+        }
+        // Wallkick: Bottom wall
+        if (blockCurrent.intY == (BoardPanel.intBlockSize*18)) {
+            System.out.println("got it");
+        }
+
        blockCurrent.rotatePiece(strDirection); // Rotate piece
     }
 

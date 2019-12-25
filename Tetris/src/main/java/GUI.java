@@ -16,6 +16,8 @@ public class GUI implements ActionListener, KeyListener {
     JButton butRotateRight = new JButton("Rotate Right");
     JButton butMoveLeft = new JButton("Move Left");
     JButton butMoveRight = new JButton("Move Right");
+    JButton butMoveDown = new JButton("Move Down");
+    JButton butMoveUp = new JButton("Move Up");
 
     Timer thetimer = new Timer(1000 / 60, this); //60FPS
 
@@ -34,6 +36,10 @@ public class GUI implements ActionListener, KeyListener {
             Controller.moveLeft(BoardPanel.blockCurrent);
         } else if (evt.getSource() == butMoveRight) {
             Controller.moveRight(BoardPanel.blockCurrent);
+        } else if (evt.getSource() == butMoveDown) {
+            Controller.moveDown(BoardPanel.blockCurrent);
+        } else if (evt.getSource() == butMoveUp) {
+            Controller.moveUp(BoardPanel.blockCurrent);
         }
     }
 
@@ -103,6 +109,16 @@ public class GUI implements ActionListener, KeyListener {
         this.butMoveRight.setSize(110,30);
         this.butMoveRight.setLocation(BoardPanel.intXMax + 170, 90);
         this.boardPanel.add(butMoveRight);
+
+        this.butMoveDown.addActionListener(this);
+        this.butMoveDown.setSize(110,30);
+        this.butMoveDown.setLocation(BoardPanel.intXMax + 170, 130);
+        this.boardPanel.add(butMoveDown);
+
+        this.butMoveUp.addActionListener(this);
+        this.butMoveUp.setSize(110,30);
+        this.butMoveUp.setLocation(BoardPanel.intXMax + 170, 170);
+        this.boardPanel.add(butMoveUp);
 
         this.theframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.theframe.setContentPane(boardPanel);
