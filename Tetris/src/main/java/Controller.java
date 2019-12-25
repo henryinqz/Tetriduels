@@ -1,11 +1,4 @@
 public class Controller {
-    /*
-
-
-    Need to add wallkick checks for rotation methods
-
-     */
-
     public static void moveLeft(Block blockCurrent) {
         if (blockCurrent.intX - BoardPanel.intMove >= 0) { // Check if furthest left block can make move without passing column 0
             blockCurrent.intX -= BoardPanel.intMove; // Move left
@@ -51,7 +44,33 @@ public class Controller {
     }
 
     public static void rotate(Block blockCurrent, String strDirection) {
-        blockCurrent.rotatePiece(strDirection);
+       // Wallkick (prevents rotation from sending block out of screen)
+        if (blockCurrent.intX < (BoardPanel.intBlockSize * 0)) { // Wallkick checks for left wall
+           if (blockCurrent.intType == Block.IBlock) { // IBlock
+               if (blockCurrent.intRotation == 1) { // Left rotation position (IBlock)
+                   moveRight(blockCurrent); // Move block right
+               } else if (blockCurrent.intRotation == 3) { // Right rotation position (IBlock)
+                   moveRight(blockCurrent); // Move block right twice
+                   moveRight(blockCurrent);
+               }
+           } else if (blockCurrent.intType == Block.JBlock || blockCurrent.intType == Block.LBlock || blockCurrent.intType == Block.SBlock || blockCurrent.intType == Block.ZBlock || blockCurrent.intType == Block.TBlock) { // J,L,S,Z,T Blocks
+               moveRight(blockCurrent); // Move block right
+           }
+        } else if (blockCurrent.intX == (BoardPanel.intBlockSize * 8)) { // Wallkick checks for right wall
+           if (blockCurrent.intType == Block.IBlock) { // IBlock
+               if (blockCurrent.intRotation == 1) { // Left rotation (IBlock)
+                       moveLeft(blockCurrent); // Move block left twice
+                       moveLeft(blockCurrent);
+               }
+           } else if (blockCurrent.intType == Block.JBlock || blockCurrent.intType == Block.LBlock || blockCurrent.intType == Block.SBlock || blockCurrent.intType == Block.ZBlock || blockCurrent.intType == Block.TBlock) { // J,L,S,Z,T Blocks
+               moveLeft(blockCurrent); // Move block left
+           }
+       } else if (blockCurrent.intX == (BoardPanel.intBlockSize * 7)) { // IBlock wallkick check for for right wall
+           if (blockCurrent.intRotation == 3) { // Right rotation (IBlock)
+               moveLeft(blockCurrent); // Move block left
+           }
+       }
+       blockCurrent.rotatePiece(strDirection); // Rotate piece
     }
 
     public static Block generateBlock() { // Generate a new Tetromino (
@@ -60,6 +79,7 @@ public class Controller {
         // Generate random integer from 0-7 to determine which block to generate
         // IBlock = 0, LBlock = 1, JBlock = 2, SBlock = 3, ZBlock = 4, TBlock = 5, OBlock = 6
         int intRandom = (int)(Math.random()*7);
+        //intRandom = Block.IBlock; // debug
 
         if (intRandom == 0) { // Create an IBlock
             blockCurrent = new Block(Block.IBlock);

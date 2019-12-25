@@ -3,6 +3,7 @@ import java.awt.*;
 public class Block {
     // PROPERTIES
     public static final int IBlock = 0, LBlock = 1, JBlock = 2, SBlock = 3, ZBlock = 4, TBlock = 5, OBlock = 6;
+    public int intType;
     private int[][][] intCoordsArray = new int[4][4][4];
     public int[][] intCurrentCoords = new int[4][4];
     public int intRotation = 0; // 0=up, 1=left, 2=down, 3=right
@@ -95,6 +96,7 @@ public class Block {
 
     //CONSTRUCTOR
     public Block(int intBlockType) {
-        makePiece(intBlockType);
+        this.intType = intBlockType;
+        makePiece(this.intType);
     }
 }
