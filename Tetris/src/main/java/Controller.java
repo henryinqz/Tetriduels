@@ -47,7 +47,7 @@ public class Controller {
             blockCurrent.intY -= BoardPanel.intMove; // Move up
         } else if (blockCurrent.intCurrentCoords[0][0] == 0 && blockCurrent.intCurrentCoords[0][1] == 0 && blockCurrent.intCurrentCoords[0][2] == 0 && blockCurrent.intCurrentCoords[0][3] == 0) { // Check if block coord array is empty in row 0
             if (blockCurrent.intCurrentCoords[1][0] == 0 && blockCurrent.intCurrentCoords[1][1] == 0 && blockCurrent.intCurrentCoords[1][2] == 0 && blockCurrent.intCurrentCoords[1][3] == 0) { // Check if block coord array is empty in row 1
-                if (blockCurrent.intY - (BoardPanel.intBlockSize * 3) <= 0) { // Check if lowest block can make move w/o exiting board
+                if (blockCurrent.intY + BoardPanel.intBlockSize >= 0) { // Check if lowest block can make move w/o exiting board
                     blockCurrent.intY -= BoardPanel.intMove; // Move up
                 }
             }
@@ -103,7 +103,13 @@ public class Controller {
                 }
             }
         }
-       blockCurrent.rotatePiece(strDirection); // Rotate piece
+        // Wallkick: Top wall (rare)
+        if (blockCurrent.intY < 0) { // Block is above 0
+            //System.out.println("Wallkicked off top wall");
+            //moveDown(blockCurrent); // Move block down
+            blockCurrent.intY = 0; // Reset block to row 0 of board (moveDown would've required more checks for IBlock)
+        }
+        blockCurrent.rotatePiece(strDirection); // Rotate piece
     }
 
     public static Block generateBlock() { // Generate a new Tetromino (
