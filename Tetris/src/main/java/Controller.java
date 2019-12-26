@@ -87,7 +87,6 @@ public class Controller {
         // Wallkick: Bottom wall
         if (blockCurrent.intY == (BoardPanel.intBlockSize*18)) {
             if (blockCurrent.intType == Block.IBlock) { // IBlock
-                System.out.println("18");
                 if (blockCurrent.intRotation == 0) { // Up rotation position (IBlock)
                     moveUp(blockCurrent); // Move block up twice
                     moveUp(blockCurrent);
@@ -96,7 +95,6 @@ public class Controller {
                 moveUp(blockCurrent); // Move block right
             }
         } else if (blockCurrent.intY == (BoardPanel.intBlockSize*17)) { // IBlock wallkick check for bottom wall
-            System.out.println("17");
             if (blockCurrent.intType == Block.IBlock) { // IBlock
                 if (blockCurrent.intRotation == 2) { // Down rotation position (IBlock)
                     moveUp(blockCurrent); // Move block up

@@ -120,14 +120,23 @@ public class GUI implements ActionListener, KeyListener {
         this.butMoveUp.setLocation(BoardPanel.intXMax + 170, 170);
         this.boardPanel.add(butMoveUp);
 
+        this.butMoveUp.setFocusable(false);
+        this.butMoveDown.setFocusable(false);
+        this.butMoveLeft.setFocusable(false);
+        this.butMoveRight.setFocusable(false);
+        this.butRotateLeft.setFocusable(false);
+        this.butRotateRight.setFocusable(false);
+
+
+        this.boardPanel.setFocusable(true);
+        this.boardPanel.addKeyListener(this);
+
         this.theframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.theframe.setContentPane(boardPanel);
         this.theframe.pack();
         this.theframe.setResizable(false);
         this.theframe.setLocationRelativeTo(null);
         this.theframe.setVisible(true);
-        this.theframe.setFocusable(true);
-        this.theframe.addKeyListener(this);
 
         this.thetimer.start();
 
