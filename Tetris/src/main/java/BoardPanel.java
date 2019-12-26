@@ -18,15 +18,10 @@ public class BoardPanel extends JPanel {
 
         drawCurrentBlock(g2); // Draw current block on board
 
-        if (blockCurrent.intY == intYMax - (intBlockSize * 2)) { // Block hits bottom
+        //if (blockCurrent.intY == intYMax - (intBlockSize * 2)) { // Block hits bottom
+        if (Controller.checkCollision(blockCurrent, "down") == true) { // Block hits bottom
             storeOldBlocks(blockCurrent);
-            /*for (int i=0;i<20;i++) { // Debug print old blocks array
-                for (int j=0;j<10;j++) {
-                    System.out.print(intGrid[i][j] + " ");
-                }
-                System.out.println("");
-            }
-            System.out.println("---");*/
+            removeFullLines(intGrid);
             blockCurrent = Controller.generateBlock();
         }
 
@@ -39,9 +34,11 @@ public class BoardPanel extends JPanel {
             for (int j = 0; j < 4; j++) {
                 if (blockCurrent.intCurrentCoords[i][j] != 0){
                     g2.fillRect(blockCurrent.intX + j * intBlockSize, blockCurrent.intY + i * intBlockSize, intBlockSize, intBlockSize);
-                    g2.setColor(Color.WHITE); // Outline
+
+                    // Draw block outline
+                    /*g2.setColor(Color.WHITE);
                     g2.drawRect(blockCurrent.intX + j * intBlockSize, blockCurrent.intY + i * intBlockSize, intBlockSize, intBlockSize);
-                    g2.setColor(blockCurrent.colBlock);
+                    g2.setColor(blockCurrent.colBlock);*/
                 }
             }
         }
@@ -50,33 +47,31 @@ public class BoardPanel extends JPanel {
     private void storeOldBlocks(Block blockCurrent) {
         for (int a = 0; a < 4; a++) {
             for (int b = 0; b < 4; b++) {
-                if (blockCurrent.intCurrentCoords[a][b] != 0) {
-                    switch (blockCurrent.intType) {
+                if (blockCurrent.intCurrentCoords[a][b] != 0) { // If block coordsArray is not empty
+                    switch (blockCurrent.intType) { // Fill intGrid array w/ corresponding integer type values
                         case (Block.IBlock):
-                            intGrid[(blockCurrent.intY/intBlockSize) + a][(blockCurrent.intX/intBlockSize) + b] = -1;
+                            intGrid[(blockCurrent.intY / intBlockSize) + a][(blockCurrent.intX / intBlockSize) + b] = 1;
                             break;
                         case (Block.LBlock):
-                            intGrid[(blockCurrent.intY/intBlockSize) + a][(blockCurrent.intX/intBlockSize) + b] = 1;
+                            intGrid[(blockCurrent.intY / intBlockSize) + a][(blockCurrent.intX / intBlockSize) + b] = 2;
                             break;
                         case (Block.JBlock):
-                            intGrid[(blockCurrent.intY/intBlockSize) + a][(blockCurrent.intX/intBlockSize) + b] = 2;
+                            intGrid[(blockCurrent.intY / intBlockSize) + a][(blockCurrent.intX / intBlockSize) + b] = 3;
                             break;
                         case (Block.SBlock):
-                            intGrid[(blockCurrent.intY/intBlockSize) + a][(blockCurrent.intX/intBlockSize) + b] = 3;
+                            intGrid[(blockCurrent.intY / intBlockSize) + a][(blockCurrent.intX / intBlockSize) + b] = 4;
                             break;
                         case (Block.ZBlock):
-                            intGrid[(blockCurrent.intY/intBlockSize) + a][(blockCurrent.intX/intBlockSize) + b] = 4;
+                            intGrid[(blockCurrent.intY / intBlockSize) + a][(blockCurrent.intX / intBlockSize) + b] = 5;
                             break;
                         case (Block.TBlock):
-                            intGrid[(blockCurrent.intY/intBlockSize) + a][(blockCurrent.intX/intBlockSize) + b] = 5;
+                            intGrid[(blockCurrent.intY / intBlockSize) + a][(blockCurrent.intX / intBlockSize) + b] = 6;
                             break;
                         case (Block.OBlock):
-                            intGrid[(blockCurrent.intY/intBlockSize) + a][(blockCurrent.intX/intBlockSize) + b] = 6;
+                            intGrid[(blockCurrent.intY / intBlockSize) + a][(blockCurrent.intX / intBlockSize) + b] = 7;
                             break;
                     }
-                } else {
-                    intGrid[(blockCurrent.intY/intBlockSize) + a][(blockCurrent.intX/intBlockSize) + b] = 0;
-                }
+                } // If nothing in block coordsArray, intGrid[(blockCurrent.intY / intBlockSize) + a][(blockCurrent.intX / intBlockSize) + b] remains at 0
             }
         }
     }
@@ -85,51 +80,58 @@ public class BoardPanel extends JPanel {
         for (int c = 0; c < (intYMax/intBlockSize); c++) {
             for (int d = 0; d < (intXMax / intBlockSize); d++) {
                 if (intGrid[c][d] != 0) {
-                    //System.out.println(intGrid[c][d]);
-                    switch (intGrid[c][d]) {
-                        case -1:
-                            g2.setColor(new Color(1, 240, 240)); // Cyan)
+                    switch (intGrid[c][d]) { // Set block colours of corresponding block/values in intGrid
+                        case Block.IBlock:
+                            g2.setColor(new Color(1, 240, 240)); // Cyan
                             break;
-                        case 1:
+                        case Block.LBlock:
                             g2.setColor(new Color(240, 160, 0)); // Orange
                             break;
-                        case 2:
+                        case Block.JBlock:
                             g2.setColor(new Color(0, 1, 240)); // Blue
                             break;
-                        case 3:
+                        case Block.SBlock:
                             g2.setColor(new Color(0, 240, 0)); // Green
                             break;
-                        case 4:
+                        case Block.ZBlock:
                             g2.setColor(new Color(240, 0, 0)); // Red
                             break;
-                        case 5:
+                        case Block.TBlock:
                             g2.setColor(new Color(160, 0, 240)); // Purple
                             break;
-                        case 6:
+                        case Block.OBlock:
                             g2.setColor(new Color(240, 240, 1)); // Yellow
                             break;
                     }
-                    g2.fillRect(d * intBlockSize, c * intBlockSize, intBlockSize, intBlockSize);
+                    g2.fillRect(d * intBlockSize, c * intBlockSize, intBlockSize, intBlockSize); // Draw oldBlocks
+                }
+            }
+        }
+    }
+
+    private void removeFullLines(int[][] intGrid) {
+        for (int y = 0; y < (intYMax/intBlockSize); y++) {
+            if (intGrid[y][0] != 0 && intGrid[y][1] != 0 && intGrid[y][2] != 0 && intGrid[y][3] != 0 && intGrid[y][4] != 0 && intGrid[y][5] != 0 && intGrid[y][6] != 0 && intGrid[y][7] != 0 && intGrid[y][8] != 0 && intGrid[y][9] != 0) { // Full Row
+                for (int a=0; a<y; a++) {
+                    intGrid[y-a] = intGrid[y-a-1];  // Shift all blocks above down 1 block
                 }
             }
         }
     }
 
     private void drawGridlines(Graphics2D g2) { // Draw gridlines on board
-        // Gridlines
         g2.setColor(Color.BLACK);
         for (int a = 0; a <= intXMax/intBlockSize; a++) {
-            g2.drawLine(a*intBlockSize, 0, a*intBlockSize, intYMax); // Vertical lines
+            g2.drawLine(a*intBlockSize, 0, a*intBlockSize, intYMax); // Vertical gridlines
         }
         for (int b = 0; b <= intYMax/intBlockSize; b++) {
-            g2.drawLine(0, b*intBlockSize, intXMax, b*intBlockSize); // Horizontal lines
+            g2.drawLine(0, b*intBlockSize, intXMax, b*intBlockSize); // Horizontal gridlines
         }
     }
 
     // CONSTRUCTOR
     public BoardPanel() {
         super();
-        //IBlock = new Block(Block.IBlock);
-        blockCurrent = Controller.generateBlock();
+        blockCurrent = Controller.generateBlock(); // Generate a new block
     }
 }

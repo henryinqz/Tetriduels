@@ -2,7 +2,7 @@ import java.awt.*;
 
 public class Block {
     // PROPERTIES
-    public static final int IBlock = 0, LBlock = 1, JBlock = 2, SBlock = 3, ZBlock = 4, TBlock = 5, OBlock = 6;
+    public static final int IBlock = 1, LBlock = 2, JBlock = 3, SBlock = 4, ZBlock = 5, TBlock = 6, OBlock = 7;
     public int intType;
     private int[][][] intCoordsArray = new int[4][4][4];
     public int[][] intCurrentCoords = new int[4][4];

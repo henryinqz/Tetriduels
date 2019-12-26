@@ -1,5 +1,5 @@
 public class Controller {
-    public static void moveLeft(Block blockCurrent) {
+    /*public static void moveLeft(Block blockCurrent) {
         if (blockCurrent.intX - BoardPanel.intMove >= 0) { // Check if furthest left block can make move without passing column 0
             blockCurrent.intX -= BoardPanel.intMove; // Move left
         } else if (blockCurrent.intCurrentCoords[0][0] == 0 && blockCurrent.intCurrentCoords[1][0] == 0 && blockCurrent.intCurrentCoords[2][0] == 0 && blockCurrent.intCurrentCoords[3][0] == 0) { // Check if block coord array is empty in column 0
@@ -42,6 +42,7 @@ public class Controller {
             }
         }
     }
+
     public static void moveUp(Block blockCurrent) { // Should only be used for bottom floor wallkick
         if (blockCurrent.intY - BoardPanel.intMove >= 0) { // Check if highest block can make move w/o exiting board
             blockCurrent.intY -= BoardPanel.intMove; // Move up
@@ -55,6 +56,85 @@ public class Controller {
                 blockCurrent.intY -= BoardPanel.intMove; // Move up
             }
         }
+    }*/
+
+    public static void moveLeft(Block blockCurrent) {
+        if (checkCollision(blockCurrent, "left") == false) {
+            blockCurrent.intX -= BoardPanel.intMove; // Move left
+        }
+    }
+    public static void moveRight(Block blockCurrent) {
+        if (checkCollision(blockCurrent, "right") == false) {
+            blockCurrent.intX += BoardPanel.intMove; // Move right
+        }
+    }
+    public static void moveDown(Block blockCurrent) {
+        if (checkCollision(blockCurrent, "down") == false) {
+            blockCurrent.intY += BoardPanel.intMove; // Move down
+        }
+    }
+    public static void moveUp(Block blockCurrent) {
+        if (checkCollision(blockCurrent, "up") == false) {
+            blockCurrent.intY -= BoardPanel.intMove; // Move up
+        }
+    }
+
+    public static boolean checkCollision(Block blockCurrent, String strSide) { // Method to check block collision (side = "up", "right", "left", "down"). True = collides, false = no collision
+        if (strSide.equalsIgnoreCase("up")) {
+            if (blockCurrent.intY - BoardPanel.intMove >= 0) { // Check if highest block can make move w/o exiting board
+                return false;
+            } else if (blockCurrent.intCurrentCoords[0][0] == 0 && blockCurrent.intCurrentCoords[0][1] == 0 && blockCurrent.intCurrentCoords[0][2] == 0 && blockCurrent.intCurrentCoords[0][3] == 0) { // Check if block coord array is empty in row 0
+                if (blockCurrent.intCurrentCoords[1][0] == 0 && blockCurrent.intCurrentCoords[1][1] == 0 && blockCurrent.intCurrentCoords[1][2] == 0 && blockCurrent.intCurrentCoords[1][3] == 0) { // Check if block coord array is empty in row 1
+                    if (blockCurrent.intY + BoardPanel.intBlockSize >= 0) { // Check if lowest block can make move w/o exiting board
+                        return false;
+                    }
+                }
+                if (blockCurrent.intY >= 0) { // Check if highest block can make move w/o exiting board
+                    return false;
+                }
+            }
+        } else if (strSide.equalsIgnoreCase("right")) {
+            if (blockCurrent.intX + BoardPanel.intMove + (BoardPanel.intBlockSize*4) <= BoardPanel.intXMax) { // Check if furthest left block can make move without passing column 10
+                return false;
+            } else if (blockCurrent.intCurrentCoords[0][3] == 0 && blockCurrent.intCurrentCoords[1][3] == 0 && blockCurrent.intCurrentCoords[2][3] == 0 && blockCurrent.intCurrentCoords[3][3] == 0) { // Check if block coord array is empty in column 3
+                if (blockCurrent.intCurrentCoords[0][2] == 0 && blockCurrent.intCurrentCoords[1][2] == 0 && blockCurrent.intCurrentCoords[2][2] == 0 && blockCurrent.intCurrentCoords[3][2] == 0) { // Check if block coord array is empty in column 2
+                    if (blockCurrent.intX + (BoardPanel.intBlockSize * 3) <= BoardPanel.intXMax) { // Check if furthest left block can make move without passing column 10
+                        return false;
+                    }
+                }
+                if (blockCurrent.intX + (BoardPanel.intBlockSize * 4) <= BoardPanel.intXMax) { // Check if furthest left block can make move without passing column 10
+                    return false;
+                }
+            }
+        } else if (strSide.equalsIgnoreCase("left")) {
+            if (blockCurrent.intX - BoardPanel.intMove >= 0) { // Check if furthest left block can make move without passing column 0
+                return false;
+            } else if (blockCurrent.intCurrentCoords[0][0] == 0 && blockCurrent.intCurrentCoords[1][0] == 0 && blockCurrent.intCurrentCoords[2][0] == 0 && blockCurrent.intCurrentCoords[3][0] == 0) { // Check if block coord array is empty in column 0
+                if (blockCurrent.intCurrentCoords[0][1] == 0 && blockCurrent.intCurrentCoords[1][1] == 0 && blockCurrent.intCurrentCoords[2][1] == 0 && blockCurrent.intCurrentCoords[3][1] == 0) { // Check if block coord array is empty in column 1
+                    if (blockCurrent.intX + BoardPanel.intBlockSize >= 0) { // Check if furthest left block can make move without passing column 0
+                        return false;
+                    }
+                }
+                if (blockCurrent.intX >= 0) { // Check if furthest left block can make move without passing column 0
+                    return false;
+                }
+            }
+        } else if (strSide.equalsIgnoreCase("down")) {
+            if (blockCurrent.intY + BoardPanel.intMove + (BoardPanel.intBlockSize * 4) <= BoardPanel.intYMax) { // Check if lowest block can make move w/o exiting board
+                return false;
+            } else if (blockCurrent.intCurrentCoords[3][0] == 0 && blockCurrent.intCurrentCoords[3][1] == 0 && blockCurrent.intCurrentCoords[3][2] == 0 && blockCurrent.intCurrentCoords[3][3] == 0) { // Check if block coord array is empty in row 3
+                if (blockCurrent.intCurrentCoords[2][0] == 0 && blockCurrent.intCurrentCoords[2][1] == 0 && blockCurrent.intCurrentCoords[2][2] == 0 && blockCurrent.intCurrentCoords[2][3] == 0) { // Check if block coord array is empty in row 2
+                    if (blockCurrent.intY + (BoardPanel.intBlockSize * 3) <= BoardPanel.intYMax) { // Check if lowest block can make move w/o exiting board
+                        return false;
+                    }
+                }
+                if (blockCurrent.intY + (BoardPanel.intBlockSize * 4) <= BoardPanel.intYMax) { // Check if lowest block can make move w/o exiting board
+                    return false;
+                }
+            }
+        }
+        System.out.println("Returning collision check true");
+        return true;
     }
 
     public static void rotate(Block blockCurrent, String strDirection) {
