@@ -85,6 +85,26 @@ public class Controller {
     public static boolean checkCollision(Block blockCurrent, String strSide) { // Method to check block collision (side = "up", "right", "left", "down"). True = collides, false = no collision
         if (strSide.equalsIgnoreCase("left")) {
             //Block collision checks
+            for (int i = 0; i < 4; i++) {
+                if (blockCurrent.intCurrentCoords[i][0] != 0 && (blockCurrent.intX / BoardPanel.intBlockSize) > 0) { // Check if non-empty array column 0 (and prevent checking outside of intGrid array)
+                    if (blockCurrent.intCurrentCoords[i][0] == 1 && BoardPanel.intGrid[(blockCurrent.intY / BoardPanel.intBlockSize) + i][(blockCurrent.intX / BoardPanel.intBlockSize) - 1] != 0) { // Check if block in intGrid below blockCurrent (non-empty array column 3)
+                        return true;
+                    }
+                } else if (blockCurrent.intCurrentCoords[i][0] == 0) { // Empty array column 0
+                    if (blockCurrent.intCurrentCoords[i][1] == 0) { // Empty array column 0 and 1
+                        if ((blockCurrent.intX / BoardPanel.intBlockSize) > -2) { // Prevent checking outside of intGrid array
+                            if (blockCurrent.intCurrentCoords[i][2] == 1 && BoardPanel.intGrid[(blockCurrent.intY / BoardPanel.intBlockSize) + i][(blockCurrent.intX / BoardPanel.intBlockSize) + 1] != 0) { // Check if block in intGrid below blockCurrent (empty array column 0 and 1)
+                                return true;
+                            }
+                        }
+                    }
+                    if ((blockCurrent.intX / BoardPanel.intBlockSize) > -1) { // Prevent checking outside of intGrid array
+                        if (blockCurrent.intCurrentCoords[i][1] == 1 && BoardPanel.intGrid[(blockCurrent.intY / BoardPanel.intBlockSize) + i][(blockCurrent.intX / BoardPanel.intBlockSize) + 0] != 0) { // Check if block in intGrid below blockCurrent (empty array column 0)
+                            return true;
+                        }
+                    }
+                }
+            }
 
             //Wall collision checks
             if (blockCurrent.intX - BoardPanel.intMove >= 0) { // Check if furthest left block can make move w/o exiting board on left (non-empty array column 0)
@@ -101,6 +121,26 @@ public class Controller {
             }
         } else if (strSide.equalsIgnoreCase("right")) {
             //Block collision checks
+            for (int i = 0; i < 4; i++) {
+                if (blockCurrent.intCurrentCoords[i][3] != 0 && (blockCurrent.intX / BoardPanel.intBlockSize) < 6) { // Check if non-empty array column 3 (and prevent checking outside of intGrid array)
+                    if (blockCurrent.intCurrentCoords[i][3] == 1 && BoardPanel.intGrid[(blockCurrent.intY / BoardPanel.intBlockSize) + i][(blockCurrent.intX / BoardPanel.intBlockSize) + 4] != 0) { // Check if block in intGrid below blockCurrent (non-empty array column 3)
+                        return true;
+                    }
+                } else if (blockCurrent.intCurrentCoords[i][3] == 0) { // Empty array column 3
+                    if (blockCurrent.intCurrentCoords[i][2] == 0) { // Empty array column 2 and 3
+                        if ((blockCurrent.intX / BoardPanel.intBlockSize) < 8) { // Prevent checking outside of intGrid array
+                            if (blockCurrent.intCurrentCoords[i][1] == 1 && BoardPanel.intGrid[(blockCurrent.intY / BoardPanel.intBlockSize) + i][(blockCurrent.intX / BoardPanel.intBlockSize) + 2] != 0) { // Check if block in intGrid below blockCurrent (empty array column 2 and 3)
+                                return true;
+                            }
+                        }
+                    }
+                    if ((blockCurrent.intX / BoardPanel.intBlockSize) < 7) { // Prevent checking outside of intGrid array
+                        if (blockCurrent.intCurrentCoords[i][2] == 1 && BoardPanel.intGrid[(blockCurrent.intY / BoardPanel.intBlockSize) + i][(blockCurrent.intX / BoardPanel.intBlockSize) + 3] != 0) { // Check if block in intGrid below blockCurrent (empty array column 3)
+                            return true;
+                        }
+                    }
+                }
+            }
 
             //Wall collision checks
             if (blockCurrent.intX + BoardPanel.intMove + (BoardPanel.intBlockSize * 4) <= BoardPanel.intXMax) { // Check if furthest left block can make move w/o exiting board on right (non-empty array column 3)
@@ -170,7 +210,6 @@ public class Controller {
                 }
             }
         }
-        System.out.println("Returning collision check true");
         return true;
     }
 
