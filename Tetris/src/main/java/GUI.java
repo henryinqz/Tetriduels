@@ -10,6 +10,9 @@ public class GUI implements ActionListener, KeyListener {
     JFrame theframe = new JFrame("Tetris");
     JPanel mainPanel = new JPanel();
     BoardPanel boardPanel = new BoardPanel();
+    
+    BlockFallTimer blockFall = new BlockFallTimer();
+    Thread threadBlockFall = new Thread(blockFall);
 
     // Debug buttons
     JButton butRotateLeft = new JButton("Rotate Left");
@@ -87,7 +90,6 @@ public class GUI implements ActionListener, KeyListener {
         //mainPanel.setPreferredSize(new Dimension(1280, 720));
         this.boardPanel.setPreferredSize(new Dimension(BoardPanel.intXMax + 400, BoardPanel.intYMax));
         this.boardPanel.setLayout(null);
-        //Block JBlock = new Block(Block.JBlock);
 
         //Debug buttons
         this.butRotateLeft.addActionListener(this);
@@ -139,6 +141,7 @@ public class GUI implements ActionListener, KeyListener {
         this.theframe.setVisible(true);
 
         this.thetimer.start();
+        this.threadBlockFall.start();
 
     }
 }
