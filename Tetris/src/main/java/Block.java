@@ -13,6 +13,8 @@ public class Block {
     public int intX = BoardPanel.intBlockSize * 3; // Spawn 4 blocks over on x axis
     public int intY = BoardPanel.intBlockSize * 0; // Spawn at top of board
 
+    public boolean blnHeldBefore = false; // Boolean property to prevent holding same block multiple times
+
     // METHODS
     private void makePiece(int intType) {
         if (intType == IBlock) {
@@ -87,6 +89,8 @@ public class Block {
             } else { // Resets intRotation so it loops from 0-3
                 intRotation = 3;
             }
+        } else if (strDirection.equalsIgnoreCase("default")) { // default rotation
+            intRotation = 0;
         }
         intCurrentCoords = intCoordsArray[intRotation]; // Sets current coordinates of block to new rotation
     }

@@ -24,7 +24,9 @@ public class GUI implements ActionListener, KeyListener {
 
     Timer thetimer = new Timer(1000 / 60, this); //60FPS
 
+    // Booleans to prevent holding keypresses
     boolean blnHardDropHeld = false;
+    boolean blnHoldBlockHeld = false;
     boolean blnRotateLeftHeld = false;
     boolean blnRotateRightHeld = false;
 
@@ -32,7 +34,7 @@ public class GUI implements ActionListener, KeyListener {
     public void actionPerformed(ActionEvent evt) {
         if (Tetris.blnGameLoop == false) {
             System.out.println("GAME OVER");
-            System.exit(0);
+            //System.exit(0); // Temporarily disabled
         }
 
         if (evt.getSource() == thetimer) {
@@ -76,6 +78,13 @@ public class GUI implements ActionListener, KeyListener {
             }
         }
 
+        if (blnHoldBlockHeld == false) { // Only activate once (disable holding down hold block key)
+            if (evt.getKeyCode() == KeyEvent.VK_C && BoardPanel.blockCurrent.blnHeldBefore == false) { // C key, and activate only if block has not been held before
+                BoardPanel.blockCurrent = Controller.holdBlock(BoardPanel.blockCurrent);
+                blnHoldBlockHeld = true;
+            }
+        }
+
         if (blnRotateLeftHeld == false) { // Only activate once (disable holding rotate button)
             if (evt.getKeyCode() == KeyEvent.VK_UP) { // Up arrow
                 Controller.rotate(BoardPanel.blockCurrent, "left");
@@ -93,6 +102,8 @@ public class GUI implements ActionListener, KeyListener {
     public void keyReleased(KeyEvent evt) {
         if (blnHardDropHeld == true && evt.getKeyCode() == KeyEvent.VK_SPACE) { // Reenable hard drop button after release
             blnHardDropHeld = false;
+        } else if (blnHoldBlockHeld == true && evt.getKeyCode() == KeyEvent.VK_C) { // Reenable hold block button after relase
+            blnHoldBlockHeld = false;
         } else if (blnRotateLeftHeld == true && evt.getKeyCode() == KeyEvent.VK_UP) { // Reenable left rotate button after release
             blnRotateLeftHeld = false;
         } else if (blnRotateRightHeld == true && evt.getKeyCode() == KeyEvent.VK_Z) { // Reenable right rotate button after release
@@ -109,32 +120,32 @@ public class GUI implements ActionListener, KeyListener {
         //Debug buttons
         this.butRotateLeft.addActionListener(this);
         this.butRotateLeft.setSize(110,30);
-        this.butRotateLeft.setLocation(BoardPanel.intXMax + 50, 50);
+        this.butRotateLeft.setLocation(BoardPanel.intXMax + 285, 10);
         this.boardPanel.add(butRotateLeft);
 
         this.butRotateRight.addActionListener(this);
         this.butRotateRight.setSize(110,30);
-        this.butRotateRight.setLocation(BoardPanel.intXMax + 50, 90);
+        this.butRotateRight.setLocation(BoardPanel.intXMax + 285, 50);
         this.boardPanel.add(butRotateRight);
 
         this.butMoveLeft.addActionListener(this);
         this.butMoveLeft.setSize(110,30);
-        this.butMoveLeft.setLocation(BoardPanel.intXMax + 170, 50);
+        this.butMoveLeft.setLocation(BoardPanel.intXMax + 285, 90);
         this.boardPanel.add(butMoveLeft);
 
         this.butMoveRight.addActionListener(this);
         this.butMoveRight.setSize(110,30);
-        this.butMoveRight.setLocation(BoardPanel.intXMax + 170, 90);
+        this.butMoveRight.setLocation(BoardPanel.intXMax + 285, 130);
         this.boardPanel.add(butMoveRight);
 
         this.butMoveDown.addActionListener(this);
         this.butMoveDown.setSize(110,30);
-        this.butMoveDown.setLocation(BoardPanel.intXMax + 170, 130);
+        this.butMoveDown.setLocation(BoardPanel.intXMax + 285, 170);
         this.boardPanel.add(butMoveDown);
 
         this.butMoveUp.addActionListener(this);
         this.butMoveUp.setSize(110,30);
-        this.butMoveUp.setLocation(BoardPanel.intXMax + 170, 170);
+        this.butMoveUp.setLocation(BoardPanel.intXMax + 285, 210);
         this.boardPanel.add(butMoveUp);
 
         this.butMoveUp.setFocusable(false);
@@ -143,7 +154,7 @@ public class GUI implements ActionListener, KeyListener {
         this.butMoveRight.setFocusable(false);
         this.butRotateLeft.setFocusable(false);
         this.butRotateRight.setFocusable(false);
-
+        // end of debug buttons
 
         this.boardPanel.setFocusable(true);
         this.boardPanel.addKeyListener(this);

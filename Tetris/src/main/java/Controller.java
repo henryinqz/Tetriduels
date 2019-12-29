@@ -1,7 +1,7 @@
 import java.util.Collections;
 import java.util.Arrays;
-import java.util.List; 
-import java.util.ArrayList; 
+import java.util.List;
+//import java.util.ArrayList;
 
 public class Controller {
     // Methods
@@ -252,5 +252,32 @@ public class Controller {
             blockCurrent = new Block(Block.OBlock);
         }
         return (blockCurrent);
+    }
+
+    public static Block generateBlock (int intBlockType) { // Generate a specific Tetromino block
+        try { // Try catch incase incorrect block type entered
+            Block blockCurrent = new Block(intBlockType); // Create new block w/ specific block type
+            return (blockCurrent);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Incorrect blockType used to generateBlock");
+            return null;
+        }
+    }
+
+    public static Block holdBlock(Block blockCurrent) { // Hold the current block, and return a block that will become the new current block
+        if (BoardPanel.blockHeld == null) { // If no block currently held
+            BoardPanel.blockHeld = blockCurrent;
+            return (generateBlock()); // Return a newly generated block
+        } else { // Block already being held; swap w/ current block
+            int intHeldType = -1; // Temporary integer to allow for switching between blockCurrent <--> blockHeld
+
+            intHeldType = BoardPanel.blockHeld.intType; // Store the type of 'held' block (to generate a new current block)
+            BoardPanel.blockHeld = blockCurrent; // Set 'held' block to the 'current' block
+            blockCurrent = generateBlock(intHeldType); // Set 'current' block to the 'temp' block ('held' block)
+            blockCurrent.blnHeldBefore = true; // Boolean to prevent holding the same block multiple times
+
+            return (blockCurrent); // Returns generated block instead of just blockCurrent to reset X,Y,rotation,etc of block
+        }
     }
 }

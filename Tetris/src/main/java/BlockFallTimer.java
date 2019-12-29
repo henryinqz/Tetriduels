@@ -13,7 +13,7 @@ public class BlockFallTimer implements Runnable{
 			Controller.moveDown(BoardPanel.blockCurrent);
 			try {
 				Thread.sleep(750); // Replace w/ Timer.schedule
-			} catch(InterruptedException e) {	
+			} catch(InterruptedException e) {
 			}
 		}
 	}

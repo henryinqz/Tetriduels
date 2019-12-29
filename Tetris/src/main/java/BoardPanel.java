@@ -9,6 +9,7 @@ public class BoardPanel extends JPanel {
     public static int intYMax = intBlockSize * 20; // 20 blocks tall
     public static int[][] intGrid = new int[intYMax/intBlockSize][intXMax/intBlockSize]; // 10x20 array grid of board
     public static Block blockCurrent;
+    public static Block blockHeld;
 
     public static int intBag = 0; 
 	public static int intRandom = -1;
@@ -21,6 +22,9 @@ public class BoardPanel extends JPanel {
         super.paintComponent(g2); // Clear previous drawings (Windows only); super JPanel (original) paintComponent method
 
         drawCurrentBlock(g2); // Draw current block on board
+        drawHeldBlock(g2); // Draw held block on sidebar
+
+        drawNextBlocks(g2);
 
         if (Controller.checkCollision(blockCurrent, "down") == true) { // Block hits bottom
             storeOldBlocks(blockCurrent);
@@ -28,30 +32,81 @@ public class BoardPanel extends JPanel {
             if (blockCurrent.intY <= 0) { // Collision at block spawn point
                 Tetris.blnGameLoop = false; // end game
             } else { // If no collision at spawn point, generate a new block
-				 
                 blockCurrent = Controller.generateBlock();
-                
             }
         }
 
         drawOldBlocks(g2);
-        drawGridlines(g2);
+        drawGridlines(0,0, intXMax, intYMax,intXMax/intBlockSize, intYMax/intBlockSize, g2);
     }
-    private void drawCurrentBlock(Graphics2D g2) { // Draw current block on board
-        g2.setColor(blockCurrent.colBlock);
+    private void drawBlock(Block blockDraw, int intX, int intY, Graphics2D g2) { // Draw block
+        g2.setColor(blockDraw.colBlock);
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
-                if (blockCurrent.intCurrentCoords[i][j] != 0){
-                    g2.fillRect(blockCurrent.intX + j * intBlockSize, blockCurrent.intY + i * intBlockSize, intBlockSize, intBlockSize);
+                if (blockDraw.intCurrentCoords[i][j] != 0){
+                    g2.fillRect(intX + (j * intBlockSize), intY + (i * intBlockSize), intBlockSize, intBlockSize);
+                    //g2.fillRect(blockDraw.intX + (j * intBlockSize), blockDraw.intY + (i * intBlockSize), intBlockSize, intBlockSize);
 
                     // Draw block outline
-                    /*g2.setColor(Color.WHITE);
-                    g2.drawRect(blockCurrent.intX + j * intBlockSize, blockCurrent.intY + i * intBlockSize, intBlockSize, intBlockSize);
-                    g2.setColor(blockCurrent.colBlock);*/
+                    g2.setColor(Color.BLACK);
+                    g2.drawRect(intX  + (j * intBlockSize), intY  + (i * intBlockSize), intBlockSize, intBlockSize);
+                    g2.setColor(blockDraw.colBlock);
                 }
             }
         }
     }
+
+    private void drawCurrentBlock(Graphics2D g2) { // Draw current block on board
+        drawBlock(blockCurrent, blockCurrent.intX, blockCurrent.intY, g2);
+    }
+
+    private void drawHeldBlock(Graphics2D g2) { // Draw held block on sidebar
+        int intHeldX = intXMax + 20;
+        int intHeldY = 25;
+
+        if (blockHeld != null) { // Run if there is a held block
+            drawBlock(blockHeld, intHeldX, intHeldY, g2); // Draws held block
+        }
+
+        g2.setColor(Color.BLACK);
+        g2.drawString("HOLD", intHeldX,intHeldY-8);
+        drawGridlines(intHeldX, intHeldY, intHeldX + (intBlockSize*4), intHeldY + (intBlockSize*4), 4, 4, g2);
+
+    }
+
+    private void drawNextBlocks(Graphics2D g2) { // Draw next 3 blocks on sidebar (WIP)
+        int intNextX = intXMax + 20;
+        int intNextY = 160;
+
+        g2.setStroke(new BasicStroke(1)); // Set thin outline stroke
+        try {
+            Block blockNext1 = new Block(pieceArray[intBag+1]);
+            drawBlock(blockNext1, intNextX, intNextY, g2);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            Block blockNext2 = new Block(pieceArray[intBag+2]);
+            drawBlock(blockNext2, intNextX, intNextY+(intBlockSize*4)+0, g2);
+        } catch (Exception e) {
+        }
+        try {
+            Block blockNext3 = new Block(pieceArray[intBag+3]);
+            drawBlock(blockNext3, intNextX, intNextY+(2*((intBlockSize*4)+00)), g2);
+        } catch (Exception e) {
+        }
+
+        g2.setColor(Color.BLACK);
+        g2.drawString("NEXT", intNextX,intNextY-8);
+        //drawGridlines(intNextX, intNextY, intNextX + (intBlockSize*4), intNextY + (intBlockSize*12), 4, 12, g2);
+        drawGridlines(intNextX, intNextY, intNextX + (intBlockSize*4), intNextY + (intBlockSize*4), 4, 4, g2);
+        drawGridlines(intNextX, intNextY + (intBlockSize*4), intNextX + (intBlockSize*4), intNextY + (intBlockSize*8), 4, 4, g2);
+        drawGridlines(intNextX, intNextY + (intBlockSize*8), intNextX + (intBlockSize*4), intNextY + (intBlockSize*12), 4, 4, g2);
+
+
+
+    }
+
 
     private void storeOldBlocks(Block blockCurrent) {
         for (int a = 0; a < 4; a++) {
@@ -128,13 +183,25 @@ public class BoardPanel extends JPanel {
         }
     }
 
-    private void drawGridlines(Graphics2D g2) { // Draw gridlines on board
+    private void drawGridlines(int intX1, int intY1, int intX2, int intY2, int intAmountVert, int intAmountHoriz, Graphics2D g2) { // Draw gridlines on board. intAmountX & Y determine how many gridlines to draw
         g2.setColor(Color.BLACK);
-        for (int a = 0; a <= intXMax/intBlockSize; a++) {
-            g2.drawLine(a*intBlockSize, 0, a*intBlockSize, intYMax); // Vertical gridlines
+        for (int a = 0; a <= intAmountVert; a++) { // Draw thick outline outside vertical grid
+            if (a == 0 || a == intAmountVert) {
+                g2.setStroke(new BasicStroke(2));
+            } else {
+                g2.setStroke(new BasicStroke(1));
+            }
+            g2.drawLine(intX1+(a*intBlockSize), intY1, intX1+(a*intBlockSize), intY2); // Vertical gridlines
+            //g2.drawLine(a*intBlockSize, 0, a*intBlockSize, intYMax); // Vertical gridlines (board)
         }
-        for (int b = 0; b <= intYMax/intBlockSize; b++) {
-            g2.drawLine(0, b*intBlockSize, intXMax, b*intBlockSize); // Horizontal gridlines
+        for (int b = 0; b <= intAmountHoriz; b++) {
+            if (b == 0 || b == intAmountHoriz) { // Draw thick outline outside horizontal grid
+                g2.setStroke(new BasicStroke(2));
+            } else {
+                g2.setStroke(new BasicStroke(1));
+            }
+            g2.drawLine(intX1, intY1+(b*intBlockSize), intX2, intY1+(b*intBlockSize)); // Horizontal gridlines
+            //g2.drawLine(0, b*intBlockSize, intXMax, b*intBlockSize); // Horizontal gridlines (board)
         }
     }
 
