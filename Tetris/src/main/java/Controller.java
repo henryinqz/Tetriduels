@@ -10,25 +10,21 @@ public class Controller {
             blockCurrent.intX -= BoardPanel.intMove; // Move left
         }
     }
-
     public static void moveRight(Block blockCurrent) {
         if (checkCollision(blockCurrent, "right") == false) {
             blockCurrent.intX += BoardPanel.intMove; // Move right
         }
     }
-
     public static void moveDown(Block blockCurrent) {
         if (checkCollision(blockCurrent, "down") == false) {
             blockCurrent.intY += BoardPanel.intMove; // Move down
         }
     }
-
     public static void moveUp(Block blockCurrent) {
         if (checkCollision(blockCurrent, "up") == false) {
             blockCurrent.intY -= BoardPanel.intMove; // Move up
         }
     }
-
     public static boolean checkCollision(Block blockCurrent, String strSide) { // Method to check block collision (side = "up", "right", "left", "down"). True = collides, false = no collision
         if (strSide.equalsIgnoreCase("left")) {
             //Block collision checks
@@ -169,7 +165,6 @@ public class Controller {
             moveDown(blockCurrent);
         }
     }
-
     public static void rotate(Block blockCurrent, String strDirection) {
         // Wallkick: Side walls (prevents rotation from sending block out of screen)
         if (blockCurrent.intX < (BoardPanel.intBlockSize * 0)) { // Wallkick checks for left wall

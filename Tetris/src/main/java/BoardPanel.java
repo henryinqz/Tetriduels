@@ -9,10 +9,6 @@ public class BoardPanel extends JPanel {
     public static int intYMax = intBlockSize * 20; // 20 blocks tall
     public static int[][] intGrid = new int[intYMax/intBlockSize][intXMax/intBlockSize]; // 10x20 array grid of board
     public static Block blockCurrent;
-    public static int intBag = 0; 
-	public static int intRandom = -1;
-	public static Integer[] pieceArray = new Integer[]{0,1,2,3,4,5,6};
-
 
     public static int intBag = 0; 
 	public static int intRandom = -1;
