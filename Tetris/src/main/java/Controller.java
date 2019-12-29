@@ -217,6 +217,12 @@ public class Controller {
         return true;
     }
 
+    public static void hardDrop(Block blockCurrent) {
+        while (checkCollision(blockCurrent, "down") == false) { // Moves block down until collision, then ends loop
+            moveDown(blockCurrent);
+        }
+    }
+
     public static void rotate(Block blockCurrent, String strDirection) {
         // Wallkick: Side walls (prevents rotation from sending block out of screen)
         if (blockCurrent.intX < (BoardPanel.intBlockSize * 0)) { // Wallkick checks for left wall

@@ -18,11 +18,14 @@ public class BoardPanel extends JPanel {
 
         drawCurrentBlock(g2); // Draw current block on board
 
-        //if (blockCurrent.intY == intYMax - (intBlockSize * 2)) { // Block hits bottom
         if (Controller.checkCollision(blockCurrent, "down") == true) { // Block hits bottom
             storeOldBlocks(blockCurrent);
             removeFullLines(intGrid);
-            blockCurrent = Controller.generateBlock();
+            if (blockCurrent.intY <= 0) { // Collision at block spawn point
+                Tetris.blnGameLoop = false; // end game
+            } else { // If no collision at spawn point, generate a new block
+                blockCurrent = Controller.generateBlock();
+            }
         }
 
         drawOldBlocks(g2);
