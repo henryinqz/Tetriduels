@@ -14,6 +14,11 @@ public class BoardPanel extends JPanel {
 	public static Integer[] pieceArray = new Integer[]{0,1,2,3,4,5,6};
 
 
+    public static int intBag = 0; 
+	public static int intRandom = -1;
+	public static Integer[] pieceArray = new Integer[]{1,2,3,4,5,6,7};
+
+
     // METHODS
     public void paintComponent(Graphics g) {
         Graphics2D g2 = (Graphics2D)g; // Use Graphics2D instead of regular Graphics

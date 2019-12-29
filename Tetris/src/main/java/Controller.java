@@ -4,65 +4,7 @@ import java.util.List;
 import java.util.ArrayList; 
 
 public class Controller {
-    /*public static void moveLeft(Block blockCurrent) {
-        if (blockCurrent.intX - BoardPanel.intMove >= 0) { // Check if furthest left block can make move without passing column 0
-            blockCurrent.intX -= BoardPanel.intMove; // Move left
-        } else if (blockCurrent.intCurrentCoords[0][0] == 0 && blockCurrent.intCurrentCoords[1][0] == 0 && blockCurrent.intCurrentCoords[2][0] == 0 && blockCurrent.intCurrentCoords[3][0] == 0) { // Check if block coord array is empty in column 0
-            if (blockCurrent.intCurrentCoords[0][1] == 0 && blockCurrent.intCurrentCoords[1][1] == 0 && blockCurrent.intCurrentCoords[2][1] == 0 && blockCurrent.intCurrentCoords[3][1] == 0) { // Check if block coord array is empty in column 1
-                if (blockCurrent.intX + BoardPanel.intBlockSize >= 0) { // Check if furthest left block can make move without passing column 0
-                    blockCurrent.intX -= BoardPanel.intMove; // Move left
-                }
-            }
-            if (blockCurrent.intX >= 0) { // Check if furthest left block can make move without passing column 0
-                blockCurrent.intX -= BoardPanel.intMove; // Move left
-            }
-        }
-    }
-    public static void moveRight(Block blockCurrent) {
-        if (blockCurrent.intX + BoardPanel.intMove + (BoardPanel.intBlockSize*4) <= BoardPanel.intXMax) { // Check if furthest left block can make move without passing column 10
-            blockCurrent.intX += BoardPanel.intBlockSize; // Move right
-        } else if (blockCurrent.intCurrentCoords[0][3] == 0 && blockCurrent.intCurrentCoords[1][3] == 0 && blockCurrent.intCurrentCoords[2][3] == 0 && blockCurrent.intCurrentCoords[3][3] == 0) { // Check if block coord array is empty in column 3
-            if (blockCurrent.intCurrentCoords[0][2] == 0 && blockCurrent.intCurrentCoords[1][2] == 0 && blockCurrent.intCurrentCoords[2][2] == 0 && blockCurrent.intCurrentCoords[3][2] == 0) { // Check if block coord array is empty in column 2
-                if (blockCurrent.intX + (BoardPanel.intBlockSize * 3) <= BoardPanel.intXMax) { // Check if furthest left block can make move without passing column 10
-                    blockCurrent.intX += BoardPanel.intMove; // Move right
-                }
-            }
-            if (blockCurrent.intX + (BoardPanel.intBlockSize * 4) <= BoardPanel.intXMax) { // Check if furthest left block can make move without passing column 10
-                blockCurrent.intX += BoardPanel.intMove; // Move right
-            }
-        }
-
-    }
-    public static void moveDown(Block blockCurrent) {
-        if (blockCurrent.intY + BoardPanel.intMove + (BoardPanel.intBlockSize * 4) <= BoardPanel.intYMax) { // Check if lowest block can make move w/o exiting board
-            blockCurrent.intY += BoardPanel.intMove; // Move down
-        } else if (blockCurrent.intCurrentCoords[3][0] == 0 && blockCurrent.intCurrentCoords[3][1] == 0 && blockCurrent.intCurrentCoords[3][2] == 0 && blockCurrent.intCurrentCoords[3][3] == 0) { // Check if block coord array is empty in row 3
-            if (blockCurrent.intCurrentCoords[2][0] == 0 && blockCurrent.intCurrentCoords[2][1] == 0 && blockCurrent.intCurrentCoords[2][2] == 0 && blockCurrent.intCurrentCoords[2][3] == 0) { // Check if block coord array is empty in row 2
-                if (blockCurrent.intY + (BoardPanel.intBlockSize * 3) <= BoardPanel.intYMax) { // Check if lowest block can make move w/o exiting board
-                    blockCurrent.intY += BoardPanel.intMove; // Move down
-                }
-            }
-            if (blockCurrent.intY + (BoardPanel.intBlockSize * 4) <= BoardPanel.intYMax) { // Check if lowest block can make move w/o exiting board
-                blockCurrent.intY += BoardPanel.intMove; // Move down
-            }
-        }
-    }
-
-    public static void moveUp(Block blockCurrent) { // Should only be used for bottom floor wallkick
-        if (blockCurrent.intY - BoardPanel.intMove >= 0) { // Check if highest block can make move w/o exiting board
-            blockCurrent.intY -= BoardPanel.intMove; // Move up
-        } else if (blockCurrent.intCurrentCoords[0][0] == 0 && blockCurrent.intCurrentCoords[0][1] == 0 && blockCurrent.intCurrentCoords[0][2] == 0 && blockCurrent.intCurrentCoords[0][3] == 0) { // Check if block coord array is empty in row 0
-            if (blockCurrent.intCurrentCoords[1][0] == 0 && blockCurrent.intCurrentCoords[1][1] == 0 && blockCurrent.intCurrentCoords[1][2] == 0 && blockCurrent.intCurrentCoords[1][3] == 0) { // Check if block coord array is empty in row 1
-                if (blockCurrent.intY + BoardPanel.intBlockSize >= 0) { // Check if lowest block can make move w/o exiting board
-                    blockCurrent.intY -= BoardPanel.intMove; // Move up
-                }
-            }
-            if (blockCurrent.intY >= 0) { // Check if highest block can make move w/o exiting board
-                blockCurrent.intY -= BoardPanel.intMove; // Move up
-            }
-        }
-    }*/
-
+    // Methods
     public static void moveLeft(Block blockCurrent) {
         if (checkCollision(blockCurrent, "left") == false) {
             blockCurrent.intX -= BoardPanel.intMove; // Move left
@@ -279,40 +221,39 @@ public class Controller {
         blockCurrent.rotatePiece(strDirection); // Rotate piece
     }
 
-    public static Block generateBlock() { // Generate a new Tetromino (
+    public static Block generateBlock() { // Generate a new Tetromino block
         Block blockCurrent = new Block(-1); // Default to -1 for return statement
 
-        // Generate random integer from 0-7 to determine which block to generate
-        // IBlock = 0, LBlock = 1, JBlock = 2, SBlock = 3, ZBlock = 4, TBlock = 5, OBlock = 6
-			if(BoardPanel.intBag<=6){ 
-				if(BoardPanel.intBag==0){
-					List<Integer> pieceList = Arrays.asList(BoardPanel.pieceArray);
-				 Collections.shuffle(pieceList);
-				pieceList.toArray(BoardPanel.pieceArray);
-				}
-			 BoardPanel.intRandom = BoardPanel.pieceArray[BoardPanel.intBag]; 
-			if(BoardPanel.intBag==6){ 
-				BoardPanel.intBag=-1; 
-			}
-			BoardPanel.intBag++; 
-		}
-		
+        // Generate random integer from 1-7 to determine which block to generate
+        // IBlock = 1, LBlock = 2, JBlock = 3, SBlock = 4, ZBlock = 5, TBlock = 6, OBlock = 7
+        if (BoardPanel.intBag == 0) { // If intBag is at start, shuffle array of pieces
+            List<Integer> pieceList = Arrays.asList(BoardPanel.pieceArray); // Convert pieceArray to an ArrayList
+            Collections.shuffle(pieceList); // Shuffle pieceArray values inside pieceList ArrayList
+            pieceList.toArray(BoardPanel.pieceArray); // Convert pieceList Arraylist --> pieceArray
+        }
+        BoardPanel.intRandom = BoardPanel.pieceArray[BoardPanel.intBag]; // Set intRandom value to next shuffled value of pieceArray
 
-        //intRandom = Block.IBlock; // debug
+        if (BoardPanel.intBag == 6) { // If intBag is at final value (6), reset intBag to starting value (0)
+            BoardPanel.intBag = 0;
+        } else { // Increase intBag value by 1
+            BoardPanel.intBag++;
+        }
 
-        if (BoardPanel.intRandom == 0) { // Create an IBlock
+        //BoardPanel.intRandom = Block.IBlock; // debug to force select a block to spawn
+
+        if (BoardPanel.intRandom == 1) { // Create an IBlock
             blockCurrent = new Block(Block.IBlock);
-        } else if (BoardPanel.intRandom == 1) { // Create an LBlock
+        } else if (BoardPanel.intRandom == 2) { // Create an LBlock
             blockCurrent = new Block(Block.LBlock);
-        } else if (BoardPanel.intRandom == 2) { // Create an JBlock
+        } else if (BoardPanel.intRandom == 3) { // Create an JBlock
             blockCurrent = new Block(Block.JBlock);
-        } else if (BoardPanel.intRandom == 3) { // Create an SBlock
+        } else if (BoardPanel.intRandom == 4) { // Create an SBlock
             blockCurrent = new Block(Block.SBlock);
-        } else if (BoardPanel.intRandom == 4) { // Create an ZBlock
+        } else if (BoardPanel.intRandom == 5) { // Create an ZBlock
             blockCurrent = new Block(Block.ZBlock);
-        } else if (BoardPanel.intRandom == 5) { // Create an TBlock
+        } else if (BoardPanel.intRandom == 6) { // Create an TBlock
             blockCurrent = new Block(Block.TBlock);
-        } else if (BoardPanel.intRandom == 6) { // Create an OBlock
+        } else if (BoardPanel.intRandom == 7) { // Create an OBlock
             blockCurrent = new Block(Block.OBlock);
         }
         return (blockCurrent);
