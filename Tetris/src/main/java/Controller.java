@@ -1,3 +1,8 @@
+import java.util.Collections;
+import java.util.Arrays;
+import java.util.List; 
+import java.util.ArrayList; 
+
 public class Controller {
     /*public static void moveLeft(Block blockCurrent) {
         if (blockCurrent.intX - BoardPanel.intMove >= 0) { // Check if furthest left block can make move without passing column 0
@@ -279,22 +284,35 @@ public class Controller {
 
         // Generate random integer from 0-7 to determine which block to generate
         // IBlock = 0, LBlock = 1, JBlock = 2, SBlock = 3, ZBlock = 4, TBlock = 5, OBlock = 6
-        int intRandom = (int) (Math.random() * 7);
+			if(BoardPanel.intBag<=6){ 
+				if(BoardPanel.intBag==0){
+					List<Integer> pieceList = Arrays.asList(BoardPanel.pieceArray);
+				 Collections.shuffle(pieceList);
+				pieceList.toArray(BoardPanel.pieceArray);
+				}
+			 BoardPanel.intRandom = BoardPanel.pieceArray[BoardPanel.intBag]; 
+			if(BoardPanel.intBag==6){ 
+				BoardPanel.intBag=-1; 
+			}
+			BoardPanel.intBag++; 
+		}
+		
+
         //intRandom = Block.IBlock; // debug
 
-        if (intRandom == 0) { // Create an IBlock
+        if (BoardPanel.intRandom == 0) { // Create an IBlock
             blockCurrent = new Block(Block.IBlock);
-        } else if (intRandom == 1) { // Create an LBlock
+        } else if (BoardPanel.intRandom == 1) { // Create an LBlock
             blockCurrent = new Block(Block.LBlock);
-        } else if (intRandom == 2) { // Create an JBlock
+        } else if (BoardPanel.intRandom == 2) { // Create an JBlock
             blockCurrent = new Block(Block.JBlock);
-        } else if (intRandom == 3) { // Create an SBlock
+        } else if (BoardPanel.intRandom == 3) { // Create an SBlock
             blockCurrent = new Block(Block.SBlock);
-        } else if (intRandom == 4) { // Create an ZBlock
+        } else if (BoardPanel.intRandom == 4) { // Create an ZBlock
             blockCurrent = new Block(Block.ZBlock);
-        } else if (intRandom == 5) { // Create an TBlock
+        } else if (BoardPanel.intRandom == 5) { // Create an TBlock
             blockCurrent = new Block(Block.TBlock);
-        } else if (intRandom == 6) { // Create an OBlock
+        } else if (BoardPanel.intRandom == 6) { // Create an OBlock
             blockCurrent = new Block(Block.OBlock);
         }
         return (blockCurrent);

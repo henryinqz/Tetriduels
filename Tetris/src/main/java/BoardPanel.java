@@ -8,8 +8,11 @@ public class BoardPanel extends JPanel {
     public static int intXMax = intBlockSize * 10; // 10 blocks wide
     public static int intYMax = intBlockSize * 20; // 20 blocks tall
     public static int[][] intGrid = new int[intYMax/intBlockSize][intXMax/intBlockSize]; // 10x20 array grid of board
-
     public static Block blockCurrent;
+    public static int intBag = 0; 
+	public static int intRandom = -1;
+	public static Integer[] pieceArray = new Integer[]{0,1,2,3,4,5,6};
+
 
     // METHODS
     public void paintComponent(Graphics g) {
@@ -24,7 +27,9 @@ public class BoardPanel extends JPanel {
             if (blockCurrent.intY <= 0) { // Collision at block spawn point
                 Tetris.blnGameLoop = false; // end game
             } else { // If no collision at spawn point, generate a new block
+				 
                 blockCurrent = Controller.generateBlock();
+                
             }
         }
 
