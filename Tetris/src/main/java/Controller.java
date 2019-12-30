@@ -221,10 +221,25 @@ public class Controller {
 
         // Generate random integer from 1-7 to determine which block to generate
         // IBlock = 1, LBlock = 2, JBlock = 3, SBlock = 4, ZBlock = 5, TBlock = 6, OBlock = 7
-        if (BoardPanel.intBag == 0) { // If intBag is at start, shuffle array of pieces
+        if (BoardPanel.intBag == -1) { // Initial intBag value. Only runs for the first generated pieceArray
+            // Generate/shuffle initial pieceArray
             List<Integer> pieceList = Arrays.asList(BoardPanel.pieceArray); // Convert pieceArray to an ArrayList
             Collections.shuffle(pieceList); // Shuffle pieceArray values inside pieceList ArrayList
-            pieceList.toArray(BoardPanel.pieceArray); // Convert pieceList Arraylist --> pieceArray
+            pieceList.toArray(BoardPanel.pieceArray); // Convert pieceList ArrayList --> pieceArray
+
+            // Generate/shuffle next pieceArray
+            pieceList = Arrays.asList(BoardPanel.pieceArray); // Convert pieceArray to an ArrayList
+            Collections.shuffle(pieceList); // Shuffle pieceArray values inside pieceList ArrayList
+            pieceList.toArray(BoardPanel.pieceArrayNext); // Convert pieceList ArrayList --> pieceArrayNext
+
+            BoardPanel.intBag++; // Increase from -1 --> 0
+        } else if (BoardPanel.intBag == 0) { // If intBag is at start, shuffle array of pieces
+            BoardPanel.pieceArray = BoardPanel.pieceArrayNext; // Set current pieceArray to the next pieceArray that is already generated
+
+            // Generate/shuffle next pieceArray (pieceArrayNext)
+            List<Integer> pieceList = Arrays.asList(BoardPanel.pieceArray); // Convert pieceArray to an ArrayList
+            Collections.shuffle(pieceList); // Shuffle pieceArray values inside pieceList ArrayList
+            pieceList.toArray(BoardPanel.pieceArrayNext); // Convert pieceList ArrayList --> pieceArrayNext
         }
         BoardPanel.intRandom = BoardPanel.pieceArray[BoardPanel.intBag]; // Set intRandom value to next shuffled value of pieceArray
 

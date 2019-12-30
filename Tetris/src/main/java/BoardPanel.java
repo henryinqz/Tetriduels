@@ -11,9 +11,10 @@ public class BoardPanel extends JPanel {
     public static Block blockCurrent;
     public static Block blockHeld;
 
-    public static int intBag = 0; 
+    public static int intBag = -1; // -1 is initial value to generate the 1st & 2nd pieceArrays
 	public static int intRandom = -1;
 	public static Integer[] pieceArray = new Integer[]{1,2,3,4,5,6,7};
+    public static Integer[] pieceArrayNext = new Integer[]{1,2,3,4,5,6,7};
 
 
     // METHODS
@@ -74,27 +75,35 @@ public class BoardPanel extends JPanel {
 
     }
 
-    private void drawNextBlocks(Graphics2D g2) { // Draw next 3 blocks on sidebar (WIP)
+    private void drawNextBlocks(Graphics2D g2) { // Draw next 3 blocks on sidebar
         int intNextX = intXMax + 20;
         int intNextY = 160;
 
+        Block blockNext1;
+        Block blockNext2;
+        Block blockNext3;
+
         g2.setStroke(new BasicStroke(1)); // Set thin outline stroke
-        try {
-            Block blockNext1 = new Block(pieceArray[intBag+1]);
-            drawBlock(blockNext1, intNextX, intNextY, g2);
-        } catch (Exception e) {
-            e.printStackTrace();
+
+        if (intBag+1 > 6) { // If value of intBag+1 is greater than 6, read from next pieceArray
+            blockNext1 = new Block(pieceArrayNext[intBag-6]);
+        } else {
+            blockNext1 = new Block(pieceArray[intBag+1]);
         }
-        try {
-            Block blockNext2 = new Block(pieceArray[intBag+2]);
-            drawBlock(blockNext2, intNextX, intNextY+(intBlockSize*4)+0, g2);
-        } catch (Exception e) {
+        if (intBag+2 > 6) { // If value of intBag+2 is greater than 6, read from next pieceArray
+            blockNext2 = new Block(pieceArrayNext[intBag-5]);
+        } else {
+            blockNext2 = new Block(pieceArray[intBag+2]);
         }
-        try {
-            Block blockNext3 = new Block(pieceArray[intBag+3]);
-            drawBlock(blockNext3, intNextX, intNextY+(2*((intBlockSize*4)+00)), g2);
-        } catch (Exception e) {
+        if (intBag+3 > 6) { // If value of intBag+3 is greater than 6, read from next pieceArray
+            blockNext3 = new Block(pieceArrayNext[intBag-4]);
+        } else {
+            blockNext3 = new Block(pieceArray[intBag+3]);
         }
+
+        drawBlock(blockNext1, intNextX, intNextY, g2);
+        drawBlock(blockNext2, intNextX, intNextY+(intBlockSize*4)+0, g2);
+        drawBlock(blockNext3, intNextX, intNextY+(2*((intBlockSize*4)+00)), g2);
 
         g2.setColor(Color.BLACK);
         g2.drawString("NEXT", intNextX,intNextY-8);
