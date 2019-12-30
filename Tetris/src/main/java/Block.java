@@ -24,7 +24,8 @@ public class Block {
                     {{0,0,0,0}, {0,0,0,0}, {1,1,1,1}, {0,0,0,0}}, // Down
                     {{0,0,1,0}, {0,0,1,0}, {0,0,1,0}, {0,0,1,0}} // Right
             };
-            colBlock = new Color(1, 240, 240); // Cyan
+            colBlock = new Color(0, 240, 240); // Cyan
+            //colBlock = new Color(0, 220, 240); // Darker cyan
         } else if (intType == LBlock) {
             intCoordsArray = new int[][][] {
                     {{0,0,1,0},{1,1,1,0},{0,0,0,0},{0,0,0,0}}, // Up
@@ -40,7 +41,7 @@ public class Block {
                     {{0,0,0,0},{1,1,1,0},{0,0,1,0},{0,0,0,0}}, // Down
                     {{0,1,1,0},{0,1,0,0},{0,1,0,0},{0,0,0,0}} // Right
             };
-            colBlock = new Color(0, 1, 240); // Blue
+            colBlock = new Color(0, 0, 240); // Blue
         } else if (intType == SBlock) {
             intCoordsArray = new int[][][] {
                     {{0,1,1,0},{1,1,0,0},{0,0,0,0},{0,0,0,0}}, // Up
@@ -49,6 +50,7 @@ public class Block {
                     {{0,1,0,0},{0,1,1,0},{0,0,1,0},{0,0,0,0}}  // Right
             };
             colBlock = new Color(0, 240, 0); // Green
+            //colBlock = new Color(0,200,0); // Darker green
         } else if (intType == ZBlock) {
             intCoordsArray = new int[][][] {
                     {{1,1,0,0},{0,1,1,0},{0,0,0,0},{0,0,0,0}}, // Up
@@ -72,7 +74,7 @@ public class Block {
                     {{0,1,1,0},{0,1,1,0},{0,0,0,0},{0,0,0,0}},
                     {{0,1,1,0},{0,1,1,0},{0,0,0,0},{0,0,0,0}}
             };
-            colBlock = new Color(240, 240, 1); // Yellow
+            colBlock = new Color(240, 240, 0); // Yellow
         }
         intCurrentCoords = intCoordsArray[intRotation]; // Set 2D array of current coordinates. Default value when making piece is up (intRotation=0)
     }
@@ -98,7 +100,7 @@ public class Block {
 
     }
 
-    //CONSTRUCTOR
+    //CONSTRUCTORS
     public Block(int intBlockType) {
         this.intType = intBlockType;
         makePiece(this.intType);

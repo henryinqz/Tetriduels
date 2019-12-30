@@ -1,7 +1,6 @@
 public class BlockFallTimer implements Runnable{
 	// PROPERTIES
-	public int intTimerInterval = 750; // Default falling interval 750ms 
-	//public static boolean blnGameLoop = true; // Later make this static in Tetris.java or GUI.java
+	public int intTimerInterval = 750; // Default falling interval 750ms
 	
 	// METHODS
 	public void run(){

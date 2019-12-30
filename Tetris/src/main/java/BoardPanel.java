@@ -9,6 +9,7 @@ public class BoardPanel extends JPanel {
     public static int intYMax = intBlockSize * 20; // 20 blocks tall
     public static int[][] intGrid = new int[intYMax/intBlockSize][intXMax/intBlockSize]; // 10x20 array grid of board
     public static Block blockCurrent;
+    public static Block blockGhost;
     public static Block blockHeld;
 
     public static int intBag = -1; // -1 is initial value to generate the 1st & 2nd pieceArrays
@@ -23,17 +24,19 @@ public class BoardPanel extends JPanel {
         super.paintComponent(g2); // Clear previous drawings (Windows only); super JPanel (original) paintComponent method
 
         drawCurrentBlock(g2); // Draw current block on board
-        drawHeldBlock(g2); // Draw held block on sidebar
+        drawGhostBlock(g2);
 
-        drawNextBlocks(g2);
+        drawHeldBlock(g2); // Draw held block on sidebar
+        drawNextBlocks(g2); // Draw next blocks on side bar
 
         if (Controller.checkCollision(blockCurrent, "down") == true) { // Block hits bottom
             storeOldBlocks(blockCurrent);
             removeFullLines(intGrid);
-            if (blockCurrent.intY <= 0) { // Collision at block spawn point
+            if (blockCurrent.intY <= 0 && blockCurrent.intX == BoardPanel.intBlockSize * 3) { // Collision at block spawn point
                 Tetris.blnGameLoop = false; // end game
             } else { // If no collision at spawn point, generate a new block
                 blockCurrent = Controller.generateBlock();
+                Controller.updateGhostBlock(blockCurrent); // Update position of ghost block
             }
         }
 
@@ -45,8 +48,7 @@ public class BoardPanel extends JPanel {
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
                 if (blockDraw.intCurrentCoords[i][j] != 0){
-                    g2.fillRect(intX + (j * intBlockSize), intY + (i * intBlockSize), intBlockSize, intBlockSize);
-                    //g2.fillRect(blockDraw.intX + (j * intBlockSize), blockDraw.intY + (i * intBlockSize), intBlockSize, intBlockSize);
+                    g2.fillRect(intX + (j * intBlockSize), intY + (i * intBlockSize), intBlockSize, intBlockSize); // Draw block
 
                     // Draw block outline
                     g2.setColor(Color.BLACK);
@@ -55,6 +57,19 @@ public class BoardPanel extends JPanel {
                 }
             }
         }
+    }
+
+    private void drawGhostBlock(Graphics2D g2) {
+        g2.setColor(blockGhost.colBlock);
+        g2.setStroke(new BasicStroke(3));
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                if (blockGhost.intCurrentCoords[i][j] != 0) {
+                    g2.drawRect(blockGhost.intX + (j * intBlockSize), blockGhost.intY + (i * intBlockSize), intBlockSize, intBlockSize);
+                }
+            }
+        }
+        g2.setStroke(new BasicStroke(1));
     }
 
     private void drawCurrentBlock(Graphics2D g2) { // Draw current block on board
@@ -72,33 +87,26 @@ public class BoardPanel extends JPanel {
         g2.setColor(Color.BLACK);
         g2.drawString("HOLD", intHeldX,intHeldY-8);
         drawGridlines(intHeldX, intHeldY, intHeldX + (intBlockSize*4), intHeldY + (intBlockSize*4), 4, 4, g2);
-
     }
 
     private void drawNextBlocks(Graphics2D g2) { // Draw next 3 blocks on sidebar
+        g2.setStroke(new BasicStroke(1)); // Set thin outline stroke
+
         int intNextX = intXMax + 20;
         int intNextY = 160;
-
-        Block blockNext1;
+        Block blockNext1 = new Block(pieceArray[intBag]);;
         Block blockNext2;
         Block blockNext3;
 
-        g2.setStroke(new BasicStroke(1)); // Set thin outline stroke
-
         if (intBag+1 > 6) { // If value of intBag+1 is greater than 6, read from next pieceArray
-            blockNext1 = new Block(pieceArrayNext[intBag-6]);
+            blockNext2 = new Block(pieceArrayNext[intBag-6]);
         } else {
-            blockNext1 = new Block(pieceArray[intBag+1]);
+            blockNext2 = new Block(pieceArray[intBag+1]);
         }
         if (intBag+2 > 6) { // If value of intBag+2 is greater than 6, read from next pieceArray
-            blockNext2 = new Block(pieceArrayNext[intBag-5]);
+            blockNext3 = new Block(pieceArrayNext[intBag-5]);
         } else {
-            blockNext2 = new Block(pieceArray[intBag+2]);
-        }
-        if (intBag+3 > 6) { // If value of intBag+3 is greater than 6, read from next pieceArray
-            blockNext3 = new Block(pieceArrayNext[intBag-4]);
-        } else {
-            blockNext3 = new Block(pieceArray[intBag+3]);
+            blockNext3 = new Block(pieceArray[intBag+2]);
         }
 
         drawBlock(blockNext1, intNextX, intNextY, g2);
@@ -155,16 +163,18 @@ public class BoardPanel extends JPanel {
                 if (intGrid[c][d] != 0) {
                     switch (intGrid[c][d]) { // Set block colours of corresponding block/values in intGrid
                         case Block.IBlock:
-                            g2.setColor(new Color(1, 240, 240)); // Cyan
+                            g2.setColor(new Color(0, 240, 240)); // Cyan
+                            //g2.setColor(new Color(0, 220, 240)); // Darker cyan
                             break;
                         case Block.LBlock:
                             g2.setColor(new Color(240, 160, 0)); // Orange
                             break;
                         case Block.JBlock:
-                            g2.setColor(new Color(0, 1, 240)); // Blue
+                            g2.setColor(new Color(0, 0, 240)); // Blue
                             break;
                         case Block.SBlock:
                             g2.setColor(new Color(0, 240, 0)); // Green
+                            //g2.setColor(new Color(0, 200, 0)); // Darker green
                             break;
                         case Block.ZBlock:
                             g2.setColor(new Color(240, 0, 0)); // Red
@@ -173,7 +183,7 @@ public class BoardPanel extends JPanel {
                             g2.setColor(new Color(160, 0, 240)); // Purple
                             break;
                         case Block.OBlock:
-                            g2.setColor(new Color(240, 240, 1)); // Yellow
+                            g2.setColor(new Color(240, 240, 0)); // Yellow
                             break;
                     }
                     g2.fillRect(d * intBlockSize, c * intBlockSize, intBlockSize, intBlockSize); // Draw oldBlocks

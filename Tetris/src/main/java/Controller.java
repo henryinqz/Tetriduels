@@ -8,21 +8,25 @@ public class Controller {
     public static void moveLeft(Block blockCurrent) {
         if (checkCollision(blockCurrent, "left") == false) {
             blockCurrent.intX -= BoardPanel.intMove; // Move left
+            updateGhostBlock(blockCurrent); // Update position of ghost block
         }
     }
     public static void moveRight(Block blockCurrent) {
         if (checkCollision(blockCurrent, "right") == false) {
             blockCurrent.intX += BoardPanel.intMove; // Move right
+            updateGhostBlock(blockCurrent); // Update position of ghost block
         }
     }
     public static void moveDown(Block blockCurrent) {
         if (checkCollision(blockCurrent, "down") == false) {
             blockCurrent.intY += BoardPanel.intMove; // Move down
+            updateGhostBlock(blockCurrent); // Update position of ghost block
         }
     }
     public static void moveUp(Block blockCurrent) {
         if (checkCollision(blockCurrent, "up") == false) {
             blockCurrent.intY -= BoardPanel.intMove; // Move up
+            updateGhostBlock(blockCurrent); // Update position of ghost block
         }
     }
     public static boolean checkCollision(Block blockCurrent, String strSide) { // Method to check block collision (side = "up", "right", "left", "down"). True = collides, false = no collision
@@ -108,7 +112,9 @@ public class Controller {
                 } else if (blockCurrent.intCurrentCoords[3][i] == 0) { // Empty array row 3
                     if (blockCurrent.intCurrentCoords[2][i] == 0) { // Empty array row 2 and 3
                         if ((blockCurrent.intY / BoardPanel.intBlockSize) < 18) { // Prevent checking outside of intGrid array
-                            if (blockCurrent.intCurrentCoords[1][i] == 1 && BoardPanel.intGrid[(blockCurrent.intY / BoardPanel.intBlockSize) + 2][(blockCurrent.intX / BoardPanel.intBlockSize) + i] != 0) { // Check if block in intGrid below blockCurrent (empty arrow row 2 and 3)
+                            if (blockCurrent.intCurrentCoords[1][i] == 1 && BoardPanel.intGrid[(blockCurrent.intY / BoardPanel.intBlockSize) + 2][(blockCurrent.intX / BoardPanel.intBlockSize) + i] != 0) { // Check if block in intGrid below blockCurrent (empty arrow row 2 and 3, checking row 1)
+                                return true;
+                            } else if (blockCurrent.intCurrentCoords[0][i] == 1 && BoardPanel.intGrid[(blockCurrent.intY / BoardPanel.intBlockSize) + 1][(blockCurrent.intX / BoardPanel.intBlockSize) + i] != 0) { // Check if block in intGrid below blockCurrent (empty arrow row 2 and 3), checking row 0)
                                 return true;
                             }
                         }
@@ -165,6 +171,18 @@ public class Controller {
             moveDown(blockCurrent);
         }
     }
+
+    public static void updateGhostBlock(Block blockCurrent) {
+        // Set properties of ghost block to match current block
+        BoardPanel.blockGhost.intX = blockCurrent.intX;
+        BoardPanel.blockGhost.intY = blockCurrent.intY;
+        BoardPanel.blockGhost.intCurrentCoords = blockCurrent.intCurrentCoords;
+
+        while (checkCollision(BoardPanel.blockGhost, "down") == false) { // Moves block down until collision, then ends loop
+            moveDown(BoardPanel.blockGhost);
+        }
+    }
+
     public static void rotate(Block blockCurrent, String strDirection) {
         // Wallkick: Side walls (prevents rotation from sending block out of screen)
         if (blockCurrent.intX < (BoardPanel.intBlockSize * 0)) { // Wallkick checks for left wall
@@ -214,6 +232,7 @@ public class Controller {
             blockCurrent.intY = 0; // Reset block to row 0 of board (moveDown would've required more checks for IBlock)
         }
         blockCurrent.rotatePiece(strDirection); // Rotate piece
+        updateGhostBlock(blockCurrent); // Update position of ghost block
     }
 
     public static Block generateBlock() { // Generate a new Tetromino block
@@ -266,12 +285,14 @@ public class Controller {
         } else if (BoardPanel.intRandom == 7) { // Create an OBlock
             blockCurrent = new Block(Block.OBlock);
         }
+        BoardPanel.blockGhost = new Block(BoardPanel.intRandom); // Set ghost block shape
         return (blockCurrent);
     }
 
     public static Block generateBlock (int intBlockType) { // Generate a specific Tetromino block
         try { // Try catch incase incorrect block type entered
             Block blockCurrent = new Block(intBlockType); // Create new block w/ specific block type
+            BoardPanel.blockGhost = new Block(intBlockType); // Set ghost block shape
             return (blockCurrent);
         } catch (Exception e) {
             e.printStackTrace();
