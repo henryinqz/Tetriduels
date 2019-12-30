@@ -166,7 +166,7 @@ public class BoardPanel extends JPanel {
                             g2.setColor(new Color(0, 200, 240)); // Cyan
                             break;
                         case Block.LBlock:
-                            g2.setColor(new Color(240, 160, 0)); // Orange
+                            g2.setColor(new Color(240, 130, 0)); // Orange
                             break;
                         case Block.JBlock:
                             g2.setColor(new Color(0, 0, 240)); // Blue
