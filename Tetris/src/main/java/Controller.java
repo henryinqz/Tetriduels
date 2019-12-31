@@ -148,6 +148,32 @@ public class Controller {
 
         } else if (strSide.equalsIgnoreCase("up")) {
             //Block collision checks
+            for (int i = 0; i < 4; i++) {
+                if (blockCurrent.intCurrentCoords[0][i] != 0 && (blockCurrent.intY / BoardPanel.intBlockSize) > 0) { // Check if non-empty array row 0 (and prevent checking outside of intGrid array)
+                    if (blockCurrent.intCurrentCoords[0][i] == 1 && BoardPanel.intGrid[(blockCurrent.intY/BoardPanel.intBlockSize) - 1][(blockCurrent.intX / BoardPanel.intBlockSize) + i] != 0) { // Check if block in intGrid above blockCurrent (non-empty arrow row 0)
+                        return true;
+                    }
+                } else if (blockCurrent.intCurrentCoords[0][i] == 0) { // Empty array row 0
+                    if (blockCurrent.intCurrentCoords[1][i] == 0) { // Empty array row 0 and 1
+                        if ((blockCurrent.intY / BoardPanel.intBlockSize) < 18) { // Prevent checking outside of intGrid array
+                            if (blockCurrent.intCurrentCoords[2][i] == 1 && BoardPanel.intGrid[(blockCurrent.intY / BoardPanel.intBlockSize) + 1][(blockCurrent.intX / BoardPanel.intBlockSize) + i] != 0) { // Check if block in intGrid above blockCurrent (empty arrow row 0 and 1, checking row 2)
+                                return true;
+                            } else if (blockCurrent.intCurrentCoords[3][i] == 1 && BoardPanel.intGrid[(blockCurrent.intY / BoardPanel.intBlockSize) + 2][(blockCurrent.intX / BoardPanel.intBlockSize) + i] != 0) { // Check if block in intGrid above blockCurrent (empty arrow row 0 and 1), checking row 3)
+                                return true;
+                            }
+                        }
+                    }
+                    if ((blockCurrent.intY / BoardPanel.intBlockSize) < 18) { // Prevent checking outside of intGrid array
+                        if (blockCurrent.intCurrentCoords[1][i] == 1 && BoardPanel.intGrid[(blockCurrent.intY / BoardPanel.intBlockSize) + 0][(blockCurrent.intX / BoardPanel.intBlockSize) + i] != 0) { // Check if block in intGrid above blockCurrent (empty arrow row 0, checking row 1)
+                            return true;
+                        } else if (blockCurrent.intCurrentCoords[2][i] == 1 && BoardPanel.intGrid[(blockCurrent.intY / BoardPanel.intBlockSize) + 1][(blockCurrent.intX / BoardPanel.intBlockSize) + i] != 0) { // Check if block in intGrid above blockCurrent (empty arrow row 0 (or 0+1), checking row 2)
+                            return true;
+                        } else if (blockCurrent.intCurrentCoords[3][i] == 1 && BoardPanel.intGrid[(blockCurrent.intY / BoardPanel.intBlockSize) + 2][(blockCurrent.intX / BoardPanel.intBlockSize) + i] != 0) { // Check if block in intGrid above blockCurrent (empty arrow row 0 (or 0+1), checking row 3)
+                            return true;
+                        }
+                    }
+                }
+            }
 
             //Wall collision checks
             if (blockCurrent.intY - BoardPanel.intMove >= 0) { // Check if highest block can make move w/o exiting board on top (non-empty array row 0)
