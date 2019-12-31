@@ -34,6 +34,7 @@ public class GUI implements ActionListener, KeyListener {
     public void actionPerformed(ActionEvent evt) {
         if (Tetris.blnGameLoop == false) {
             System.out.println("GAME OVER");
+            //thetimer.stop();
             //System.exit(0); // Temporarily disabled
         }
 
