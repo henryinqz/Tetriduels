@@ -238,7 +238,11 @@ public class Controller {
     public static Block generateBlock() { // Generate a new Tetromino block
         Block blockCurrent = new Block(-1); // Default to -1 for return statement
 
-        // Generate random integer from 1-7 to determine which block to generate
+        if (BoardPanel.intBag > 6) { // If intBag is past final value of (6), reset intBag to starting value (0)
+            BoardPanel.intBag = 0;
+        }
+
+        // Generate random integers from 1-7 to determine which block to generate
         // IBlock = 1, LBlock = 2, JBlock = 3, SBlock = 4, ZBlock = 5, TBlock = 6, OBlock = 7
         if (BoardPanel.intBag == -1) { // Initial intBag value. Only runs for the first generated pieceArray
             // Generate/shuffle initial pieceArray
@@ -247,28 +251,22 @@ public class Controller {
             pieceList.toArray(BoardPanel.pieceArray); // Convert pieceList ArrayList --> pieceArray
 
             // Generate/shuffle next pieceArray
-            pieceList = Arrays.asList(BoardPanel.pieceArray); // Convert pieceArray to an ArrayList
+            pieceList = Arrays.asList(BoardPanel.pieceArrayNext); // Convert pieceArray to an ArrayList
             Collections.shuffle(pieceList); // Shuffle pieceArray values inside pieceList ArrayList
             pieceList.toArray(BoardPanel.pieceArrayNext); // Convert pieceList ArrayList --> pieceArrayNext
 
             BoardPanel.intBag++; // Increase from -1 --> 0
         } else if (BoardPanel.intBag == 0) { // If intBag is at start, shuffle array of pieces
-            BoardPanel.pieceArray = BoardPanel.pieceArrayNext; // Set current pieceArray to the next pieceArray that is already generated
+            System.arraycopy(BoardPanel.pieceArrayNext, 0, BoardPanel.pieceArray, 0, 7); // Set current pieceArray to the next pieceArray that is already generated
+            //BoardPanel.pieceArray = BoardPanel.pieceArrayNext; // Set current pieceArray to the next pieceArray that is already generated
 
             // Generate/shuffle next pieceArray (pieceArrayNext)
-            List<Integer> pieceList = Arrays.asList(BoardPanel.pieceArray); // Convert pieceArray to an ArrayList
+            List<Integer> pieceList = Arrays.asList(BoardPanel.pieceArrayNext); // Convert pieceArray to an ArrayList
             Collections.shuffle(pieceList); // Shuffle pieceArray values inside pieceList ArrayList
             pieceList.toArray(BoardPanel.pieceArrayNext); // Convert pieceList ArrayList --> pieceArrayNext
         }
         BoardPanel.intRandom = BoardPanel.pieceArray[BoardPanel.intBag]; // Set intRandom value to next shuffled value of pieceArray
-
-        if (BoardPanel.intBag == 6) { // If intBag is at final value (6), reset intBag to starting value (0)
-            BoardPanel.intBag = 0;
-        } else { // Increase intBag value by 1
-            BoardPanel.intBag++;
-        }
-
-        //BoardPanel.intRandom = Block.IBlock; // debug to force select a block to spawn
+        BoardPanel.intBag++; // Increase intBag value by 1
 
         if (BoardPanel.intRandom == 1) { // Create an IBlock
             blockCurrent = new Block(Block.IBlock);
@@ -306,10 +304,10 @@ public class Controller {
             BoardPanel.blockHeld = blockCurrent;
             return (generateBlock()); // Return a newly generated block
         } else { // Block already being held; swap w/ current block
-            int intHeldType = -1; // Temporary integer to allow for switching between blockCurrent <--> blockHeld
+            int intHeldType; // Temporary integer to allow for switching between blockCurrent <--> blockHeld
 
             intHeldType = BoardPanel.blockHeld.intType; // Store the type of 'held' block (to generate a new current block)
-            BoardPanel.blockHeld = blockCurrent; // Set 'held' block to the 'current' block
+            BoardPanel.blockHeld = generateBlock(blockCurrent.intType); // Set 'held' block to the 'current' block
             blockCurrent = generateBlock(intHeldType); // Set 'current' block to the 'temp' block ('held' block)
             blockCurrent.blnHeldBefore = true; // Boolean to prevent holding the same block multiple times
 

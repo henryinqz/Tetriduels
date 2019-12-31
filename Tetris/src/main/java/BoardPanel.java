@@ -96,10 +96,15 @@ public class BoardPanel extends JPanel {
 
         int intNextX = intXMax + 20;
         int intNextY = 160;
-        Block blockNext1 = new Block(pieceArray[intBag]);;
+        Block blockNext1;
         Block blockNext2;
         Block blockNext3;
 
+        if (intBag > 6) { // If value of intBag is greater than 6, read from next pieceArray
+            blockNext1 = new Block(pieceArrayNext[intBag-7]);
+        } else {
+            blockNext1 = new Block(pieceArray[intBag]);
+        }
         if (intBag+1 > 6) { // If value of intBag+1 is greater than 6, read from next pieceArray
             blockNext2 = new Block(pieceArrayNext[intBag-6]);
         } else {
@@ -175,7 +180,7 @@ public class BoardPanel extends JPanel {
         for (int y = 0; y < (intYMax/intBlockSize); y++) {
             if (intGrid[y][0] != 0 && intGrid[y][1] != 0 && intGrid[y][2] != 0 && intGrid[y][3] != 0 && intGrid[y][4] != 0 && intGrid[y][5] != 0 && intGrid[y][6] != 0 && intGrid[y][7] != 0 && intGrid[y][8] != 0 && intGrid[y][9] != 0) { // Full Row
                 for (int a=0; a<y; a++) {
-//                  intGrid[y-a] = intGrid[y-a-1];  // Shift all blocks above down 1 block (DOESN'T WORK, SINCE intGrid[y-a] SIMPLY BECOMES A REFERENCE FOR intGrid[y-a-1]
+                    //intGrid[y - a] = intGrid[y - a - 1];  // Shift all blocks above down 1 block (DOESN'T WORK, SINCE intGrid[y-a] SIMPLY BECOMES A REFERENCE FOR intGrid[y-a-1]
                     System.arraycopy(intGrid[y-a-1], 0, intGrid[y-a], 0, 10); // Shift all blocks above down 1 block, by copying the array
                 }
             }
