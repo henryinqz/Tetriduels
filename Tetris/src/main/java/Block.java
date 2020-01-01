@@ -36,11 +36,11 @@ public class Block {
             //colBlock = new Color(240, 160, 0); // Orange
             colBlock = new Color(240, 130, 0); // Darker orange
         } else if (intType == JBlock) {
-            intCoordsArray = new int[][][] {
-                    {{1,0,0,0},{1,1,1,0},{0,0,0,0},{0,0,0,0}},  // Up
-                    {{0,1,0,0},{0,1,0,0},{1,1,0,0},{0,0,0,0}}, // Left
-                    {{0,0,0,0},{1,1,1,0},{0,0,1,0},{0,0,0,0}}, // Down
-                    {{0,1,1,0},{0,1,0,0},{0,1,0,0},{0,0,0,0}} // Right
+            intCoordsArray = new int[][][]{
+                    {{1,0,0,0}, {1,1,1,0}, {0,0,0,0}, {0,0,0,0}},  // Up
+                    {{0,1,0,0}, {0,1,0,0}, {1,1,0,0}, {0,0,0,0}}, // Left
+                    {{0,0,0,0}, {1,1,1,0}, {0,0,1,0}, {0,0,0,0}}, // Down
+                    {{0,1,1,0}, {0,1,0,0}, {0,1,0,0}, {0,0,0,0}} // Right
             };
             //colBlock = new Color(0, 0, 240); // Darker blue
             colBlock = new Color(0, 80, 255); // Lighter blue
@@ -99,13 +99,18 @@ public class Block {
         }
         intCurrentCoords = intCoordsArray[intRotation]; // Sets current coordinates of block to new rotation
     }
-    public void spawn() {
-
-    }
 
     //CONSTRUCTORS
-    public Block(int intBlockType) {
+    public Block(int intBlockType) { // Default constructor to create block using given block type
         this.intType = intBlockType;
         makePiece(this.intType);
+    }
+    public Block(Block blockToCopy) { // Constructor to clone a block
+        this.intType = blockToCopy.intType;
+        this.intRotation = blockToCopy.intRotation;
+        this.intX = blockToCopy.intX;
+        this.intY = blockToCopy.intY;
+        makePiece(this.intType);
+
     }
 }
