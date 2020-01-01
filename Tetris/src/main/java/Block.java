@@ -2,7 +2,7 @@ import java.awt.*;
 
 public class Block {
     // PROPERTIES
-    public static final int IBlock = 1, LBlock = 2, JBlock = 3, SBlock = 4, ZBlock = 5, TBlock = 6, OBlock = 7;
+    public static final int IBLOCK = 1, LBLOCK = 2, JBLOCK = 3, SBLOCK = 4, ZBLOCK = 5, TBLOCK = 6, OBLOCK = 7;
     public int intType;
     private int[][][] intCoordsArray = new int[4][4][4];
     public int[][] intCurrentCoords = new int[4][4];
@@ -10,14 +10,14 @@ public class Block {
     public Color colBlock;
 
     // Spawning coordinates
-    public int intX = BoardPanel.intBlockSize * 3; // Spawn 4 blocks over on x axis
-    public int intY = BoardPanel.intBlockSize * 0; // Spawn at top of board
+    public int intX = BoardPanel.BLOCKSIZE * 3; // Spawn 4 blocks over on x axis
+    public int intY = BoardPanel.BLOCKSIZE * 0; // Spawn at top of board
 
     public boolean blnHeldBefore = false; // Boolean property to prevent holding same block multiple times
 
     // METHODS
     private void makePiece(int intType) {
-        if (intType == IBlock) {
+        if (intType == IBLOCK) {
             intCoordsArray = new int[][][]{
                     {{0,0,0,0}, {1,1,1,1}, {0,0,0,0}, {0,0,0,0}}, // Up
                     {{0,1,0,0}, {0,1,0,0}, {0,1,0,0}, {0,1,0,0}}, // Left
@@ -26,7 +26,7 @@ public class Block {
             };
             //colBlock = new Color(0, 240, 240); // Cyan
             colBlock = new Color(0, 200, 240); // Darker cyan
-        } else if (intType == LBlock) {
+        } else if (intType == LBLOCK) {
             intCoordsArray = new int[][][] {
                     {{0,0,1,0},{1,1,1,0},{0,0,0,0},{0,0,0,0}}, // Up
                     {{1,1,0,0},{0,1,0,0},{0,1,0,0},{0,0,0,0}}, // Left
@@ -35,7 +35,7 @@ public class Block {
             };
             //colBlock = new Color(240, 160, 0); // Orange
             colBlock = new Color(240, 130, 0); // Darker orange
-        } else if (intType == JBlock) {
+        } else if (intType == JBLOCK) {
             intCoordsArray = new int[][][]{
                     {{1,0,0,0}, {1,1,1,0}, {0,0,0,0}, {0,0,0,0}},  // Up
                     {{0,1,0,0}, {0,1,0,0}, {1,1,0,0}, {0,0,0,0}}, // Left
@@ -44,7 +44,7 @@ public class Block {
             };
             //colBlock = new Color(0, 0, 240); // Darker blue
             colBlock = new Color(0, 80, 255); // Lighter blue
-        } else if (intType == SBlock) {
+        } else if (intType == SBLOCK) {
             intCoordsArray = new int[][][] {
                     {{0,1,1,0},{1,1,0,0},{0,0,0,0},{0,0,0,0}}, // Up
                     {{1,0,0,0},{1,1,0,0},{0,1,0,0},{0,0,0,0}},  // Left
@@ -53,7 +53,7 @@ public class Block {
             };
             //colBlock = new Color(0, 240, 0); // Green
             colBlock = new Color(0,200,0); // Darker green
-        } else if (intType == ZBlock) {
+        } else if (intType == ZBLOCK) {
             intCoordsArray = new int[][][] {
                     {{1,1,0,0},{0,1,1,0},{0,0,0,0},{0,0,0,0}}, // Up
                     {{0,1,0,0},{1,1,0,0},{1,0,0,0},{0,0,0,0}},  //Left
@@ -61,7 +61,7 @@ public class Block {
                     {{0,0,1,0},{0,1,1,0},{0,1,0,0},{0,0,0,0}}  // Right
             };
             colBlock = new Color(240, 0, 0); // Red
-        } else if (intType == TBlock) {
+        } else if (intType == TBLOCK) {
             intCoordsArray = new int[][][] {
                     {{0,1,0,0},{1,1,1,0},{0,0,0,0},{0,0,0,0}}, // Up
                     {{0,1,0,0},{1,1,0,0},{0,1,0,0},{0,0,0,0}}, //Left
@@ -69,7 +69,7 @@ public class Block {
                     {{0,1,0,0},{0,1,1,0},{0,1,0,0},{0,0,0,0}}  //Right
             };
             colBlock = new Color(160, 0, 240); // Purple
-        } else if (intType == OBlock) {
+        } else if (intType == OBLOCK) {
             intCoordsArray = new int[][][] {
                     {{0,1,1,0},{0,1,1,0},{0,0,0,0},{0,0,0,0}}, // All directions are same
                     {{0,1,1,0},{0,1,1,0},{0,0,0,0},{0,0,0,0}},
