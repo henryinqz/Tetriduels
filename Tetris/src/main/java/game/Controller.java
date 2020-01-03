@@ -1,3 +1,8 @@
+package game;
+
+import panels.*;
+import network.*;
+
 import java.util.Collections;
 import java.util.Arrays;
 import java.util.List;
@@ -35,7 +40,7 @@ public class Controller {
     public static boolean checkCollision(Block blockCurrent, String strSide) { // Method to check block collision (side = "up", "right", "left", "down"). True = collides, false = no collision
         // Directional checks
         if (strSide.equalsIgnoreCase("left")) {
-            //Block collision checks
+            //game.Block collision checks
             for (int i = 0; i < 4; i++) {
                 if (blockCurrent.intCurrentCoords[i][0] != 0 && (blockCurrent.intX / BoardPanel.BLOCKSIZE) > 0) { // Check if non-empty array column 0 (and prevent checking outside of intGrid array)
                     if (blockCurrent.intCurrentCoords[i][0] == 1 && BoardPanel.intGrid[(blockCurrent.intY / BoardPanel.BLOCKSIZE) + i][(blockCurrent.intX / BoardPanel.BLOCKSIZE) - 1] != 0) { // Check if block in intGrid below blockCurrent (non-empty array column 3)
@@ -71,7 +76,7 @@ public class Controller {
                 }
             }
         } else if (strSide.equalsIgnoreCase("right")) {
-            //Block collision checks
+            //game.Block collision checks
             for (int i = 0; i < 4; i++) {
                 if (blockCurrent.intCurrentCoords[i][3] != 0 && (blockCurrent.intX / BoardPanel.BLOCKSIZE) < 6) { // Check if non-empty array column 3 (and prevent checking outside of intGrid array)
                     if (blockCurrent.intCurrentCoords[i][3] == 1 && BoardPanel.intGrid[(blockCurrent.intY / BoardPanel.BLOCKSIZE) + i][(blockCurrent.intX / BoardPanel.BLOCKSIZE) + 4] != 0) { // Check if block in intGrid below blockCurrent (non-empty array column 3)
@@ -107,7 +112,7 @@ public class Controller {
                 }
             }
         } else if (strSide.equalsIgnoreCase("down")) {
-            //Block collision checks
+            //game.Block collision checks
             for (int i = 0; i < 4; i++) {
                 if (blockCurrent.intCurrentCoords[3][i] != 0 && (blockCurrent.intY / BoardPanel.BLOCKSIZE) < 16) { // Check if non-empty array row 3 (and prevent checking outside of intGrid array)
                     if (blockCurrent.intCurrentCoords[3][i] == 1 && BoardPanel.intGrid[(blockCurrent.intY / BoardPanel.BLOCKSIZE) + 4][(blockCurrent.intX / BoardPanel.BLOCKSIZE) + i] != 0) { // Check if block in intGrid below blockCurrent (non-empty arrow row 3)
@@ -149,7 +154,7 @@ public class Controller {
                 }
             }
         } else if (strSide.equalsIgnoreCase("up")) {
-            //Block collision checks
+            //game.Block collision checks
             for (int i = 0; i < 4; i++) {
                 if (blockCurrent.intCurrentCoords[0][i] != 0 && (blockCurrent.intY / BoardPanel.BLOCKSIZE) > 0) { // Check if non-empty array row 0 (and prevent checking outside of intGrid array)
                     if (blockCurrent.intCurrentCoords[0][i] == 1 && BoardPanel.intGrid[(blockCurrent.intY / BoardPanel.BLOCKSIZE) - 1][(blockCurrent.intX / BoardPanel.BLOCKSIZE) + i] != 0) { // Check if block in intGrid above blockCurrent (non-empty arrow row 0)
@@ -327,7 +332,7 @@ public class Controller {
                 }
             }
             // Wallkick: Top wall (rare)
-            if (blockCurrent.intY < 0) { // Block is above 0
+            if (blockCurrent.intY < 0) { // game.Block is above 0
                 //System.out.println("Wallkicked off top wall");
                 //moveDown(blockCurrent); // Move block down
                 blockCurrent.intY = 0; // Reset block to row 0 of board (moveDown would've required more checks for IBlock)
@@ -442,7 +447,7 @@ public class Controller {
             BoardPanel.intBag++; // Increase from -1 --> 0
         } else if (BoardPanel.intBag == 0) { // If intBag is at start, shuffle array of pieces
             System.arraycopy(BoardPanel.pieceArrayNext, 0, BoardPanel.pieceArray, 0, 7); // Set current pieceArray to the next pieceArray that is already generated
-            //BoardPanel.pieceArray = BoardPanel.pieceArrayNext; // Set current pieceArray to the next pieceArray that is already generated
+            //game.BoardPanel.pieceArray = game.BoardPanel.pieceArrayNext; // Set current pieceArray to the next pieceArray that is already generated
 
             // Generate/shuffle next pieceArray (pieceArrayNext)
             List<Integer> pieceList = Arrays.asList(BoardPanel.pieceArrayNext); // Convert pieceArray to an ArrayList
@@ -487,13 +492,13 @@ public class Controller {
         if (BoardPanel.blockHeld == null) { // If no block currently held
             BoardPanel.blockHeld = blockCurrent;
             return (generateBlock()); // Return a newly generated block
-        } else { // Block already being held; swap w/ current block
+        } else { // game.Block already being held; swap w/ current block
             int intHeldType; // Temporary integer to allow for switching between blockCurrent <--> blockHeld
 
             intHeldType = BoardPanel.blockHeld.intType; // Store the type of 'held' block (to generate a new current block)
             BoardPanel.blockHeld = blockCurrent; // Set 'held' block to the 'current' block
             BoardPanel.blockHeld.rotatePiece("default"); // Rotate 'held' block to default positioning
-            //BoardPanel.blockHeld = generateBlock(blockCurrent.intType); // Set 'held' block to the 'current' block
+            //game.BoardPanel.blockHeld = generateBlock(blockCurrent.intType); // Set 'held' block to the 'current' block
 
             blockCurrent = generateBlock(intHeldType); // Set 'current' block to the 'temp' block ('held' block)
             blockCurrent.blnHeldBefore = true; // Boolean to prevent holding the same block multiple times

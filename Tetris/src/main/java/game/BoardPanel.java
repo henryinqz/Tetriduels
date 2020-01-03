@@ -1,10 +1,15 @@
+package game;
+
+import panels.*;
+import network.*;
+
 import javax.swing.*;
 import java.awt.*;
 
 public class BoardPanel extends JPanel {
     // PROPERTIES
-    public static final int MOVE = 25; // # of pixels moved every time
-    public static final int BLOCKSIZE = 25; // Block size (25*25px)
+    public static final int MOVE = 30; // # of pixels moved every time
+    public static final int BLOCKSIZE = 30; // game.Block size (25*25px)
     public static int intXMax = BLOCKSIZE * 10; // 10 blocks wide
     public static int intYMax = BLOCKSIZE * 20; // 20 blocks tall
     public static int[][] intGrid = new int[intYMax / BLOCKSIZE][intXMax / BLOCKSIZE]; // 10x20 array grid of board
@@ -16,6 +21,9 @@ public class BoardPanel extends JPanel {
     public static int intRandom = -1;
     public static Integer[] pieceArray = new Integer[]{1, 2, 3, 4, 5, 6, 7};
     public static Integer[] pieceArrayNext = new Integer[]{1, 2, 3, 4, 5, 6, 7};
+
+    // Enemy intGrid
+    public static int[][] intEnemyGrid = new int[intYMax / BLOCKSIZE][intXMax / BLOCKSIZE]; // 10x20 array grid of board
 
     // METHODS
     public void paintComponent(Graphics g) {
@@ -34,7 +42,7 @@ public class BoardPanel extends JPanel {
         drawHeldBlock(g2); // Draw held block on sidebar
         drawNextBlocks(g2); // Draw next blocks on side bar
 
-        if (Controller.checkCollision(blockCurrent, "down") == true) { // Block hits bottom
+        if (Controller.checkCollision(blockCurrent, "down") == true) { // game.Block hits bottom
             storeOldBlocks(blockCurrent);
             removeFullLines(intGrid);
             if (blockCurrent.intY <= 0 && blockCurrent.intX == BoardPanel.BLOCKSIZE * 3) { // Collision at block spawn point
@@ -44,6 +52,14 @@ public class BoardPanel extends JPanel {
                 Controller.updateGhostBlock(blockCurrent); // Update position of ghost block
             }
         }
+
+        // Opponent
+        g2.setColor(Color.DARK_GRAY); // Background
+        g2.fillRect(500, 0, intXMax, intYMax);
+
+        drawEnemyOldBlocks(g2);
+        drawGridlines(500, 0, 500+intXMax, intYMax, intXMax / BLOCKSIZE, intYMax / BLOCKSIZE, g2); // Draw board gridlines
+
     }
 
     private void drawBlock(Block blockDraw, int intX, int intY, Graphics2D g2) { // Draw block
@@ -133,10 +149,16 @@ public class BoardPanel extends JPanel {
         for (int a = 0; a < 4; a++) { // Loop through entire block coordsArray (all 16 values of the 4x4 array)
             for (int b = 0; b < 4; b++) {
                 if (blockCurrent.intCurrentCoords[a][b] != 0) { // If block coordsArray is not empty
-                    intGrid[(blockCurrent.intY / BLOCKSIZE) + a][(blockCurrent.intX / BLOCKSIZE) + b] = blockCurrent.intType; // Fill intGrid array w/ corresponding integer type values
+                    //intGrid[(blockCurrent.intY / BLOCKSIZE) + a][(blockCurrent.intX / BLOCKSIZE) + b] = blockCurrent.intType; // Fill intGrid array w/ corresponding integer type values
+
+                    int intSquareX = (blockCurrent.intY / BLOCKSIZE) + a; // Singular square of block X coordinate in intGrid array
+                    int intSquareY = (blockCurrent.intX / BLOCKSIZE) + b;// Singular square of block Y coordinate in intGrid array
+                    intGrid[intSquareX][intSquareY] = blockCurrent.intType; // Fill intGrid array w/ corresponding integer type values
+                    Connections.sendMessage(Connections.GRID, "add," + intSquareX + "," + intSquareY + "," + blockCurrent.intType);
                 } // If nothing in block coordsArray, intGrid[(blockCurrent.intY / intBlockSize) + a][(blockCurrent.intX / intBlockSize) + b] remains at 0
             }
         }
+
     }
 
     private void drawOldBlocks(Graphics2D g2) {
@@ -176,6 +198,43 @@ public class BoardPanel extends JPanel {
             }
         }
     }
+    private void drawEnemyOldBlocks(Graphics2D g2) {
+        for (int c = 0; c < (intYMax / BLOCKSIZE); c++) {
+            for (int d = 0; d < (intXMax / BLOCKSIZE); d++) {
+                if (intEnemyGrid[c][d] != 0) { // enemy grid
+                    switch (intEnemyGrid[c][d]) { // Set block colours of corresponding block/values in intGrid
+                        case Block.IBLOCK:
+                            //g2.setColor(new Color(0, 240, 240)); // Cyan
+                            g2.setColor(new Color(0, 200, 240)); // Darker cyan
+                            break;
+                        case Block.LBLOCK:
+                            //g2.setColor(new Color(240, 160, 0)); // Orange
+                            g2.setColor(new Color(240, 130, 0)); // Darker orange
+                            break;
+                        case Block.JBLOCK:
+                            //g2.setColor(new Color(0, 0, 240)); // Darker blue
+                            g2.setColor(new Color(0, 80, 255)); // Lighter blue
+                            break;
+                        case Block.SBLOCK:
+                            //g2.setColor(new Color(0, 240, 0)); // Green
+                            g2.setColor(new Color(0, 200, 0)); // Darker green
+                            break;
+                        case Block.ZBLOCK:
+                            g2.setColor(new Color(240, 0, 0)); // Red
+                            break;
+                        case Block.TBLOCK:
+                            g2.setColor(new Color(160, 0, 240)); // Purple
+                            break;
+                        case Block.OBLOCK:
+                            //g2.setColor(new Color(240, 240, 0)); // Yellow
+                            g2.setColor(new Color(240, 200, 0)); // Yellow
+                            break;
+                    }
+                    g2.fillRect(500+(d * BLOCKSIZE), c * BLOCKSIZE, BLOCKSIZE, BLOCKSIZE); // Draw oldBlocks
+                }
+            }
+        }
+    }
 
     private void removeFullLines(int[][] intGrid) {
         for (int y = 0; y < (intYMax / BLOCKSIZE); y++) {
@@ -184,9 +243,12 @@ public class BoardPanel extends JPanel {
                     //intGrid[y - a] = intGrid[y - a - 1];  // Shift all blocks above down 1 block (DOESN'T WORK, SINCE intGrid[y-a] SIMPLY BECOMES A REFERENCE FOR intGrid[y-a-1]
                     System.arraycopy(intGrid[y - a - 1], 0, intGrid[y - a], 0, 10); // Shift all blocks above down 1 block, by copying the array
                 }
+                Connections.sendMessage(Connections.GRID, "remove," + y);
             }
         }
     }
+
+
 
     private void drawGridlines(int intX1, int intY1, int intX2, int intY2, int intAmountVert, int intAmountHoriz, Graphics2D g2) { // Draw gridlines on board. intAmountX & Y determine how many gridlines to draw
         g2.setColor(Color.BLACK);

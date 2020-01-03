@@ -1,3 +1,8 @@
+package game;
+
+import panels.*;
+import network.*;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -5,22 +10,20 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-public class GUI implements ActionListener, KeyListener {
+public class Game implements ActionListener, KeyListener {
     // PROPERTIES
-    JFrame theframe = new JFrame("Tetris");
-    JPanel mainPanel = new JPanel();
     BoardPanel boardPanel = new BoardPanel();
     
     BlockFallTimer blockFall = new BlockFallTimer();
     Thread threadBlockFall = new Thread(blockFall);
 
-    // Debug buttons
+    /*// Debug buttons
     JButton butRotateLeft = new JButton("Rotate Left");
     JButton butRotateRight = new JButton("Rotate Right");
     JButton butMoveLeft = new JButton("Move Left");
     JButton butMoveRight = new JButton("Move Right");
     JButton butMoveDown = new JButton("Move Down");
-    JButton butMoveUp = new JButton("Move Up");
+    JButton butMoveUp = new JButton("Move Up");*/
 
     Timer thetimer = new Timer(1000 / 60, this); //60FPS
 
@@ -31,7 +34,14 @@ public class GUI implements ActionListener, KeyListener {
     boolean blnRotateRightHeld = false;
 
     // METHODS
+    public JPanel getPanel() {
+        return boardPanel;
+    }
     public void actionPerformed(ActionEvent evt) {
+        if (this.boardPanel.isFocusOwner() != true) {
+            this.boardPanel.requestFocus();
+        }
+
         if (Tetris.blnGameLoop == false) {
             System.out.println("GAME OVER");
             //thetimer.stop();
@@ -40,7 +50,8 @@ public class GUI implements ActionListener, KeyListener {
 
         if (evt.getSource() == thetimer) {
             this.boardPanel.repaint();
-        } else if (evt.getSource() == butRotateLeft) {
+        }
+        /*else if (evt.getSource() == butRotateLeft) {
             Controller.rotate(BoardPanel.blockCurrent, "left");
         } else if (evt.getSource() == butRotateRight) {
             Controller.rotate(BoardPanel.blockCurrent, "right");
@@ -52,7 +63,7 @@ public class GUI implements ActionListener, KeyListener {
             Controller.moveDown(BoardPanel.blockCurrent);
         } else if (evt.getSource() == butMoveUp) {
             Controller.moveUp(BoardPanel.blockCurrent);
-        }
+        }*/
     }
 
     // KeyListener
@@ -87,13 +98,13 @@ public class GUI implements ActionListener, KeyListener {
         }
 
         if (blnRotateLeftHeld == false) { // Only activate once (disable holding rotate button)
-            if (evt.getKeyCode() == KeyEvent.VK_UP) { // Up arrow
+            if (evt.getKeyCode() == KeyEvent.VK_Z) { // Z key
                 Controller.rotate(BoardPanel.blockCurrent, "left");
                 blnRotateLeftHeld = true;
             }
         }
         if (blnRotateRightHeld == false) { // Only activate once (disable holding rotate button)
-            if (evt.getKeyCode() == KeyEvent.VK_Z) { // Z key
+            if (evt.getKeyCode() == KeyEvent.VK_UP) { // Up arrow
                 Controller.rotate(BoardPanel.blockCurrent, "right");
                 blnRotateRightHeld = true;
             }
@@ -105,20 +116,21 @@ public class GUI implements ActionListener, KeyListener {
             blnHardDropHeld = false;
         } else if (blnHoldBlockHeld == true && evt.getKeyCode() == KeyEvent.VK_C) { // Reenable hold block button after relase
             blnHoldBlockHeld = false;
-        } else if (blnRotateLeftHeld == true && evt.getKeyCode() == KeyEvent.VK_UP) { // Reenable left rotate button after release
+        } else if (blnRotateLeftHeld == true && evt.getKeyCode() == KeyEvent.VK_Z) { // Reenable left rotate button after release
             blnRotateLeftHeld = false;
-        } else if (blnRotateRightHeld == true && evt.getKeyCode() == KeyEvent.VK_Z) { // Reenable right rotate button after release
+        } else if (blnRotateRightHeld == true && evt.getKeyCode() == KeyEvent.VK_UP) { // Reenable right rotate button after release
             blnRotateRightHeld = false;
         }
     }
     // CONSTRUCTOR
 
-    public GUI() {
+    public Game() {
         //mainPanel.setPreferredSize(new Dimension(1280, 720));
-        this.boardPanel.setPreferredSize(new Dimension(BoardPanel.intXMax + 400, BoardPanel.intYMax));
+        //this.boardPanel.setPreferredSize(new Dimension(BoardPanel.intXMax + 400, BoardPanel.intYMax));
+        this.boardPanel.setPreferredSize(new Dimension(GUI.FRAME_WIDTH,GUI.FRAME_HEIGHT));
         this.boardPanel.setLayout(null);
 
-        //Debug buttons
+        /*//Debug buttons
         this.butRotateLeft.addActionListener(this);
         this.butRotateLeft.setSize(110,30);
         this.butRotateLeft.setLocation(BoardPanel.intXMax + 285, 10);
@@ -155,17 +167,18 @@ public class GUI implements ActionListener, KeyListener {
         this.butMoveRight.setFocusable(false);
         this.butRotateLeft.setFocusable(false);
         this.butRotateRight.setFocusable(false);
-        // end of debug buttons
+        // end of debug buttons*/
 
         this.boardPanel.setFocusable(true);
+        this.boardPanel.requestFocus();
         this.boardPanel.addKeyListener(this);
 
-        this.theframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        /*this.theframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.theframe.setContentPane(boardPanel);
         this.theframe.pack();
         this.theframe.setResizable(false);
         this.theframe.setLocationRelativeTo(null);
-        this.theframe.setVisible(true);
+        this.theframe.setVisible(true);*/
 
         this.thetimer.start();
         this.threadBlockFall.start();

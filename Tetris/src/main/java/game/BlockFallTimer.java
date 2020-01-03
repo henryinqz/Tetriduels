@@ -1,3 +1,8 @@
+package game;
+
+import panels.*;
+import network.*;
+
 public class BlockFallTimer implements Runnable{
 	// PROPERTIES
 	public int intTimerInterval = 750; // Default falling interval 750ms

@@ -1,3 +1,5 @@
+package network;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.AWTEventMulticaster;
@@ -17,7 +19,7 @@ import java.util.Vector;
 import java.util.Enumeration;
 
 /**
- * <h1>SuperSocketMaster</h1>
+ * <h1>network.SuperSocketMaster</h1>
  * This class gives Java students the ability to quickly open a Java network socket<p>
  * They can then send outgoing text over the socket<p>
  * They can recieve incoming text over the socket<p>
@@ -142,7 +144,7 @@ public class SuperSocketMaster{
   }
   // Constructor
   /**
-   * Server Mode SuperSocketMaster Constructor<p>
+   * Server Mode network.SuperSocketMaster Constructor<p>
    * 
    * @param intPort TCP Port you want to use for your connection
    * @param listener Swing/AWT program's ActionListener.  Usually "this"
@@ -152,7 +154,7 @@ public class SuperSocketMaster{
     this.intPort = intPort;
   }
   /**
-   * Client Mode SuperSocketMaster Constructor<p>
+   * Client Mode network.SuperSocketMaster Constructor<p>
    * 
    * @param strServerIP Hostname or IP address of the server you want to connect to
    * @param intPort TCP Port you want to use for your connection

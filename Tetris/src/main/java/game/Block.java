@@ -1,3 +1,8 @@
+package game;
+
+import panels.*;
+import network.*;
+
 import java.awt.*;
 
 public class Block {
