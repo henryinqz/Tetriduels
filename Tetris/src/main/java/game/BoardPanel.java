@@ -47,13 +47,15 @@ public class BoardPanel extends JPanel {
             removeFullLines(intGrid);
             if (blockCurrent.intY <= 0 && blockCurrent.intX == BoardPanel.BLOCKSIZE * 3) { // Collision at block spawn point
                 Tetris.blnGameLoop = false; // end game
+                Connections.sendMessage(Connections.GAME_OVER,"loss");
+                Game.endGame();
             } else { // If no collision at spawn point, generate a new block
                 blockCurrent = Controller.generateBlock();
                 Controller.updateGhostBlock(blockCurrent); // Update position of ghost block
             }
         }
 
-        // Opponent
+        // Enemy
         g2.setColor(Color.DARK_GRAY); // Background
         g2.fillRect(500, 0, intXMax, intYMax);
 

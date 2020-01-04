@@ -1,7 +1,6 @@
 package game;
 
 import panels.*;
-import network.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -25,7 +24,7 @@ public class Game implements ActionListener, KeyListener {
     JButton butMoveDown = new JButton("Move Down");
     JButton butMoveUp = new JButton("Move Up");*/
 
-    Timer thetimer = new Timer(1000 / 60, this); //60FPS
+    Timer timerGame = new Timer(1000 / 60, this); //60FPS
 
     // Booleans to prevent holding keypresses
     boolean blnHardDropHeld = false;
@@ -37,18 +36,31 @@ public class Game implements ActionListener, KeyListener {
     public JPanel getPanel() {
         return boardPanel;
     }
+    public static void endGame() {
+        if (Tetris.blnGameLoop == false) {
+            System.out.println("Game over!");
+            //timerGame.stop();
+            // KILL THREADS SOMEHOW
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+            }
+            Utility.setPanel(new ConnectMenu().getPanel());
+        }
+    }
+
+    public void killTimersThreads() {
+        timerGame.stop();
+
+    }
+
     public void actionPerformed(ActionEvent evt) {
         if (this.boardPanel.isFocusOwner() != true) {
             this.boardPanel.requestFocus();
         }
 
-        if (Tetris.blnGameLoop == false) {
-            System.out.println("GAME OVER");
-            //thetimer.stop();
-            //System.exit(0); // Temporarily disabled
-        }
 
-        if (evt.getSource() == thetimer) {
+        if (evt.getSource() == timerGame) {
             this.boardPanel.repaint();
         }
         /*else if (evt.getSource() == butRotateLeft) {
@@ -180,7 +192,7 @@ public class Game implements ActionListener, KeyListener {
         this.theframe.setLocationRelativeTo(null);
         this.theframe.setVisible(true);*/
 
-        this.thetimer.start();
+        this.timerGame.start();
         this.threadBlockFall.start();
 
     }

@@ -8,7 +8,7 @@ import java.awt.event.ActionListener;
 
 public class Connections implements ActionListener {
     // PROPERTIES
-    public static final int READY=0, START=1, CHAT_MESSAGE=2, GRID=3; // Message types
+    public static final int READY=0, START=1, CHAT_MESSAGE=2, GRID=3, GAME_OVER=4; // Message types
 
     public static SuperSocketMaster ssm; // Create SuperSocketMaster object to communicate over a network (https://github.com/MrCadawas). Wraps BufferedReader & PrintWriter objects.
     public static boolean blnIsServer;
@@ -42,9 +42,19 @@ public class Connections implements ActionListener {
                 } else if (strMessageSegment[1].equalsIgnoreCase("remove")) { // Remov rows from grid
                     int intRow = Integer.parseInt(strMessageSegment[2]);
                     for (int a = 0; a < intRow; a++) {
-                        System.arraycopy(BoardPanel.intEnemyGrid[intRow - a - 1], 0, BoardPanel.intEnemyGrid[intRow - a], 0, 10); // Shift all blocks above down 1 block, by copying the array
+                        System.arraycopy(BoardPanel.intEnemyGrid[intRow-a-1], 0, BoardPanel.intEnemyGrid[intRow-a], 0, 10); // Shift all blocks above down 1 block, by copying the array
                     }
                 }
+            } else if (intMessageType == GAME_OVER) {
+                if (strMessageSegment[1].equalsIgnoreCase("loss")) { // Enemy lost
+                    Tetris.blnGameLoop = false;
+                    Game.endGame();
+                    // print game over
+                    //wait 5 seconds
+                    // stats
+                    // rematch
+                    // close/leave server
+                }// else if (strMessageSegment[1].equalsIgnoreCase("win"))
             }
         }
     }
@@ -70,14 +80,14 @@ public class Connections implements ActionListener {
 
     // CONSTRUCTORS
     // Server Constructor
-    public Connections(int intPort, ActionListener actionListener) {
+    public Connections(int intPort) {
         this.blnIsServer = true;
         this.ssm = new SuperSocketMaster(intPort, this); // (intPort, listener)
         this.ssm.connect();
     }
 
     // Client Constructor
-    public Connections(String strServerIP, int intPort, ActionListener actionListener) {
+    public Connections(String strServerIP, int intPort) {
         this.blnIsServer = false;
         this.ssm = new SuperSocketMaster(strServerIP, intPort, this); // (strServerIP, intPort, listener)
         if (this.ssm.connect() == true) { // Connect to server

@@ -24,7 +24,7 @@ public class ConnectMenu implements ActionListener {
     JLabel labelError = new JLabel("",SwingConstants.CENTER);
 
     public String strServerPort;
-    public int intPort = 9001;
+    public int intPort = 2626;
 
     JButton butReady = new JButton("Ready");
     public static boolean blnReady = false;
@@ -46,7 +46,7 @@ public class ConnectMenu implements ActionListener {
             if (Connections.ssm != null) {
                 Connections.ssm.disconnect();
             }
-            new Connections(intPort, this); // Server; create SuperSocketMaster object
+            new Connections(intPort); // Server; create SuperSocketMaster object
             fieldServerIP.setEditable(false);
             fieldServerIP.setText(Connections.ssm.getMyAddress());
             fieldPort.setEditable(false);
@@ -74,10 +74,14 @@ public class ConnectMenu implements ActionListener {
         } else if (evt.getSource() == butConnect) { // Client connection
             if (!fieldServerIP.getText().equals("") && !fieldPort.getText().equals("")) { // Check if server IP & port are blank
                 String strServerIP = fieldServerIP.getText();
-                int intPort = Integer.parseInt(fieldPort.getText());
+                try {
+                    int intPort = Integer.parseInt(fieldPort.getText());
+                } catch (NumberFormatException e) { // User did not input numbers
+                    intPort = -1;
+                }
 
                 if (intPort >= 0 && intPort <= 65535) { // Check if port entered is within range of all ports
-                    new Connections(strServerIP, intPort,this ); // Client; create SuperSocketMaster object
+                    new Connections(strServerIP, intPort); // Client; create SuperSocketMaster object
                     if (Connections.blnConnected == true) { // Connected to server
                         labelError.setVisible(false);
                         butConnect.setEnabled(false);
@@ -177,7 +181,7 @@ public class ConnectMenu implements ActionListener {
 
         // Initialize error label
         this.labelError.setLocation(900,5);
-        this.labelError.setSize(300,200);
+        this.labelError.setSize(300,300);
         this.labelError.setForeground(Color.RED);
         this.labelError.setVisible(false);
         this.connectPanel.add(labelError);
