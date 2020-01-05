@@ -7,7 +7,7 @@ import java.awt.*;
 
 public class Block {
     // PROPERTIES
-    public static final int IBLOCK = 1, LBLOCK = 2, JBLOCK = 3, SBLOCK = 4, ZBLOCK = 5, TBLOCK = 6, OBLOCK = 7;
+    public static final int IBLOCK = 1, LBLOCK = 2, JBLOCK = 3, SBLOCK = 4, ZBLOCK = 5, TBLOCK = 6, OBLOCK = 7, GARBAGE = 8;
     public int intType;
     private int[][][] intCoordsArray = new int[4][4][4];
     public int[][] intCurrentCoords = new int[4][4];
@@ -83,6 +83,8 @@ public class Block {
             };
             //colBlock = new Color(240, 240, 0); // Yellow
             colBlock = new Color(240, 200, 0); // Yellow
+        } else if (intType == GARBAGE) {
+            colBlock = Color.LIGHT_GRAY;
         }
         intCurrentCoords = intCoordsArray[intRotation]; // Set 2D array of current coordinates. Default value when making piece is up (intRotation=0)
     }

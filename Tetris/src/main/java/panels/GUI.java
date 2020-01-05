@@ -17,7 +17,8 @@ public class GUI implements ActionListener {
 
     // CONSTRUCTORS
     public GUI() {
-        new MainMenu();
+        //this.theframe.setLocationRelativeTo(null);
+        //new MainMenu();
     }
 
 

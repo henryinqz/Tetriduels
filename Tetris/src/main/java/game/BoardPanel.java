@@ -153,10 +153,10 @@ public class BoardPanel extends JPanel {
                 if (blockCurrent.intCurrentCoords[a][b] != 0) { // If block coordsArray is not empty
                     //intGrid[(blockCurrent.intY / BLOCKSIZE) + a][(blockCurrent.intX / BLOCKSIZE) + b] = blockCurrent.intType; // Fill intGrid array w/ corresponding integer type values
 
-                    int intSquareX = (blockCurrent.intY / BLOCKSIZE) + a; // Singular square of block X coordinate in intGrid array
-                    int intSquareY = (blockCurrent.intX / BLOCKSIZE) + b;// Singular square of block Y coordinate in intGrid array
-                    intGrid[intSquareX][intSquareY] = blockCurrent.intType; // Fill intGrid array w/ corresponding integer type values
-                    Connections.sendMessage(Connections.GRID, "add," + intSquareX + "," + intSquareY + "," + blockCurrent.intType);
+                    int intSquareY = (blockCurrent.intY / BLOCKSIZE) + a; // Singular square of block X coordinate in intGrid array
+                    int intSquareX = (blockCurrent.intX / BLOCKSIZE) + b;// Singular square of block Y coordinate in intGrid array
+                    intGrid[intSquareY][intSquareX] = blockCurrent.intType; // Fill intGrid array w/ corresponding integer type values
+                    Connections.sendMessage(Connections.GRID, "add," + intSquareY + "," + intSquareX + "," + blockCurrent.intType);
                 } // If nothing in block coordsArray, intGrid[(blockCurrent.intY / intBlockSize) + a][(blockCurrent.intX / intBlockSize) + b] remains at 0
             }
         }
@@ -193,6 +193,9 @@ public class BoardPanel extends JPanel {
                         case Block.OBLOCK:
                             //g2.setColor(new Color(240, 240, 0)); // Yellow
                             g2.setColor(new Color(240, 200, 0)); // Yellow
+                            break;
+                        case Block.GARBAGE:
+                            g2.setColor(Color.LIGHT_GRAY);
                             break;
                     }
                     g2.fillRect(d * BLOCKSIZE, c * BLOCKSIZE, BLOCKSIZE, BLOCKSIZE); // Draw oldBlocks
@@ -231,6 +234,9 @@ public class BoardPanel extends JPanel {
                             //g2.setColor(new Color(240, 240, 0)); // Yellow
                             g2.setColor(new Color(240, 200, 0)); // Yellow
                             break;
+                        case Block.GARBAGE:
+                            g2.setColor(Color.LIGHT_GRAY);
+                            break;
                     }
                     g2.fillRect(500+(d * BLOCKSIZE), c * BLOCKSIZE, BLOCKSIZE, BLOCKSIZE); // Draw oldBlocks
                 }
@@ -239,15 +245,24 @@ public class BoardPanel extends JPanel {
     }
 
     private void removeFullLines(int[][] intGrid) {
+        int intRemovedLines = 0; // Variable that determines how many rows/lines were removed after 1 block placement
         for (int y = 0; y < (intYMax / BLOCKSIZE); y++) {
             if (intGrid[y][0] != 0 && intGrid[y][1] != 0 && intGrid[y][2] != 0 && intGrid[y][3] != 0 && intGrid[y][4] != 0 && intGrid[y][5] != 0 && intGrid[y][6] != 0 && intGrid[y][7] != 0 && intGrid[y][8] != 0 && intGrid[y][9] != 0) { // Full Row
                 for (int a = 0; a < y; a++) {
                     //intGrid[y - a] = intGrid[y - a - 1];  // Shift all blocks above down 1 block (DOESN'T WORK, SINCE intGrid[y-a] SIMPLY BECOMES A REFERENCE FOR intGrid[y-a-1]
                     System.arraycopy(intGrid[y - a - 1], 0, intGrid[y - a], 0, 10); // Shift all blocks above down 1 block, by copying the array
                 }
-                Connections.sendMessage(Connections.GRID, "remove," + y);
+                intRemovedLines++; // increase # of removes lines by 1
+                Connections.sendMessage(Connections.GRID, "remove," + y); // Tell enemy to clear line of our board
             }
         }
+        if (intRemovedLines > 1) { // Only send if 2 or more lines were cleared
+            sendGarbageLines(intRemovedLines-1); // Call method to send garbage lines to opposite side
+        }
+    }
+
+    private void sendGarbageLines(int intRemovedLines) {
+        Connections.sendMessage(Connections.GRID, "garbage," + intRemovedLines);
     }
 
 

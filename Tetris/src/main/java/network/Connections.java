@@ -35,15 +35,46 @@ public class Connections implements ActionListener {
                 ConnectMenu.areaChat.append(strMessageSegment[1] + "\n"); // Add new chat message to chat
             } else if (intMessageType == GRID) {
                 if (strMessageSegment[1].equalsIgnoreCase("add")) { // Add blocks to grind
-                    int intSquareX = Integer.parseInt(strMessageSegment[2]);
-                    int intSquareY = Integer.parseInt(strMessageSegment[3]);
+                    int intSquareY = Integer.parseInt(strMessageSegment[2]);
+                    int intSquareX = Integer.parseInt(strMessageSegment[3]);
                     int intBlockType = Integer.parseInt(strMessageSegment[4]);
-                    BoardPanel.intEnemyGrid[intSquareX][intSquareY] = intBlockType;
-                } else if (strMessageSegment[1].equalsIgnoreCase("remove")) { // Remov rows from grid
+                    BoardPanel.intEnemyGrid[intSquareY][intSquareX] = intBlockType;
+                } else if (strMessageSegment[1].equalsIgnoreCase("remove")) { // Remove rows from grid
                     int intRow = Integer.parseInt(strMessageSegment[2]);
                     for (int a = 0; a < intRow; a++) {
                         System.arraycopy(BoardPanel.intEnemyGrid[intRow-a-1], 0, BoardPanel.intEnemyGrid[intRow-a], 0, 10); // Shift all blocks above down 1 block, by copying the array
                     }
+                } else if (strMessageSegment[1].equalsIgnoreCase("garbage")) { // Add garbage to player grid
+                    int intGarbageLines = Integer.parseInt(strMessageSegment[2]); // Store # of garbage lines being received
+
+                    if (intGarbageLines > 0) { // Only run if garbage lines sent was above 0
+                        for (int a = 0; a < intGarbageLines; a++) { // Loop for # of garbage lines being received
+                            for (int b = 0; b < 19; b++) { // Loop through entire y-axis of board
+                                if (BoardPanel.intGrid[b+1][0] != 0 || BoardPanel.intGrid[b+1][1] != 0 || BoardPanel.intGrid[b+1][2] != 0 || BoardPanel.intGrid[b+1][3] != 0 || BoardPanel.intGrid[b+1][4] != 0 || BoardPanel.intGrid[b+1][5] != 0 || BoardPanel.intGrid[b+1][6] != 0 || BoardPanel.intGrid[b+1][7] != 0 || BoardPanel.intGrid[b+1][8] != 0 || BoardPanel.intGrid[b+1][9] != 0) { // Skip line if empty
+                                    System.arraycopy(BoardPanel.intGrid[b + 1], 0, BoardPanel.intGrid[b], 0, 10); // Shift all blocks above up 1 block, by copying the array
+                                }
+                                for (int c = 0; c < 10; c++) { // Loop through X-axis
+                                    sendMessage(GRID, "add," + (b) + "," + (c) + "," + BoardPanel.intGrid[b][c]); // Tell enemy to change their view of our board by moving blocks up
+                                }
+                            }
+                        }
+                        for (int d = 0; d < intGarbageLines; d++) {
+                            int intSquareY = 19 - d;
+                            int intBlockType = Block.GARBAGE;
+
+                            int intRandom = (int)(Math.floor(Math.random()*10)); // Generate a random # between 0-9 for a gap block in the new garbage line
+                            for (int intSquareX=0; intSquareX < 10; intSquareX++) {
+                                if (intSquareX == intRandom) { // If the preselected number above is equal to the x-axis value being looped through
+                                    BoardPanel.intGrid[intSquareY][intSquareX] = 0; // Set block to air instead of garbage
+                                    sendMessage(GRID,"add,"+intSquareY+","+intSquareX+","+0); // Tell enemy to change their view of our board by adding air space
+                                } else {
+                                    BoardPanel.intGrid[intSquareY][intSquareX] = intBlockType; // Set starting from bottom of board to garbage
+                                    sendMessage(GRID,"add,"+intSquareY+","+intSquareX+","+intBlockType); // Tell enemy to change their view of our board by adding garbage blocks
+                                }
+                            }
+                        }
+                    }
+                    Controller.updateGhostBlock(BoardPanel.blockCurrent); // update ghost block
                 }
             } else if (intMessageType == GAME_OVER) {
                 if (strMessageSegment[1].equalsIgnoreCase("loss")) { // Enemy lost
