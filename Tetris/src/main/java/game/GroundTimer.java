@@ -42,6 +42,7 @@ class TotalGroundTimer implements Runnable { // TOTAL TIMER TO ALLOW MOVES ON GR
     // PROPERTIES
     public static boolean blnTotalGroundAllow = true; // Default to true. After timer finishes, sets to false and places block.
     public static boolean blnRun;
+    public static boolean blnCancel = false;
 
     // METHODS
     public void run() {
@@ -52,7 +53,12 @@ class TotalGroundTimer implements Runnable { // TOTAL TIMER TO ALLOW MOVES ON GR
                     Thread.sleep(4000); // Maximum time allowed to move on ground (4s)
                 } catch (InterruptedException e) {
                 }
-                blnTotalGroundAllow = false; // Prevent block from moving once it touches the ground again
+                if (blnCancel == true) {
+                    blnTotalGroundAllow = true;
+                    blnCancel = false;
+                } else {
+                    blnTotalGroundAllow = false; // Prevent block from moving once it touches the ground again
+                }
                 blnRun = false; // Prevent code from running again until blnRun is set to true again by a different class
             }
             try { // This 1ms exists otherwise the code would not continously loop (likely since there is no code outside the if statement)
@@ -66,3 +72,4 @@ class TotalGroundTimer implements Runnable { // TOTAL TIMER TO ALLOW MOVES ON GR
     public TotalGroundTimer() {
     }
 }
+
