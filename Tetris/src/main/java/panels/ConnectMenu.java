@@ -109,14 +109,9 @@ public class ConnectMenu implements ActionListener {
         } else if (evt.getSource() == butReady) {
             butReady.setEnabled(false);
             blnReady = true;
+            Tetris.blnGameLoop = true;
             Connections.sendMessage(Connections.READY);
         }
-
-        //Ready
-        //if (blnReady = true && blnReadyOpp == true) { // Both players ready
-        //    panels.Utility.setPanel(new Game().getPanel());
-        //}
-
 
         // Chat
         if(evt.getSource() == butChatMessageSend) { // Send text over network

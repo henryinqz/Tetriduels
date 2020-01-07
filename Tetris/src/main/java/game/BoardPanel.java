@@ -13,6 +13,7 @@ public class BoardPanel extends JPanel {
     public static int intXMax = BLOCKSIZE * 10; // 10 blocks wide
     public static int intYMax = BLOCKSIZE * 20; // 20 blocks tall
     public static int[][] intGrid = new int[intYMax / BLOCKSIZE][intXMax / BLOCKSIZE]; // 10x20 array grid of board
+    public static int[][] intEnemyGrid = new int[intYMax / BLOCKSIZE][intXMax / BLOCKSIZE]; // 10x20 array grid of board (Enemy)
     public static Block blockCurrent;
     public static Block blockGhost;
     public static Block blockHeld;
@@ -22,11 +23,11 @@ public class BoardPanel extends JPanel {
     public static Integer[] pieceArray = new Integer[]{1, 2, 3, 4, 5, 6, 7};
     public static Integer[] pieceArrayNext = new Integer[]{1, 2, 3, 4, 5, 6, 7};
 
-    // Enemy intGrid
-    public static int[][] intEnemyGrid = new int[intYMax / BLOCKSIZE][intXMax / BLOCKSIZE]; // 10x20 array grid of board
+    Thread threadTotalGroundTimer = new Thread(new TotalGroundTimer());
+    Thread threadGroundTimer = new Thread(new GroundTimer());
 
     // METHODS
-    public void paintComponent(Graphics g) {
+    public synchronized void paintComponent(Graphics g) {
         Graphics2D g2 = (Graphics2D) g; // Use Graphics2D instead of regular Graphics
         super.paintComponent(g2); // Clear previous drawings (Windows only); super JPanel (original) paintComponent method
 
@@ -42,16 +43,36 @@ public class BoardPanel extends JPanel {
         drawHeldBlock(g2); // Draw held block on sidebar
         drawNextBlocks(g2); // Draw next blocks on side bar
 
-        if (Controller.checkCollision(blockCurrent, "down") == true) { // game.Block hits bottom
-            storeOldBlocks(blockCurrent);
-            removeFullLines(intGrid);
-            if (blockCurrent.intY <= 0 && blockCurrent.intX == BoardPanel.BLOCKSIZE * 3) { // Collision at block spawn point
-                Tetris.blnGameLoop = false; // end game
-                Connections.sendMessage(Connections.GAME_OVER,"loss");
-                Game.endGame();
-            } else { // If no collision at spawn point, generate a new block
-                blockCurrent = Controller.generateBlock();
-                Controller.updateGhostBlock(blockCurrent); // Update position of ghost block
+        if (Controller.checkCollision(blockCurrent, "down") == true) { // Block hits bottom
+            if (TotalGroundTimer.blnTotalGroundAllow == false || GroundTimer.blnGroundAllow == false || Controller.blnHardDrop == true) {
+                storeOldBlocks(blockCurrent);
+                removeFullLines(intGrid);
+                if (blockCurrent.intY <= 0 && blockCurrent.intX == BoardPanel.BLOCKSIZE * 3) { // Collision at block spawn point
+                    Tetris.blnGameLoop = false; // end game
+                    Connections.sendMessage(Connections.GAME_OVER,"loss");
+                    Game.endGame();
+                } else { // If no collision at spawn point, generate a new block
+                    blockCurrent = Controller.generateBlock();
+                    Controller.updateGhostBlock(blockCurrent); // Update position of ghost block
+
+                    TotalGroundTimer.blnTotalGroundAllow = true; // Reset TotalGroundTimer (Reset boolean to allow movement within total allowed time on ground)
+                    GroundTimer.blnGroundAllow = true; // Reset GroundTimer (Reset boolean to allow movement within standard allowed time on ground)
+                    Controller.blnHardDrop = false; // Reset hard drop boolean
+                }
+            } else if (TotalGroundTimer.blnTotalGroundAllow == true && TotalGroundTimer.blnRun == false) {
+                // Total Ground Timer
+                if (threadTotalGroundTimer.getState() == Thread.State.NEW) { // Thread not running yet
+                   threadTotalGroundTimer.start(); // Start total ground timer to prevent rotations/moves on same level
+                } else { // Thread already running
+                   TotalGroundTimer.blnRun = true; // Allow loop to run timer code again
+                }
+            } else if (GroundTimer.blnGroundAllow == true && GroundTimer.blnRun == false) {
+                // (Shorter) Ground Timer
+                if (threadGroundTimer.getState() == Thread.State.NEW) { // Thread not running yet
+                    threadGroundTimer.start(); // Start (shorter)) ground timer to prevent rotations/moves on same level
+                } else { // Thread already running
+                    GroundTimer.blnRun = true; // Allow loop to run timer code again
+                }
             }
         }
 
@@ -61,7 +82,6 @@ public class BoardPanel extends JPanel {
 
         drawEnemyOldBlocks(g2);
         drawGridlines(500, 0, 500+intXMax, intYMax, intXMax / BLOCKSIZE, intYMax / BLOCKSIZE, g2); // Draw board gridlines
-
     }
 
     private void drawBlock(Block blockDraw, int intX, int intY, Graphics2D g2) { // Draw block

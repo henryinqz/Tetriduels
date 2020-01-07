@@ -12,9 +12,8 @@ import java.awt.event.KeyListener;
 public class Game implements ActionListener, KeyListener {
     // PROPERTIES
     BoardPanel boardPanel = new BoardPanel();
-    
-    BlockFallTimer blockFall = new BlockFallTimer();
-    Thread threadBlockFall = new Thread(blockFall);
+
+    Thread threadBlockFall = new Thread(new BlockFallTimer());
 
     /*// Debug buttons
     JButton butRotateLeft = new JButton("Rotate Left");

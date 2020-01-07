@@ -8,12 +8,16 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Controller {
+    // Properties
+    public static boolean blnHardDrop = false;
+
     // Methods
     public static void moveLeft(Block blockCurrent) {
         if (checkCollision(blockCurrent, "left") == false) {
             blockCurrent.intX -= BoardPanel.MOVE; // Move left
             updateGhostBlock(blockCurrent); // Update position of ghost block
         }
+        GroundTimer.blnMoving = true;
     }
 
     public static void moveRight(Block blockCurrent) {
@@ -21,6 +25,7 @@ public class Controller {
             blockCurrent.intX += BoardPanel.MOVE; // Move right
             updateGhostBlock(blockCurrent); // Update position of ghost block
         }
+        GroundTimer.blnMoving = true;
     }
 
     public static void moveDown(Block blockCurrent) {
@@ -28,6 +33,7 @@ public class Controller {
             blockCurrent.intY += BoardPanel.MOVE; // Move down
             updateGhostBlock(blockCurrent); // Update position of ghost block
         }
+        GroundTimer.blnMoving = true;
     }
 
     public static void moveUp(Block blockCurrent) {
@@ -35,6 +41,7 @@ public class Controller {
             blockCurrent.intY -= BoardPanel.MOVE; // Move up
             updateGhostBlock(blockCurrent); // Update position of ghost block
         }
+        GroundTimer.blnMoving = true;
     }
 
     public static boolean checkCollision(Block blockCurrent, String strSide) { // Method to check block collision (side = "up", "right", "left", "down"). True = collides, false = no collision
@@ -203,6 +210,7 @@ public class Controller {
         while (checkCollision(blockCurrent, "down") == false) { // Moves block down until collision, then ends loop
             moveDown(blockCurrent);
         }
+        blnHardDrop = true;
     }
 
     public static void updateGhostBlock(Block blockCurrent) {
@@ -217,6 +225,7 @@ public class Controller {
     }
 
     public static void rotate(Block blockCurrent, String strDirection) {
+        GroundTimer.blnMoving = true;
         boolean blnStuckCheck = false; // Default allow true
         // STUCK CHECK
         Block blockRotateCheck = new Block(blockCurrent); // Clone the current block to test rotation
@@ -251,17 +260,13 @@ public class Controller {
                 } catch (ArrayIndexOutOfBoundsException e) { // Catch exception is block is beside left/right/top/bottom wall. Continues to cycle through the rest of array
                     if (b == 0) { // Boolean to determine if rotateCheck intersects on left
                         blnHitsLeft = true;
-                        System.out.println("left");
                     } else if (b == 3) { // Boolean to determine if rotateCheck intersects on right
                         blnHitsRight = true;
-                        System.out.println("right");
                     }
                     if (a == 0) { // Boolean to determine if rotateCheck intersects on top
                         blnHitsTop = true;
-                        System.out.println("top");
                     } else if (a == 3) { // Boolean to determine if rotateCheck intersects on bottom
                         blnHitsBottom = true;
-                        System.out.println("bottom");
                     }
                 }
             }
@@ -278,12 +283,10 @@ public class Controller {
             }
         } else if ((blockRotateCheck.intX/BoardPanel.BLOCKSIZE) >= 7) { // Out of bounds of array
             if (blnHitsLeft == true || blnHitsRight == true) {
-                System.out.println("Yessir");
                 blnStuckCheck = true;
             }
         } else if (blockRotateCheck.intType == Block.IBLOCK && (blockRotateCheck.intX/BoardPanel.BLOCKSIZE) >= 5) { // Out of bounds of array (IBLOCK)
             if (blnHitsLeft == true || blnHitsRight == true) {
-                System.out.println("Yessir2");
                 blnStuckCheck = true;
             }
         }
