@@ -2,12 +2,16 @@ package game;
 
 import panels.*;
 import network.*;
+import java.io.File;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 
 import java.util.Collections;
 import java.util.Arrays;
 import java.util.List;
 
 public class Controller {
+
     // Properties
     public static boolean blnHardDrop = false;
 
@@ -207,9 +211,16 @@ public class Controller {
     }
 
     public static void hardDrop(Block blockCurrent) {
+
         while (checkCollision(blockCurrent, "down") == false) { // Moves block down until collision, then ends loop
+            Sound soundClip = new Sound();
+            File noise = new File("BlockDropSound.wav");
+            soundClip.playSound(noise);
+            System.out.println("drop");
+
             moveDown(blockCurrent);
         }
+
         blnHardDrop = true;
     }
 

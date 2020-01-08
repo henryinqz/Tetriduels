@@ -5,6 +5,7 @@ import game.*;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 public class Connections implements ActionListener {
     // PROPERTIES
@@ -96,6 +97,7 @@ public class Connections implements ActionListener {
 
     public static void sendMessage(int intMessageType, String strMessage) {
         ssm.sendText(intMessageType + "," + strMessage);
+
     }
 
     public static void sendMessage(int intMessageType, String[] strMessage) {
