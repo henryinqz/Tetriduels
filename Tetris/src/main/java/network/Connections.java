@@ -5,7 +5,6 @@ import game.*;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 
 public class Connections implements ActionListener {
     // PROPERTIES
@@ -50,7 +49,7 @@ public class Connections implements ActionListener {
 
                     if (intGarbageLines > 0) { // Only run if garbage lines sent was above 0
                         for (int a = 0; a < intGarbageLines; a++) { // Loop for # of garbage lines being received
-                            for (int b = 0; b < 19; b++) { // Loop through entire y-axis of board
+                            for (int b = 0; b < 21; b++) { // Loop through entire y-axis of board
                                 if (BoardPanel.intGrid[b+1][0] != 0 || BoardPanel.intGrid[b+1][1] != 0 || BoardPanel.intGrid[b+1][2] != 0 || BoardPanel.intGrid[b+1][3] != 0 || BoardPanel.intGrid[b+1][4] != 0 || BoardPanel.intGrid[b+1][5] != 0 || BoardPanel.intGrid[b+1][6] != 0 || BoardPanel.intGrid[b+1][7] != 0 || BoardPanel.intGrid[b+1][8] != 0 || BoardPanel.intGrid[b+1][9] != 0) { // Skip line if empty
                                     System.arraycopy(BoardPanel.intGrid[b + 1], 0, BoardPanel.intGrid[b], 0, 10); // Shift all blocks above up 1 block, by copying the array
                                 }
@@ -60,7 +59,7 @@ public class Connections implements ActionListener {
                             }
                         }
                         for (int d = 0; d < intGarbageLines; d++) {
-                            int intSquareY = 19 - d;
+                            int intSquareY = 21 - d;
                             int intBlockType = Block.GARBAGE;
 
                             int intRandom = (int)(Math.floor(Math.random()*10)); // Generate a random # between 0-9 for a gap block in the new garbage line

@@ -83,7 +83,7 @@ public class Controller {
                 }
             }
         } else if (strSide.equalsIgnoreCase("right")) {
-            //game.Block collision checks
+            //Block collision checks
             for (int i = 0; i < 4; i++) {
                 if (blockCurrent.intCurrentCoords[i][3] != 0 && (blockCurrent.intX / BoardPanel.BLOCKSIZE) < 6) { // Check if non-empty array column 3 (and prevent checking outside of intGrid array)
                     if (blockCurrent.intCurrentCoords[i][3] == 1 && BoardPanel.intGrid[(blockCurrent.intY / BoardPanel.BLOCKSIZE) + i][(blockCurrent.intX / BoardPanel.BLOCKSIZE) + 4] != 0) { // Check if block in intGrid below blockCurrent (non-empty array column 3)
@@ -121,13 +121,13 @@ public class Controller {
         } else if (strSide.equalsIgnoreCase("down")) {
             //game.Block collision checks
             for (int i = 0; i < 4; i++) {
-                if (blockCurrent.intCurrentCoords[3][i] != 0 && (blockCurrent.intY / BoardPanel.BLOCKSIZE) < 16) { // Check if non-empty array row 3 (and prevent checking outside of intGrid array)
+                if (blockCurrent.intCurrentCoords[3][i] != 0 && (blockCurrent.intY / BoardPanel.BLOCKSIZE) < 16+2) { // Check if non-empty array row 3 (and prevent checking outside of intGrid array)
                     if (blockCurrent.intCurrentCoords[3][i] == 1 && BoardPanel.intGrid[(blockCurrent.intY / BoardPanel.BLOCKSIZE) + 4][(blockCurrent.intX / BoardPanel.BLOCKSIZE) + i] != 0) { // Check if block in intGrid below blockCurrent (non-empty arrow row 3)
                         return true;
                     }
                 } else if (blockCurrent.intCurrentCoords[3][i] == 0) { // Empty array row 3
                     if (blockCurrent.intCurrentCoords[2][i] == 0) { // Empty array row 2 and 3
-                        if ((blockCurrent.intY / BoardPanel.BLOCKSIZE) < 18) { // Prevent checking outside of intGrid array
+                        if ((blockCurrent.intY / BoardPanel.BLOCKSIZE) < 18+2) { // Prevent checking outside of intGrid array
                             if (blockCurrent.intCurrentCoords[1][i] == 1 && BoardPanel.intGrid[(blockCurrent.intY / BoardPanel.BLOCKSIZE) + 2][(blockCurrent.intX / BoardPanel.BLOCKSIZE) + i] != 0) { // Check if block in intGrid below blockCurrent (empty arrow row 2 and 3, checking row 1)
                                 return true;
                             } else if (blockCurrent.intCurrentCoords[0][i] == 1 && BoardPanel.intGrid[(blockCurrent.intY / BoardPanel.BLOCKSIZE) + 1][(blockCurrent.intX / BoardPanel.BLOCKSIZE) + i] != 0) { // Check if block in intGrid below blockCurrent (empty arrow row 2 and 3), checking row 0)
@@ -135,7 +135,7 @@ public class Controller {
                             }
                         }
                     }
-                    if ((blockCurrent.intY/BoardPanel.BLOCKSIZE) < 17) { // Prevent checking outside of intGrid array
+                    if ((blockCurrent.intY/BoardPanel.BLOCKSIZE) < 17+2) { // Prevent checking outside of intGrid array
                         if (blockCurrent.intCurrentCoords[2][i] == 1 && BoardPanel.intGrid[(blockCurrent.intY / BoardPanel.BLOCKSIZE) + 3][(blockCurrent.intX / BoardPanel.BLOCKSIZE) + i] != 0) { // Check if block in intGrid below blockCurrent (empty arrow row 3, checking row 2)
                             return true;
                         } else if (blockCurrent.intCurrentCoords[1][i] == 1 && BoardPanel.intGrid[(blockCurrent.intY / BoardPanel.BLOCKSIZE) + 2][(blockCurrent.intX / BoardPanel.BLOCKSIZE) + i] != 0) { // Check if block in intGrid below blockCurrent (empty arrow row 3 (or 2+3), checking row 1)
@@ -169,7 +169,7 @@ public class Controller {
                     }
                 } else if (blockCurrent.intCurrentCoords[0][i] == 0) { // Empty array row 0
                     if (blockCurrent.intCurrentCoords[1][i] == 0) { // Empty array row 0 and 1
-                        if ((blockCurrent.intY / BoardPanel.BLOCKSIZE) < 18) { // Prevent checking outside of intGrid array
+                        if ((blockCurrent.intY / BoardPanel.BLOCKSIZE) < 18+2) { // Prevent checking outside of intGrid array
                             if (blockCurrent.intCurrentCoords[2][i] == 1 && BoardPanel.intGrid[(blockCurrent.intY / BoardPanel.BLOCKSIZE) + 1][(blockCurrent.intX / BoardPanel.BLOCKSIZE) + i] != 0) { // Check if block in intGrid above blockCurrent (empty arrow row 0 and 1, checking row 2)
                                 return true;
                             } else if (blockCurrent.intCurrentCoords[3][i] == 1 && BoardPanel.intGrid[(blockCurrent.intY / BoardPanel.BLOCKSIZE) + 2][(blockCurrent.intX / BoardPanel.BLOCKSIZE) + i] != 0) { // Check if block in intGrid above blockCurrent (empty arrow row 0 and 1), checking row 3)
@@ -177,7 +177,7 @@ public class Controller {
                             }
                         }
                     }
-                    if ((blockCurrent.intY / BoardPanel.BLOCKSIZE) < 18) { // Prevent checking outside of intGrid array
+                    if ((blockCurrent.intY / BoardPanel.BLOCKSIZE) < 18+2) { // Prevent checking outside of intGrid array
                         if (blockCurrent.intCurrentCoords[1][i] == 1 && BoardPanel.intGrid[(blockCurrent.intY / BoardPanel.BLOCKSIZE) + 0][(blockCurrent.intX / BoardPanel.BLOCKSIZE) + i] != 0) { // Check if block in intGrid above blockCurrent (empty arrow row 0, checking row 1)
                             return true;
                         } else if (blockCurrent.intCurrentCoords[2][i] == 1 && BoardPanel.intGrid[(blockCurrent.intY / BoardPanel.BLOCKSIZE) + 1][(blockCurrent.intX / BoardPanel.BLOCKSIZE) + i] != 0) { // Check if block in intGrid above blockCurrent (empty arrow row 0 (or 0+1), checking row 2)
@@ -321,7 +321,7 @@ public class Controller {
                 }
             }
             // Wallkick: Bottom wall
-            if (blockCurrent.intY == (BoardPanel.BLOCKSIZE * 18)) {
+            if (blockCurrent.intY == (BoardPanel.BLOCKSIZE * 18+2)) {
                 if (blockCurrent.intType == Block.IBLOCK) { // IBlock
                     if (blockCurrent.intRotation == 0) { // Up rotation position (IBlock)
                         moveUp(blockCurrent); // Move block up twice
@@ -330,7 +330,7 @@ public class Controller {
                 } else if (blockCurrent.intType == Block.JBLOCK || blockCurrent.intType == Block.LBLOCK || blockCurrent.intType == Block.SBLOCK || blockCurrent.intType == Block.ZBLOCK || blockCurrent.intType == Block.TBLOCK) { // J,L,S,Z,T Blocks
                     moveUp(blockCurrent); // Move block right
                 }
-            } else if (blockCurrent.intY == (BoardPanel.BLOCKSIZE * 17) && blockCurrent.intType == Block.IBLOCK) { // IBlock wallkick check for bottom wall
+            } else if (blockCurrent.intY == (BoardPanel.BLOCKSIZE * 17+2) && blockCurrent.intType == Block.IBLOCK) { // IBlock wallkick check for bottom wall
                 if (blockCurrent.intRotation == 2) { // Down rotation position (IBlock)
                     moveUp(blockCurrent); // Move block up
                 }

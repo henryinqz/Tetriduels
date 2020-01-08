@@ -1,9 +1,6 @@
 package panels;
 
-import game.Sound;
-
 import javax.swing.*;
-import java.io.File;
 
 public class Tetris {
     public static boolean blnGameLoop = true; // Static boolean for game loop

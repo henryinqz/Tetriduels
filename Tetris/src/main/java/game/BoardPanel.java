@@ -11,7 +11,7 @@ public class BoardPanel extends JPanel {
     public static final int MOVE = 30; // # of pixels moved every time
     public static final int BLOCKSIZE = 30; // game.Block size (25*25px)
     public static int intXMax = BLOCKSIZE * 10; // 10 blocks wide
-    public static int intYMax = BLOCKSIZE * 20; // 20 blocks tall
+    public static int intYMax = BLOCKSIZE * 22; // 22 blocks tall (should only show 20 blocks)
     public static int[][] intGrid = new int[intYMax / BLOCKSIZE][intXMax / BLOCKSIZE]; // 10x20 array grid of board
     public static int[][] intEnemyGrid = new int[intYMax / BLOCKSIZE][intXMax / BLOCKSIZE]; // 10x20 array grid of board (Enemy)
     public static Block blockCurrent;
@@ -31,23 +31,40 @@ public class BoardPanel extends JPanel {
         Graphics2D g2 = (Graphics2D) g; // Use Graphics2D instead of regular Graphics
         super.paintComponent(g2); // Clear previous drawings (Windows only); super JPanel (original) paintComponent method
 
-        g2.setColor(Color.DARK_GRAY); // Background
+        //Background of board
+        g2.setColor(Color.LIGHT_GRAY);
+        g2.fillRect(0,0,GUI.FRAME_WIDTH,GUI.FRAME_HEIGHT);
+        g2.fillRect(0,0,GUI.FRAME_WIDTH,BLOCKSIZE*3);
+
+        // Player Board
+        g2.setColor(Color.DARK_GRAY); // Fill in board background
         g2.fillRect(0, 0, intXMax, intYMax);
 
         drawOldBlocks(g2); // Draw previously stored blocks
-        drawGridlines(0, 0, intXMax, intYMax, intXMax / BLOCKSIZE, intYMax / BLOCKSIZE, g2); // Draw board gridlines
-
+        drawGridlines(0, (BLOCKSIZE*2), intXMax, intYMax, (intXMax/BLOCKSIZE), (intYMax/BLOCKSIZE)-2, g2); // Draw board gridlines
         drawGhostBlock(g2); // Draw ghost block (so that current block can overlap when they intersect)
         drawCurrentBlock(g2); // Draw current block on board
-
         drawHeldBlock(g2); // Draw held block on sidebar
         drawNextBlocks(g2); // Draw next blocks on side bar
 
+        // Enemy Board
+        g2.setColor(Color.DARK_GRAY); // Fill in enemy board background
+        g2.fillRect(500, 0, intXMax, intYMax);
+
+        drawEnemyOldBlocks(g2); // Draw enemy's previously stored blocks
+        drawGridlines(500, (BLOCKSIZE*2), 500+intXMax, intYMax, (intXMax/BLOCKSIZE), (intYMax/BLOCKSIZE)-2, g2); // Draw board gridlines
+
+        // Cover top three rows
+        g2.setColor(Color.LIGHT_GRAY);
+        g2.fillRect(0,0, intXMax+6,BLOCKSIZE*2); // Player board
+        g2.fillRect(500,0, intXMax+2,BLOCKSIZE*2); // Enemy board
+
+        // Checks for if block is landed
         if (Controller.checkCollision(blockCurrent, "down") == true) { // Block hits bottom
             if (TotalGroundTimer.blnTotalGroundAllow == false || GroundTimer.blnGroundAllow == false || Controller.blnHardDrop == true) {
                 storeOldBlocks(blockCurrent);
                 removeFullLines(intGrid);
-                if (blockCurrent.intY <= 0 && blockCurrent.intX == BoardPanel.BLOCKSIZE * 3) { // Collision at block spawn point
+                if (blockCurrent.intY <= BLOCKSIZE*1 && blockCurrent.intX == BLOCKSIZE * 3) { // Collision at block spawn point
                     Tetris.blnGameLoop = false; // end game
                     Connections.sendMessage(Connections.GAME_OVER,"loss");
                     Game.endGame();
@@ -76,12 +93,6 @@ public class BoardPanel extends JPanel {
             }
         }
 
-        // Enemy
-        g2.setColor(Color.DARK_GRAY); // Background
-        g2.fillRect(500, 0, intXMax, intYMax);
-
-        drawEnemyOldBlocks(g2);
-        drawGridlines(500, 0, 500+intXMax, intYMax, intXMax / BLOCKSIZE, intYMax / BLOCKSIZE, g2); // Draw board gridlines
     }
 
     private void drawBlock(Block blockDraw, int intX, int intY, Graphics2D g2) { // Draw block
@@ -119,7 +130,7 @@ public class BoardPanel extends JPanel {
 
     private void drawHeldBlock(Graphics2D g2) { // Draw held block on sidebar
         int intHeldX = intXMax + 20;
-        int intHeldY = 25;
+        int intHeldY = 15+(BLOCKSIZE*3);
 
         if (blockHeld != null) { // Run if there is a held block
             drawBlock(blockHeld, intHeldX, intHeldY, g2); // Draws held block
@@ -131,10 +142,8 @@ public class BoardPanel extends JPanel {
     }
 
     private void drawNextBlocks(Graphics2D g2) { // Draw next 3 blocks on sidebar
-        g2.setStroke(new BasicStroke(1)); // Set thin outline stroke
-
         int intNextX = intXMax + 20;
-        int intNextY = 160;
+        int intNextY = 160+(BLOCKSIZE*3);
         Block blockNext1;
         Block blockNext2;
         Block blockNext3;
@@ -155,6 +164,7 @@ public class BoardPanel extends JPanel {
             blockNext3 = new Block(pieceArray[intBag + 2]);
         }
 
+        g2.setStroke(new BasicStroke(1)); // Thin line stroke
         drawBlock(blockNext1, intNextX, intNextY, g2);
         drawBlock(blockNext2, intNextX, intNextY + (BLOCKSIZE * 4) + 0, g2);
         drawBlock(blockNext3, intNextX, intNextY + (2 * ((BLOCKSIZE * 4) + 00)), g2);

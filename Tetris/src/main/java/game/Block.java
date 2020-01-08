@@ -16,7 +16,7 @@ public class Block {
 
     // Spawning coordinates
     public int intX = BoardPanel.BLOCKSIZE * 3; // Spawn 4 blocks over on x axis
-    public int intY = BoardPanel.BLOCKSIZE * 0; // Spawn at top of board
+    public int intY = BoardPanel.BLOCKSIZE * 1; // Spawn at top of board
 
     public boolean blnHeldBefore = false; // Boolean property to prevent holding same block multiple times
 

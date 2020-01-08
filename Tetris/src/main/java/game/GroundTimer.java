@@ -15,7 +15,7 @@ public class GroundTimer implements Runnable { // Shorter timer to allow moves o
                 blnGroundAllow = true; // Reset blnGroundAllow to true
                 blnMoving = false; // Set before sleep incase movement methods set it to true while method is sleeping
                 try {
-                    Thread.sleep(1500); // Time allowed to move/rotate on ground before block is placed (1.5s)
+                    Thread.sleep(700); // Time allowed to move/rotate on ground before block is placed (0.7s)
                 } catch (InterruptedException e) {
                 }
 
@@ -50,7 +50,7 @@ class TotalGroundTimer implements Runnable { // TOTAL TIMER TO ALLOW MOVES ON GR
             if (blnRun == true) { // Allow run only once
                 blnTotalGroundAllow = true; // Reset blnTotalGroundAllow to true
                 try {
-                    Thread.sleep(4000); // Maximum time allowed to move on ground (4s)
+                    Thread.sleep(3500); // Maximum time allowed to move on ground (3.5s)
                 } catch (InterruptedException e) {
                 }
                 if (blnCancel == true) {
