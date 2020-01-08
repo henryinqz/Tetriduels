@@ -82,40 +82,36 @@ public class Game implements ActionListener, KeyListener {
     }
     public void keyPressed(KeyEvent evt) {
         int intKeyCode = evt.getKeyCode();
-        switch (intKeyCode) { // Left/right movement
-            case KeyEvent.VK_LEFT: // Left arrow
-                Controller.moveLeft(BoardPanel.blockCurrent); // Move block left
-                break;
-            case KeyEvent.VK_RIGHT: // Right arrow
-                Controller.moveRight(BoardPanel.blockCurrent);
-                break;
-            case KeyEvent.VK_DOWN: // Down arrow
-                Controller.moveDown(BoardPanel.blockCurrent);
-                break;
+        if(intKeyCode == SettingsMenu.intKeyLeft) { // Left/right movement
+            Controller.moveLeft(BoardPanel.blockCurrent); // Move block left
+        }else if(intKeyCode == SettingsMenu.intKeyRight) {// Right arrow
+            Controller.moveRight(BoardPanel.blockCurrent);
+        }else if(intKeyCode == SettingsMenu.intKeySoftDrop){
+            Controller.moveDown(BoardPanel.blockCurrent);
         }
 
         if (blnHardDropHeld == false) { // Only activate once (disable holding hard drop)
-            if (evt.getKeyCode() == KeyEvent.VK_SPACE) { // Spacebar
+            if (evt.getKeyCode() == SettingsMenu.intKeyHardDrop) { // Spacebar
                 Controller.hardDrop(BoardPanel.blockCurrent);
                 blnHardDropHeld = true;
             }
         }
 
         if (blnHoldBlockHeld == false) { // Only activate once (disable holding down hold block key)
-            if (evt.getKeyCode() == KeyEvent.VK_C && BoardPanel.blockCurrent.blnHeldBefore == false) { // C key, and activate only if block has not been held before
+            if (evt.getKeyCode() == SettingsMenu.intKeyHold && BoardPanel.blockCurrent.blnHeldBefore == false) { // C key, and activate only if block has not been held before
                 BoardPanel.blockCurrent = Controller.holdBlock(BoardPanel.blockCurrent);
                 blnHoldBlockHeld = true;
             }
         }
 
         if (blnRotateLeftHeld == false) { // Only activate once (disable holding rotate button)
-            if (evt.getKeyCode() == KeyEvent.VK_Z) { // Z key
+            if (evt.getKeyCode() == SettingsMenu.intKeyRotateLeft) { // Z key
                 Controller.rotate(BoardPanel.blockCurrent, "left");
                 blnRotateLeftHeld = true;
             }
         }
         if (blnRotateRightHeld == false) { // Only activate once (disable holding rotate button)
-            if (evt.getKeyCode() == KeyEvent.VK_UP) { // Up arrow
+            if (evt.getKeyCode() == SettingsMenu.intKeyRotateRight) { // Up arrow
                 Controller.rotate(BoardPanel.blockCurrent, "right");
                 blnRotateRightHeld = true;
             }
@@ -123,13 +119,13 @@ public class Game implements ActionListener, KeyListener {
     }
 
     public void keyReleased(KeyEvent evt) {
-        if (blnHardDropHeld == true && evt.getKeyCode() == KeyEvent.VK_SPACE) { // Reenable hard drop button after release
+        if (blnHardDropHeld == true && evt.getKeyCode() == SettingsMenu.intKeyHardDrop) { // Reenable hard drop button after release
             blnHardDropHeld = false;
-        } else if (blnHoldBlockHeld == true && evt.getKeyCode() == KeyEvent.VK_C) { // Reenable hold block button after relase
+        } else if (blnHoldBlockHeld == true && evt.getKeyCode() == SettingsMenu.intKeyHold) { // Reenable hold block button after relase
             blnHoldBlockHeld = false;
-        } else if (blnRotateLeftHeld == true && evt.getKeyCode() == KeyEvent.VK_Z) { // Reenable left rotate button after release
+        } else if (blnRotateLeftHeld == true && evt.getKeyCode() == SettingsMenu.intKeyRotateLeft) { // Reenable left rotate button after release
             blnRotateLeftHeld = false;
-        } else if (blnRotateRightHeld == true && evt.getKeyCode() == KeyEvent.VK_UP) { // Reenable right rotate button after release
+        } else if (blnRotateRightHeld == true && evt.getKeyCode() == SettingsMenu.intKeyRotateRight) { // Reenable right rotate button after release
             blnRotateRightHeld = false;
         }
     }
