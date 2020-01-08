@@ -24,6 +24,8 @@ public class MainMenu implements ActionListener {
             //panels.Utility.setPanel(new game.Game().getPanel());
         } else if (evt.getSource() == butHelp) {
         } else if (evt.getSource() == butSettings) {
+            Utility.setPanel(new SettingsMenu().getPanel());
+
         } else if (evt.getSource() == butExit) {
             System.exit(1); // Exit game
         }
