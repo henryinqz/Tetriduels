@@ -19,7 +19,20 @@ public class SettingsMenu implements ActionListener, KeyListener {
     public static int intKeySoftDrop = KeyEvent.VK_DOWN;
     public static int intKeyHold = KeyEvent.VK_C;
 
+    int intKeyHardDropDefault = KeyEvent.VK_SPACE;
+    int intKeyLeftDefault = KeyEvent.VK_LEFT;
+    int intKeyRightDefault = KeyEvent.VK_RIGHT;
+    int intKeyRotateRightDefault = KeyEvent.VK_UP;
+    int intKeyRotateLeftDefault = KeyEvent.VK_Z;
+    int intKeySoftDropDefault = KeyEvent.VK_DOWN;
+    int intKeyHoldDefault = KeyEvent.VK_C;
+
+    int intDefaultPort = 2626;
     public static int intPort = 2626;
+
+    public static boolean blnSoundCheck = true;
+
+    private String strBindText = "Please type the key you would like to change to";
 
     JPanel settingsPanel = new JPanel();
     JButton butChangeHardDrop = new JButton(KeyEvent.getKeyText(intKeyHardDrop));
@@ -42,25 +55,67 @@ public class SettingsMenu implements ActionListener, KeyListener {
 
     JButton butRevert = new JButton("Revert to default settings");
 
+    JCheckBox soundCheck = new JCheckBox("Enable sound");
+
+    JTextField portField = new JTextField(5);
+    JLabel labelPort = new JLabel("Port Number:");
+    JButton butPort = new JButton("Apply port number");
+
 
     @Override
     public void actionPerformed(ActionEvent evt) {
         if (evt.getSource() == butChangeHardDrop) {
-            butChangeHardDrop.setText("Please type the key you would like to change to");
+            butChangeHardDrop.setText(strBindText);
         }else if (evt.getSource() == butChangeSoftDrop) {
-            butChangeSoftDrop.setText("Please type the key you would like to change to");
+            butChangeSoftDrop.setText(strBindText);
         }else if (evt.getSource() == butChangeMoveLeft) {
-                butChangeMoveLeft.setText("Please type the key you would like to change to");
+                butChangeMoveLeft.setText(strBindText);
         }else if (evt.getSource() == butChangeMoveRight) {
-            butChangeMoveRight.setText("Please type the key you would like to change to");
+            butChangeMoveRight.setText(strBindText);
         }else if (evt.getSource() == butChangeRotateRight) {
-            butChangeRotateRight.setText("Please type the key you would like to change to");
+            butChangeRotateRight.setText(strBindText);
         }else if (evt.getSource() == butChangeRotateLeft) {
-            butChangeRotateLeft.setText("Please type the key you would like to change to");
+            butChangeRotateLeft.setText(strBindText);
         }else if (evt.getSource() == butChangeHold) {
-            butChangeHold.setText("Please type the key you would like to change to");
+            butChangeHold.setText(strBindText);
         }else if (evt.getSource() == butBack) {
             Utility.setPanel(new MainMenu().getPanel());
+        }else if (evt.getSource() == butRevert) {
+            intKeyHardDrop = intKeyHardDropDefault;
+            intKeySoftDrop = intKeySoftDropDefault;
+            intKeyLeft = intKeyLeftDefault;
+            intKeyRight = intKeyRightDefault;
+            intKeyRotateLeft = intKeyRotateLeftDefault;
+            intKeyRotateRight = intKeyRotateRightDefault;
+            intKeyHold = intKeyHoldDefault;
+
+            butChangeHardDrop.setText(KeyEvent.getKeyText(intKeyHardDrop));
+            butChangeSoftDrop.setText(KeyEvent.getKeyText(intKeySoftDrop));
+            butChangeMoveLeft.setText(KeyEvent.getKeyText(intKeyLeft));
+            butChangeMoveRight.setText(KeyEvent.getKeyText(intKeyRight));
+            butChangeMoveRight.setText(KeyEvent.getKeyText(intKeyRight));
+            butChangeRotateLeft.setText(KeyEvent.getKeyText(intKeyRotateLeft));
+            butChangeRotateRight.setText(KeyEvent.getKeyText(intKeyRotateRight));
+            butChangeHold.setText(KeyEvent.getKeyText(intKeyHold));
+
+            blnSoundCheck = true;
+            this.soundCheck.setSelected(true);
+
+            intPort = intDefaultPort;
+            portField.setText(String.valueOf(intDefaultPort));
+
+
+            settingsPanel.requestFocus();
+        }else if (evt.getSource() == soundCheck) {
+            blnSoundCheck = !blnSoundCheck;
+        }else if (evt.getSource() == butPort) {
+            try {
+                intPort = Integer.parseInt(portField.getText());
+            } catch (NumberFormatException e) {
+                intPort = intDefaultPort;
+                portField.setText(String.valueOf(intDefaultPort));
+                System.out.println("Must be a number!");
+            }
         }
 
     }
@@ -71,40 +126,45 @@ public class SettingsMenu implements ActionListener, KeyListener {
 
     @Override
     public void keyTyped(KeyEvent evt) {
-
-    }
+        if(portField.getText().length()>=5) {
+            evt.consume();
+        }
+        }
 
     @Override
     public void keyPressed(KeyEvent evt) {
         if (evt.getSource() == butChangeHardDrop) {
             intKeyHardDrop = evt.getKeyCode();
             butChangeHardDrop.setText(KeyEvent.getKeyText(intKeyHardDrop));
-            Utility.setPanel(new SettingsMenu().getPanel());
+            settingsPanel.requestFocus(); // Return focus back to the panel
 
         } else if (evt.getSource() == butChangeSoftDrop) {
             intKeySoftDrop = evt.getKeyCode();
             butChangeSoftDrop.setText(KeyEvent.getKeyText(intKeySoftDrop));
-            Utility.setPanel(new SettingsMenu().getPanel());
+            settingsPanel.requestFocus(); // Return focus back to the panel
         } else if (evt.getSource() == butChangeMoveLeft) {
             intKeyLeft = evt.getKeyCode();
             butChangeMoveLeft.setText(KeyEvent.getKeyText(intKeyLeft));
-            Utility.setPanel(new SettingsMenu().getPanel());
+            settingsPanel.requestFocus(); // Return focus back to the panel
         } else if (evt.getSource() == butChangeMoveRight) {
             intKeyRight = evt.getKeyCode();
             butChangeMoveRight.setText(KeyEvent.getKeyText(intKeyRight));
-            Utility.setPanel(new SettingsMenu().getPanel());
+            settingsPanel.requestFocus(); // Return focus back to the panel
         } else if (evt.getSource() == butChangeRotateLeft) {
             intKeyRotateLeft = evt.getKeyCode();
             butChangeRotateLeft.setText(KeyEvent.getKeyText(intKeyRotateLeft));
-            Utility.setPanel(new SettingsMenu().getPanel());
+            settingsPanel.requestFocus(); // Return focus back to the panel
+
         } else if (evt.getSource() == butChangeRotateRight) {
             intKeyRotateRight = evt.getKeyCode();
             butChangeRotateRight.setText(KeyEvent.getKeyText(intKeyRotateRight));
-            Utility.setPanel(new SettingsMenu().getPanel());
+            settingsPanel.requestFocus(); // Return focus back to the panel
+
         } else if (evt.getSource() == butChangeHold) {
             intKeyHold = evt.getKeyCode();
             butChangeHold.setText(KeyEvent.getKeyText(intKeyHold));
-            Utility.setPanel(new SettingsMenu().getPanel());
+            settingsPanel.requestFocus(); // Return focus back to the panel
+
         }
     }
     @Override
@@ -169,6 +229,28 @@ public class SettingsMenu implements ActionListener, KeyListener {
         this.butBack.setBounds(500,5,200,100);
         this.butBack.addActionListener(this);
         this.settingsPanel.add(this.butBack);
+
+        this.butRevert.setBounds(500,120,200,100);
+        this.butRevert.addActionListener(this);
+        this.settingsPanel.add(this.butRevert);
+
+        this.soundCheck.setBounds(500,230,125,30);
+        this.soundCheck.setSelected(true);
+        this.soundCheck.addActionListener(this);
+        this.settingsPanel.add(this.soundCheck);
+
+        this.portField.setBounds(580,270,55,30);
+        this.portField.addKeyListener(this);
+        this.portField.setText(String.valueOf(intPort));
+        this.settingsPanel.add(this.portField);
+
+        this.labelPort.setBounds(500,270,100,30);
+        this.settingsPanel.add(this.labelPort);
+
+        this.butPort.setBounds(645,270,150,30);
+        this.butPort.addActionListener(this);
+        this.settingsPanel.add(this.butPort);
+
 
     }
 }

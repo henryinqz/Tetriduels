@@ -24,7 +24,7 @@ public class ConnectMenu implements ActionListener {
     JLabel labelError = new JLabel("",SwingConstants.CENTER);
 
     public String strServerPort;
-    public int intPort = 2626;
+    public int intPort = SettingsMenu.intPort;
 
     JButton butReady = new JButton("Ready");
     public static boolean blnReady = false;

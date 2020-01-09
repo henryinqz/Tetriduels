@@ -15,12 +15,14 @@ public class Utility {
         GUI.theframe.setVisible(true);
     }
     public static void playSound (File Sound) {
-        try {
-            Clip clip = AudioSystem.getClip();
-            clip.open(AudioSystem.getAudioInputStream(Sound));
-            clip.start();
-        } catch (Exception e) {
-            e.printStackTrace();
+        if(SettingsMenu.blnSoundCheck == true) {
+            try {
+                Clip clip = AudioSystem.getClip();
+                clip.open(AudioSystem.getAudioInputStream(Sound));
+                clip.start();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 }
