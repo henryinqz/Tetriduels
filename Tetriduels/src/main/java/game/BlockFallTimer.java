@@ -13,7 +13,7 @@ public class BlockFallTimer implements Runnable{
 	}
 	
 	public void blockDown(){
-		while (Tetris.blnGameLoop == true){
+		while (Tetriduels.blnGameLoop == true){
 			Controller.moveDown(BoardPanel.blockCurrent);
 			try {
 				Thread.sleep(750); // Replace w/ Timer.schedule

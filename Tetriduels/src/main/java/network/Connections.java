@@ -78,7 +78,7 @@ public class Connections implements ActionListener {
                 }
             } else if (intMessageType == GAME_OVER) {
                 if (strMessageSegment[1].equalsIgnoreCase("loss")) { // Enemy lost
-                    Tetris.blnGameLoop = false;
+                    Tetriduels.blnGameLoop = false;
                     Game.endGame();
                     // print game over
                     //wait 5 seconds

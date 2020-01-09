@@ -36,7 +36,7 @@ public class Game implements ActionListener, KeyListener {
         return boardPanel;
     }
     public static void endGame() {
-        if (Tetris.blnGameLoop == false) {
+        if (Tetriduels.blnGameLoop == false) {
             System.out.println("Game over!");
             //timerGame.stop();
             // KILL THREADS SOMEHOW

@@ -1,6 +1,6 @@
 package game;
 
-import panels.Tetris;
+import panels.Tetriduels;
 
 public class GroundTimer implements Runnable { // Shorter timer to allow moves on ground (resets everytime a move/rotate is made once block has collided on bottom)
     // PROPERTIES
@@ -10,7 +10,7 @@ public class GroundTimer implements Runnable { // Shorter timer to allow moves o
 
     // METHODS
     public void run() {
-        while (Tetris.blnGameLoop == true) { // Loop that keeps thread alive. Runs while game loop is true
+        while (Tetriduels.blnGameLoop == true) { // Loop that keeps thread alive. Runs while game loop is true
             if (blnRun == true) {
                 blnGroundAllow = true; // Reset blnGroundAllow to true
                 blnMoving = false; // Set before sleep incase movement methods set it to true while method is sleeping
@@ -46,7 +46,7 @@ class TotalGroundTimer implements Runnable { // TOTAL TIMER TO ALLOW MOVES ON GR
 
     // METHODS
     public void run() {
-        while (Tetris.blnGameLoop == true) { // Loop that keeps thread alive. Runs while game loop is true
+        while (Tetriduels.blnGameLoop == true) { // Loop that keeps thread alive. Runs while game loop is true
             if (blnRun == true) { // Allow run only once
                 blnTotalGroundAllow = true; // Reset blnTotalGroundAllow to true
                 try {

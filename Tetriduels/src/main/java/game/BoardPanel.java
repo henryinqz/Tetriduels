@@ -65,7 +65,7 @@ public class BoardPanel extends JPanel {
                 storeOldBlocks(blockCurrent);
                 removeFullLines(intGrid);
                 if (blockCurrent.intY <= BLOCKSIZE*1 && blockCurrent.intX == BLOCKSIZE * 3) { // Collision at block spawn point
-                    Tetris.blnGameLoop = false; // end game
+                    Tetriduels.blnGameLoop = false; // end game
                     Connections.sendMessage(Connections.GAME_OVER,"loss");
                     Game.endGame();
                 } else { // If no collision at spawn point, generate a new block

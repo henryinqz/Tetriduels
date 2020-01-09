@@ -109,7 +109,7 @@ public class ConnectMenu implements ActionListener {
         } else if (evt.getSource() == butReady) {
             butReady.setEnabled(false);
             blnReady = true;
-            Tetris.blnGameLoop = true;
+            Tetriduels.blnGameLoop = true;
             Connections.sendMessage(Connections.READY);
         }
 

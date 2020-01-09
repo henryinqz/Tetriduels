@@ -34,6 +34,8 @@ public class SettingsMenu implements ActionListener, KeyListener {
 
     private String strBindText = "Please type the key you would like to change to";
 
+
+
     JPanel settingsPanel = new JPanel();
     JButton butChangeHardDrop = new JButton(KeyEvent.getKeyText(intKeyHardDrop));
     JButton butChangeMoveLeft = new JButton(KeyEvent.getKeyText(intKeyLeft));
@@ -66,21 +68,21 @@ public class SettingsMenu implements ActionListener, KeyListener {
     public void actionPerformed(ActionEvent evt) {
         if (evt.getSource() == butChangeHardDrop) {
             butChangeHardDrop.setText(strBindText);
-        }else if (evt.getSource() == butChangeSoftDrop) {
+        } else if (evt.getSource() == butChangeSoftDrop) {
             butChangeSoftDrop.setText(strBindText);
-        }else if (evt.getSource() == butChangeMoveLeft) {
-                butChangeMoveLeft.setText(strBindText);
-        }else if (evt.getSource() == butChangeMoveRight) {
+        } else if (evt.getSource() == butChangeMoveLeft) {
+            butChangeMoveLeft.setText(strBindText);
+        } else if (evt.getSource() == butChangeMoveRight) {
             butChangeMoveRight.setText(strBindText);
-        }else if (evt.getSource() == butChangeRotateRight) {
+        } else if (evt.getSource() == butChangeRotateRight) {
             butChangeRotateRight.setText(strBindText);
-        }else if (evt.getSource() == butChangeRotateLeft) {
+        } else if (evt.getSource() == butChangeRotateLeft) {
             butChangeRotateLeft.setText(strBindText);
-        }else if (evt.getSource() == butChangeHold) {
+        } else if (evt.getSource() == butChangeHold) {
             butChangeHold.setText(strBindText);
-        }else if (evt.getSource() == butBack) {
+        } else if (evt.getSource() == butBack) {
             Utility.setPanel(new MainMenu().getPanel());
-        }else if (evt.getSource() == butRevert) {
+        } else if (evt.getSource() == butRevert) {
             intKeyHardDrop = intKeyHardDropDefault;
             intKeySoftDrop = intKeySoftDropDefault;
             intKeyLeft = intKeyLeftDefault;
@@ -106,18 +108,24 @@ public class SettingsMenu implements ActionListener, KeyListener {
 
 
             settingsPanel.requestFocus();
-        }else if (evt.getSource() == soundCheck) {
+        } else if (evt.getSource() == soundCheck) {
             blnSoundCheck = !blnSoundCheck;
-        }else if (evt.getSource() == butPort) {
+        } else if (evt.getSource() == butPort) {
             try {
-                intPort = Integer.parseInt(portField.getText());
+                if (0 <= Integer.parseInt(portField.getText()) && Integer.parseInt(portField.getText()) <= 65535) {
+                    intPort = Integer.parseInt(portField.getText());
+                } else {
+                    intPort = intDefaultPort;
+                    portField.setText(String.valueOf(intDefaultPort));
+                    System.out.println("Erorr: Number must be between 0 and 65535");
+
+                }
             } catch (NumberFormatException e) {
                 intPort = intDefaultPort;
                 portField.setText(String.valueOf(intDefaultPort));
                 System.out.println("Must be a number!");
             }
         }
-
     }
 
     public JPanel getPanel() {
@@ -129,7 +137,7 @@ public class SettingsMenu implements ActionListener, KeyListener {
         if(portField.getText().length()>=5) {
             evt.consume();
         }
-        }
+    }
 
     @Override
     public void keyPressed(KeyEvent evt) {
@@ -164,7 +172,6 @@ public class SettingsMenu implements ActionListener, KeyListener {
             intKeyHold = evt.getKeyCode();
             butChangeHold.setText(KeyEvent.getKeyText(intKeyHold));
             settingsPanel.requestFocus(); // Return focus back to the panel
-
         }
     }
     @Override
@@ -250,7 +257,5 @@ public class SettingsMenu implements ActionListener, KeyListener {
         this.butPort.setBounds(645,270,150,30);
         this.butPort.addActionListener(this);
         this.settingsPanel.add(this.butPort);
-
-
     }
 }
