@@ -1,4 +1,4 @@
-# Tetris
+# Tetriduels
 Final CPT multiplayer project for ICS4U1.
 
 ## Authors
