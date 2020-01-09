@@ -132,6 +132,7 @@ public class SettingsMenu implements ActionListener, KeyListener {
         return settingsPanel;
     }
 
+
     @Override
     public void keyTyped(KeyEvent evt) {
         if(portField.getText().length()>=5) {
