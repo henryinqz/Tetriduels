@@ -25,4 +25,7 @@ public class Utility {
             }
         }
     }
+    public static void loadImage (File Image) {
+
+    }
 }

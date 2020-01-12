@@ -19,6 +19,7 @@ public class SettingsMenu implements ActionListener, KeyListener {
     public static int intKeySoftDrop = KeyEvent.VK_DOWN;
     public static int intKeyHold = KeyEvent.VK_C;
 
+    // Default keybinds
     int intKeyHardDropDefault = KeyEvent.VK_SPACE;
     int intKeyLeftDefault = KeyEvent.VK_LEFT;
     int intKeyRightDefault = KeyEvent.VK_RIGHT;
@@ -27,14 +28,13 @@ public class SettingsMenu implements ActionListener, KeyListener {
     int intKeySoftDropDefault = KeyEvent.VK_DOWN;
     int intKeyHoldDefault = KeyEvent.VK_C;
 
+    // Port
     int intDefaultPort = 2626;
     public static int intPort = 2626;
 
     public static boolean blnSoundCheck = true;
 
     private String strBindText = "Please type the key you would like to change to";
-
-
 
     JPanel settingsPanel = new JPanel();
     JButton butChangeHardDrop = new JButton(KeyEvent.getKeyText(intKeyHardDrop));
@@ -63,8 +63,6 @@ public class SettingsMenu implements ActionListener, KeyListener {
     JLabel labelPort = new JLabel("Port Number:");
     JButton butPort = new JButton("Apply port number");
 
-
-    @Override
     public void actionPerformed(ActionEvent evt) {
         if (evt.getSource() == butChangeHardDrop) {
             butChangeHardDrop.setText(strBindText);
@@ -132,15 +130,12 @@ public class SettingsMenu implements ActionListener, KeyListener {
         return settingsPanel;
     }
 
-
-    @Override
     public void keyTyped(KeyEvent evt) {
         if(portField.getText().length()>=5) {
             evt.consume();
         }
     }
 
-    @Override
     public void keyPressed(KeyEvent evt) {
         if (evt.getSource() == butChangeHardDrop) {
             intKeyHardDrop = evt.getKeyCode();
@@ -175,9 +170,8 @@ public class SettingsMenu implements ActionListener, KeyListener {
             settingsPanel.requestFocus(); // Return focus back to the panel
         }
     }
-    @Override
-    public void keyReleased(KeyEvent evt) {
 
+    public void keyReleased(KeyEvent evt) {
     }
 
     public SettingsMenu() {

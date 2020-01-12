@@ -11,8 +11,6 @@ public class HelpMenu implements ActionListener{
     JPanel HelpPanel = new JPanel();
     JButton HelpBackButton = new JButton("Click to return");
 
-    Utility.loadImage()
-
     public void actionPerformed(ActionEvent evt){
         if(evt.getSource() == HelpBackButton){
             Utility.setPanel(new MainMenu().getPanel());
@@ -32,6 +30,7 @@ public class HelpMenu implements ActionListener{
         this.HelpBackButton.addActionListener(this);
 
         this.HelpPanel.add(HelpBackButton);
+        //Utility.loadImage(null);
 
 
 
