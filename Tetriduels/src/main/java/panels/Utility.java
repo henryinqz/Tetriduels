@@ -46,7 +46,10 @@ public class Utility {
         }
         return font;
     }
-    public static void setFontSizeLabel (JLabel labelFont, int intSize) {
+    public static void setFontSize (JLabel labelFont, int intSize) {
         labelFont.setFont(labelFont.getFont().deriveFont(Font.PLAIN,intSize));
+    }
+    public static void setFontSize (JButton buttonFont, int intSize) {
+        buttonFont.setFont(buttonFont.getFont().deriveFont(Font.PLAIN,intSize));
     }
 }
