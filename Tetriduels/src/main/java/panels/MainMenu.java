@@ -4,6 +4,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
 
 public class MainMenu implements ActionListener {
     // PROPERTIES
@@ -56,5 +60,46 @@ public class MainMenu implements ActionListener {
         this.butExit.setBounds(5,(5*4)+(150*3),400,150);
         this.mainMenuPanel.add(butExit);
 
+    }
+} class SplashMenu implements KeyListener {
+    // PROPERTIES
+    SplashMenuPanel splashMenuPanel = new SplashMenuPanel();
+    JLabel labelContinue = new JLabel("Press any key to continue...");
+
+    // METHODS
+    public void keyTyped(KeyEvent evt) {
+    }
+    public void keyReleased(KeyEvent evt) {
+    }
+    public void keyPressed(KeyEvent evt) { // If any key is pressed, go to main menu
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        Utility.setPanel(new MainMenu().getPanel()); // Go to main menu
+    }
+    public JPanel getPanel() {
+        return splashMenuPanel;
+    }
+
+    // CONSTRUCTOR
+    public SplashMenu() {
+        this.splashMenuPanel.setPreferredSize(new Dimension(GUI.FRAME_WIDTH,GUI.FRAME_HEIGHT));
+        this.splashMenuPanel.setLayout(null);
+
+        this.labelContinue.setBounds(450,500,200,70);
+        this.labelContinue.setForeground(Color.WHITE);
+        this.splashMenuPanel.add(labelContinue);
+
+        this.splashMenuPanel.setFocusable(true);
+        this.splashMenuPanel.requestFocus();
+        this.splashMenuPanel.addKeyListener(this);
+        this.splashMenuPanel.repaint();
+    }
+} class SplashMenuPanel extends JPanel {
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        g.drawImage(Utility.loadImage(new File("images/splashscreen.png")),0,0,null); // Draw splash screen picture
     }
 }

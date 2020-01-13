@@ -1,8 +1,10 @@
 package panels;
 
+import javax.imageio.ImageIO;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.swing.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
 
 public class Utility {
@@ -25,7 +27,13 @@ public class Utility {
             }
         }
     }
-    public static void loadImage (File Image) {
-
+    public static BufferedImage loadImage (File Image) {
+        try {
+            BufferedImage loadedImage = ImageIO.read(Image);
+            return loadedImage;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
