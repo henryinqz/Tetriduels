@@ -88,8 +88,10 @@ public class MainMenu implements ActionListener {
         this.splashMenuPanel.setPreferredSize(new Dimension(GUI.FRAME_WIDTH,GUI.FRAME_HEIGHT));
         this.splashMenuPanel.setLayout(null);
 
-        this.labelContinue.setBounds(450,500,200,70);
+        this.labelContinue.setBounds(400,530,470,70);
         this.labelContinue.setForeground(Color.WHITE);
+        this.labelContinue.setFont(Utility.loadFont());
+        Utility.setFontSizeLabel(this.labelContinue, 30);
         this.splashMenuPanel.add(labelContinue);
 
         this.splashMenuPanel.setFocusable(true);

@@ -4,6 +4,7 @@ import javax.imageio.ImageIO;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.swing.*;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 
@@ -35,5 +36,17 @@ public class Utility {
             e.printStackTrace();
         }
         return null;
+    }
+    public static Font loadFont() {
+        Font font = null;
+        try {
+            font = Font.createFont(Font.PLAIN, new File("assets/font/zorque.ttf"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return font;
+    }
+    public static void setFontSizeLabel (JLabel labelFont, int intSize) {
+        labelFont.setFont(labelFont.getFont().deriveFont(Font.PLAIN,intSize));
     }
 }
