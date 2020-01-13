@@ -22,11 +22,10 @@ public class MainMenu implements ActionListener {
     public void actionPerformed(ActionEvent evt) {
         if (evt.getSource() == butPlay) {
             Utility.setPanel(new ConnectMenu().getPanel());
-            //panels.Utility.setPanel(new game.Game().getPanel());
         } else if (evt.getSource() == butHelp) {
+            Utility.setPanel(new HelpMenu().getPanel());
         } else if (evt.getSource() == butSettings) {
             Utility.setPanel(new SettingsMenu().getPanel());
-
         } else if (evt.getSource() == butExit) {
             System.exit(1); // Exit game
         }

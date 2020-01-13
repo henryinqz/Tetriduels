@@ -4,36 +4,38 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.io.File;
 
 public class HelpMenu implements ActionListener{
-    JPanel HelpPanel = new JPanel();
-    JButton HelpBackButton = new JButton("Click to return");
+    // PROPERTIES
+    HelpMenuPanel helpPanel = new HelpMenuPanel();
+    JButton butBack = new JButton("Click to return");
 
+    // METHODS
     public void actionPerformed(ActionEvent evt){
-        if(evt.getSource() == HelpBackButton){
-            Utility.setPanel(new MainMenu().getPanel());
+        if(evt.getSource() == butBack){
+            Utility.setPanel(new MainMenu().getPanel()); // Return to main menu
         }
     }
-
     public JPanel getPanel() {
-        return HelpPanel;
+        return helpPanel;
     }
 
+    // CONSTRUCTOR
     public HelpMenu(){
-        this.HelpPanel.setPreferredSize(new Dimension(GUI.FRAME_WIDTH,GUI.FRAME_HEIGHT));
-        this.HelpPanel.setLayout(null);
+        this.helpPanel.setPreferredSize(new Dimension(GUI.FRAME_WIDTH,GUI.FRAME_HEIGHT));
+        this.helpPanel.setLayout(null);
 
-        this.HelpBackButton.setSize(200,100);
-        this.HelpBackButton.setLocation(540,600);
-        this.HelpBackButton.addActionListener(this);
+        this.butBack.setSize(200,100);
+        this.butBack.setLocation(540,600);
+        this.butBack.addActionListener(this);
 
-        this.HelpPanel.add(HelpBackButton);
-        //Utility.loadImage(null);
-
-
-
+        this.helpPanel.add(butBack);
+        this.helpPanel.repaint();
     }
-
+} class HelpMenuPanel extends JPanel {
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        g.drawImage(Utility.loadImage(new File("assets/images/helpscreen.png")),0,0,null); // Draw splash screen picture
+    }
 }
