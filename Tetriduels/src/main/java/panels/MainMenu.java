@@ -100,6 +100,6 @@ public class MainMenu implements ActionListener {
 } class SplashMenuPanel extends JPanel {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.drawImage(Utility.loadImage(new File("images/splashscreen.png")),0,0,null); // Draw splash screen picture
+        g.drawImage(Utility.loadImage(new File("assets/images/splashscreen.png")),0,0,null); // Draw splash screen picture
     }
 }
