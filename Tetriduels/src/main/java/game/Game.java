@@ -38,7 +38,7 @@ public class Game implements ActionListener, KeyListener {
     public static void endGame() {
         if (Tetriduels.blnGameLoop == false) {
             System.out.println("Game over!");
-
+            Utility.setPanel(new GameOver().getPanel());
         }
     }
 
