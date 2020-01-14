@@ -12,7 +12,7 @@ import java.awt.event.KeyListener;
 public class Game implements ActionListener, KeyListener {
     // PROPERTIES
     BoardPanel boardPanel = new BoardPanel();
-
+    GameOver gameOver = new GameOver();
     Thread threadBlockFall = new Thread(new BlockFallTimer());
 
     /*// Debug buttons
@@ -38,13 +38,7 @@ public class Game implements ActionListener, KeyListener {
     public static void endGame() {
         if (Tetriduels.blnGameLoop == false) {
             System.out.println("Game over!");
-            //timerGame.stop();
-            // KILL THREADS SOMEHOW
-            try {
-                Thread.sleep(5000);
-            } catch (InterruptedException e) {
-            }
-            Utility.setPanel(new ConnectMenu().getPanel());
+
         }
     }
 
