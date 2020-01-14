@@ -1,25 +1,23 @@
 package panels;
 
-import game.Game;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.*;
 
 public class SettingsMenu implements ActionListener, KeyListener {
     //Static variables for all keybinds
-    public static int intKeyHardDrop = KeyEvent.VK_SPACE;
-    public static int intKeyLeft = KeyEvent.VK_LEFT;
-    public static int intKeyRight = KeyEvent.VK_RIGHT;
-    public static int intKeyRotateRight = KeyEvent.VK_UP;
-    public static int intKeyRotateLeft = KeyEvent.VK_Z;
-    public static int intKeySoftDrop = KeyEvent.VK_DOWN;
-    public static int intKeyHold = KeyEvent.VK_C;
+    public static int intKeyHardDrop;
+    public static int intKeyLeft;
+    public static int intKeyRight;
+    public static int intKeyRotateRight;
+    public static int intKeyRotateLeft;
+    public static int intKeySoftDrop;
+    public static int intKeyHold;
 
-    // Default keybinds
     int intKeyHardDropDefault = KeyEvent.VK_SPACE;
     int intKeyLeftDefault = KeyEvent.VK_LEFT;
     int intKeyRightDefault = KeyEvent.VK_RIGHT;
@@ -28,13 +26,18 @@ public class SettingsMenu implements ActionListener, KeyListener {
     int intKeySoftDropDefault = KeyEvent.VK_DOWN;
     int intKeyHoldDefault = KeyEvent.VK_C;
 
-    // Port
     int intDefaultPort = 2626;
     public static int intPort = 2626;
 
     public static boolean blnSoundCheck = true;
 
     private String strBindText = "Please type the key you would like to change to";
+
+    public static FileReader settingsFile;
+    public static BufferedReader settingsFileData;
+
+    public static FileWriter settingsOutput;
+    public static PrintWriter settingsOutputData;
 
     JPanel settingsPanel = new JPanel();
     JButton butChangeHardDrop = new JButton(KeyEvent.getKeyText(intKeyHardDrop));
@@ -57,12 +60,14 @@ public class SettingsMenu implements ActionListener, KeyListener {
 
     JButton butRevert = new JButton("Revert to default settings");
 
-    JCheckBox soundCheck = new JCheckBox("Enable sound");
+    public static JCheckBox soundCheck = new JCheckBox("Enable sound");
 
     JTextField portField = new JTextField(5);
     JLabel labelPort = new JLabel("Port Number:");
     JButton butPort = new JButton("Apply port number");
 
+
+    @Override
     public void actionPerformed(ActionEvent evt) {
         if (evt.getSource() == butChangeHardDrop) {
             butChangeHardDrop.setText(strBindText);
@@ -79,6 +84,7 @@ public class SettingsMenu implements ActionListener, KeyListener {
         } else if (evt.getSource() == butChangeHold) {
             butChangeHold.setText(strBindText);
         } else if (evt.getSource() == butBack) {
+            saveControls();
             Utility.setPanel(new MainMenu().getPanel());
         } else if (evt.getSource() == butRevert) {
             intKeyHardDrop = intKeyHardDropDefault;
@@ -104,10 +110,11 @@ public class SettingsMenu implements ActionListener, KeyListener {
             intPort = intDefaultPort;
             portField.setText(String.valueOf(intDefaultPort));
 
-
             settingsPanel.requestFocus();
+            saveControls();
         } else if (evt.getSource() == soundCheck) {
             blnSoundCheck = !blnSoundCheck;
+            saveControls();
         } else if (evt.getSource() == butPort) {
             try {
                 if (0 <= Integer.parseInt(portField.getText()) && Integer.parseInt(portField.getText()) <= 65535) {
@@ -123,29 +130,80 @@ public class SettingsMenu implements ActionListener, KeyListener {
                 portField.setText(String.valueOf(intDefaultPort));
                 System.out.println("Must be a number!");
             }
+            saveControls();
         }
     }
 
     public JPanel getPanel() {
         return settingsPanel;
+
+    }
+    public static void getControls() {
+        try {
+            settingsFile = new FileReader("Tetriduels/assets/textfiles/settings.csv");
+
+            settingsFileData = new BufferedReader(settingsFile);
+            String strSplit;
+
+            while (settingsFileData != null) {
+                strSplit = settingsFileData.readLine();
+
+                String strData[] = strSplit.split(",");
+                intKeyHardDrop = Integer.parseInt(strData[0]);
+                intKeySoftDrop = Integer.parseInt(strData[1]);
+                intKeyLeft = Integer.parseInt(strData[2]);
+                intKeyRight = Integer.parseInt(strData[3]);
+                intKeyRotateLeft = Integer.parseInt(strData[4]);
+                intKeyRotateRight = Integer.parseInt(strData[5]);
+                intKeyHold = Integer.parseInt(strData[6]);
+                intPort = Integer.parseInt(strData[7]);
+                soundCheck.setSelected(Boolean.parseBoolean(strData[8]));
+                blnSoundCheck = Boolean.parseBoolean(strData[8]);
+                settingsFileData.close();
+                settingsFile.close();
+
+            }
+        } catch (FileNotFoundException e) {
+        } catch (IOException e) {
+        } catch (NullPointerException e){
+        }
+    }
+    public static void saveControls() {
+        try {
+            settingsOutput = new FileWriter("Tetriduels/assets/textfiles/settings.csv");
+        }catch(IOException e) {
+        }
+        settingsOutputData = new PrintWriter(settingsOutput);
+        settingsOutputData.println(intKeyHardDrop+","+intKeySoftDrop+","+intKeyLeft+","+intKeyRight+","+intKeyRotateLeft+","+intKeyRotateRight+","+intKeyHold+","+intPort+","+blnSoundCheck);
+        settingsOutputData.close();
+        try {
+            settingsOutput.close();
+        }catch(IOException e) {
+        }
     }
 
+
+    @Override
     public void keyTyped(KeyEvent evt) {
         if(portField.getText().length()>=5) {
             evt.consume();
         }
     }
 
+    @Override
     public void keyPressed(KeyEvent evt) {
         if (evt.getSource() == butChangeHardDrop) {
             intKeyHardDrop = evt.getKeyCode();
+
             butChangeHardDrop.setText(KeyEvent.getKeyText(intKeyHardDrop));
             settingsPanel.requestFocus(); // Return focus back to the panel
+            saveControls();
 
         } else if (evt.getSource() == butChangeSoftDrop) {
             intKeySoftDrop = evt.getKeyCode();
             butChangeSoftDrop.setText(KeyEvent.getKeyText(intKeySoftDrop));
             settingsPanel.requestFocus(); // Return focus back to the panel
+            saveControls();
         } else if (evt.getSource() == butChangeMoveLeft) {
             intKeyLeft = evt.getKeyCode();
             butChangeMoveLeft.setText(KeyEvent.getKeyText(intKeyLeft));
@@ -154,24 +212,29 @@ public class SettingsMenu implements ActionListener, KeyListener {
             intKeyRight = evt.getKeyCode();
             butChangeMoveRight.setText(KeyEvent.getKeyText(intKeyRight));
             settingsPanel.requestFocus(); // Return focus back to the panel
+            saveControls();
         } else if (evt.getSource() == butChangeRotateLeft) {
             intKeyRotateLeft = evt.getKeyCode();
             butChangeRotateLeft.setText(KeyEvent.getKeyText(intKeyRotateLeft));
             settingsPanel.requestFocus(); // Return focus back to the panel
+            saveControls();
 
         } else if (evt.getSource() == butChangeRotateRight) {
             intKeyRotateRight = evt.getKeyCode();
             butChangeRotateRight.setText(KeyEvent.getKeyText(intKeyRotateRight));
             settingsPanel.requestFocus(); // Return focus back to the panel
+            saveControls();
 
         } else if (evt.getSource() == butChangeHold) {
             intKeyHold = evt.getKeyCode();
             butChangeHold.setText(KeyEvent.getKeyText(intKeyHold));
             settingsPanel.requestFocus(); // Return focus back to the panel
+            saveControls();
         }
     }
-
+    @Override
     public void keyReleased(KeyEvent evt) {
+
     }
 
     public SettingsMenu() {
@@ -183,6 +246,7 @@ public class SettingsMenu implements ActionListener, KeyListener {
         this.butChangeHardDrop.addActionListener(this);
         this.butChangeHardDrop.addKeyListener(this);
         this.butChangeHardDrop.setBounds(100, 5, 305, 35);
+        this.butChangeHardDrop.getInputMap().put(KeyStroke.getKeyStroke("SPACE"), "none");
         this.settingsPanel.add(butChangeHardDrop);
         this.settingsPanel.add(labelChangeHardDrop);
 
@@ -190,6 +254,7 @@ public class SettingsMenu implements ActionListener, KeyListener {
         this.butChangeSoftDrop.addActionListener(this);
         this.butChangeSoftDrop.addKeyListener(this);
         this.butChangeSoftDrop.setBounds(100, 60, 305, 35);
+        this.butChangeSoftDrop.getInputMap().put(KeyStroke.getKeyStroke("SPACE"), "none");
         this.settingsPanel.add(butChangeSoftDrop);
         this.settingsPanel.add(labelChangeSoftDrop);
 
@@ -197,6 +262,7 @@ public class SettingsMenu implements ActionListener, KeyListener {
         this.butChangeMoveLeft.addActionListener(this);
         this.butChangeMoveLeft.addKeyListener(this);
         this.butChangeMoveLeft.setBounds(100, 105, 305, 35);
+        this.butChangeMoveLeft.getInputMap().put(KeyStroke.getKeyStroke("SPACE"), "none");
         this.settingsPanel.add(butChangeMoveLeft);
         this.settingsPanel.add(labelChangeMoveLeft);
 
@@ -204,6 +270,7 @@ public class SettingsMenu implements ActionListener, KeyListener {
         this.butChangeMoveRight.addActionListener(this);
         this.butChangeMoveRight.addKeyListener(this);
         this.butChangeMoveRight.setBounds(100, 160, 305, 35);
+        this.butChangeMoveRight.getInputMap().put(KeyStroke.getKeyStroke("SPACE"), "none");
         this.settingsPanel.add(butChangeMoveRight);
         this.settingsPanel.add(labelChangeMoveRight);
 
@@ -211,6 +278,7 @@ public class SettingsMenu implements ActionListener, KeyListener {
         this.butChangeRotateLeft.addActionListener(this);
         this.butChangeRotateLeft.addKeyListener(this);
         this.butChangeRotateLeft.setBounds(100, 205, 305, 35);
+        this.butChangeRotateLeft.getInputMap().put(KeyStroke.getKeyStroke("SPACE"), "none");
         this.settingsPanel.add(butChangeRotateLeft);
         this.settingsPanel.add(labelChangeRotateLeft);
 
@@ -218,6 +286,7 @@ public class SettingsMenu implements ActionListener, KeyListener {
         this.butChangeRotateRight.addActionListener(this);
         this.butChangeRotateRight.addKeyListener(this);
         this.butChangeRotateRight.setBounds(100, 260, 305, 35);
+        this.butChangeRotateRight.getInputMap().put(KeyStroke.getKeyStroke("SPACE"), "none");
         this.settingsPanel.add(butChangeRotateRight);
         this.settingsPanel.add(labelChangeRotateRight);
 
@@ -225,6 +294,7 @@ public class SettingsMenu implements ActionListener, KeyListener {
         this.butChangeHold.addActionListener(this);
         this.butChangeHold.addKeyListener(this);
         this.butChangeHold.setBounds(100, 305, 305, 35);
+        this.butChangeHold.getInputMap().put(KeyStroke.getKeyStroke("SPACE"), "none");
         this.settingsPanel.add(butChangeHold);
         this.settingsPanel.add(labelChangeHold);
 
@@ -237,7 +307,7 @@ public class SettingsMenu implements ActionListener, KeyListener {
         this.settingsPanel.add(this.butRevert);
 
         this.soundCheck.setBounds(500,230,125,30);
-        this.soundCheck.setSelected(true);
+        this.soundCheck.setSelected(blnSoundCheck);
         this.soundCheck.addActionListener(this);
         this.settingsPanel.add(this.soundCheck);
 
@@ -252,5 +322,6 @@ public class SettingsMenu implements ActionListener, KeyListener {
         this.butPort.setBounds(645,270,150,30);
         this.butPort.addActionListener(this);
         this.settingsPanel.add(this.butPort);
+
     }
 }

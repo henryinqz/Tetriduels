@@ -40,7 +40,7 @@ public class Utility {
     public static Font loadFont() {
         Font font = null;
         try {
-            font = Font.createFont(Font.PLAIN, new File("assets/font/zorque.ttf"));
+            font = Font.createFont(Font.PLAIN, new File("Tetriduels/assets/font/zorque.ttf"));
         } catch (Exception e) {
             e.printStackTrace();
         }
