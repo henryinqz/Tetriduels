@@ -15,6 +15,7 @@ public class MainMenu implements ActionListener {
     JButton butHelp = new JButton("Help");
     JButton butSettings = new JButton("Settings");
     JButton butExit = new JButton("Exit");
+    JButton butAbout = new JButton("About");
 
     // METHODS
     public JPanel getPanel() {
@@ -27,6 +28,8 @@ public class MainMenu implements ActionListener {
             Utility.setPanel(new HelpMenu().getPanel());
         } else if (evt.getSource() == butSettings) {
             Utility.setPanel(new SettingsMenu().getPanel());
+        } else if (evt.getSource() == butAbout){
+            Utility.setPanel(new About().getPanel());
         } else if (evt.getSource() == butExit) {
             System.exit(1); // Exit game
         }
@@ -71,6 +74,15 @@ public class MainMenu implements ActionListener {
         this.butSettings.setBackground(Color.BLACK);
         this.butSettings.setForeground(Color.WHITE);
         this.mainMenuPanel.add(butSettings);
+
+        //About button
+        this.butAbout.addActionListener(this);
+        this.butAbout.setBounds(925 , 200+(5*4)+(120*3), 300,120);
+        this.butAbout.setFont(Utility.loadFont("zorque"));
+        Utility.setFontSize(this.butAbout,40);
+        this.butAbout.setBackground(Color.BLACK);
+        this.butAbout.setForeground(Color.WHITE);
+        this.mainMenuPanel.add(butAbout);
 
         // Exit button
         this.butExit.addActionListener(this);
@@ -140,6 +152,6 @@ public class MainMenu implements ActionListener {
 } class SplashMenuPanel extends JPanel {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.drawImage(Utility.loadImage(new File("assets/images/SplashScreen.png")),0,0,null); // Draw splash screen picture
+        g.drawImage(Utility.loadImage(new File("Tetriduels/assets/images/SplashScreen.png")),0,0,null); // Draw splash screen picture
     }
 }
