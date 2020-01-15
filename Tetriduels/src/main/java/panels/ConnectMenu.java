@@ -24,7 +24,7 @@ public class ConnectMenu implements ActionListener {
     JLabel labelError = new JLabel("",SwingConstants.CENTER);
 
     public String strServerPort;
-    public int intPort = SettingsMenu.intPort;
+    public int intPort;
 
     JButton butReady = new JButton("Ready");
     public static boolean blnReady = false;
@@ -46,11 +46,11 @@ public class ConnectMenu implements ActionListener {
             if (Connections.ssm != null) {
                 Connections.ssm.disconnect();
             }
-            new Connections(intPort); // Server; create SuperSocketMaster object
+            new Connections(SettingsMenu.intPort); // Server; create SuperSocketMaster object
             fieldServerIP.setEditable(false);
             fieldServerIP.setText(Connections.ssm.getMyAddress());
             fieldPort.setEditable(false);
-            fieldPort.setText(intPort + "");
+            fieldPort.setText(SettingsMenu.intPort + "");
             butConnect.setEnabled(false);
             butReady.setVisible(true);
             butReady.setEnabled(true);
@@ -75,7 +75,7 @@ public class ConnectMenu implements ActionListener {
             if (!fieldServerIP.getText().equals("") && !fieldPort.getText().equals("")) { // Check if server IP & port are blank
                 String strServerIP = fieldServerIP.getText();
                 try {
-                    int intPort = Integer.parseInt(fieldPort.getText());
+                    intPort = Integer.parseInt(fieldPort.getText());
                 } catch (NumberFormatException e) { // User did not input numbers
                     intPort = -1;
                 }

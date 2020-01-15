@@ -80,7 +80,7 @@ public class Game implements ActionListener, KeyListener {
             Controller.moveLeft(BoardPanel.blockCurrent); // Move block left
         }else if(intKeyCode == SettingsMenu.intKeyRight) {// Right arrow
             Controller.moveRight(BoardPanel.blockCurrent);
-        }else if(intKeyCode == SettingsMenu.intKeySoftDrop){
+        }else if(intKeyCode == SettingsMenu.intKeyDown){
             Controller.moveDown(BoardPanel.blockCurrent);
         }
 

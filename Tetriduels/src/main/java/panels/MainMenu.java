@@ -10,6 +10,7 @@ public class MainMenu implements ActionListener {
     // PROPERTIES
     JPanel mainMenuPanel = new JPanel();
 
+    JLabel labelMainTitle = new JLabel("Tetriduels");
     JButton butPlay = new JButton("Play");
     JButton butHelp = new JButton("Help");
     JButton butSettings = new JButton("Settings");
@@ -37,19 +38,26 @@ public class MainMenu implements ActionListener {
         this.mainMenuPanel.setLayout(null);
         this.mainMenuPanel.setBackground(Color.DARK_GRAY);
 
+        // Title
+        this.labelMainTitle.setBounds(55,25,500,150);
+        this.labelMainTitle.setForeground(Color.WHITE);
+        this.labelMainTitle.setFont(Utility.loadFont("fannabella"));
+        Utility.setFontSize(this.labelMainTitle, 140);
+        this.mainMenuPanel.add(this.labelMainTitle);
+
         // Play button
         this.butPlay.addActionListener(this);
-        this.butPlay.setBounds(56,170,400,150);
-        this.butPlay.setFont(Utility.loadFont());
-        Utility.setFontSize(this.butPlay,40);
+        this.butPlay.setBounds(75,180,400,140);
+        this.butPlay.setFont(Utility.loadFont("zorque"));
+        Utility.setFontSize(this.butPlay,60);
         this.butPlay.setBackground(Color.BLACK);
         this.butPlay.setForeground(Color.WHITE);
         this.mainMenuPanel.add(butPlay);
 
         // Help button
         this.butHelp.addActionListener(this);
-        this.butHelp.setBounds(105,200+(5*2)+120,300,120);
-        this.butHelp.setFont(Utility.loadFont());
+        this.butHelp.setBounds(125,200+(5*2)+120,300,120);
+        this.butHelp.setFont(Utility.loadFont("zorque"));
         Utility.setFontSize(this.butHelp,40);
         this.butHelp.setBackground(Color.BLACK);
         this.butHelp.setForeground(Color.WHITE);
@@ -57,8 +65,8 @@ public class MainMenu implements ActionListener {
 
         // Settings button
         this.butSettings.addActionListener(this);
-        this.butSettings.setBounds(105,200+(5*3)+(120*2),300,120);
-        this.butSettings.setFont(Utility.loadFont());
+        this.butSettings.setBounds(125,200+(5*3)+(120*2),300,120);
+        this.butSettings.setFont(Utility.loadFont("zorque"));
         Utility.setFontSize(this.butSettings,40);
         this.butSettings.setBackground(Color.BLACK);
         this.butSettings.setForeground(Color.WHITE);
@@ -66,8 +74,8 @@ public class MainMenu implements ActionListener {
 
         // Exit button
         this.butExit.addActionListener(this);
-        this.butExit.setBounds(105,200+(5*4)+(120*3),300,120);
-        this.butExit.setFont(Utility.loadFont());
+        this.butExit.setBounds(125,200+(5*4)+(120*3),300,120);
+        this.butExit.setFont(Utility.loadFont("zorque"));
         Utility.setFontSize(this.butExit,40);
         this.butExit.setBackground(Color.BLACK);
         this.butExit.setForeground(Color.WHITE);
@@ -93,19 +101,18 @@ public class MainMenu implements ActionListener {
     public void keyReleased(KeyEvent evt) {
     }
     public void keyPressed(KeyEvent evt) { // If any key is pressed, go to main menu
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        Utility.setPanel(new MainMenu().getPanel()); // Go to main menu
+        loadMainMenu();
     }
-    public void mouseClicked(MouseEvent evt) {
-        try {
+    public void mouseClicked(MouseEvent evt) { // If mouse is pressed, go to main menu
+        loadMainMenu();
+    }
+
+    public void loadMainMenu() {
+        /*try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
-        }
+        }*/
         Utility.setPanel(new MainMenu().getPanel()); // Go to main menu
     }
 
@@ -120,7 +127,7 @@ public class MainMenu implements ActionListener {
 
         this.labelContinue.setBounds(400,530,470,70);
         this.labelContinue.setForeground(Color.WHITE);
-        this.labelContinue.setFont(Utility.loadFont());
+        this.labelContinue.setFont(Utility.loadFont("zorque"));
         Utility.setFontSize(this.labelContinue, 30);
         this.splashMenuPanel.add(this.labelContinue);
 
@@ -133,6 +140,6 @@ public class MainMenu implements ActionListener {
 } class SplashMenuPanel extends JPanel {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.drawImage(Utility.loadImage(new File("Tetriduels/assets/images/SplashScreen.png")),0,0,null); // Draw splash screen picture
+        g.drawImage(Utility.loadImage(new File("assets/images/SplashScreen.png")),0,0,null); // Draw splash screen picture
     }
 }

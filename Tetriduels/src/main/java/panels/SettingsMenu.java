@@ -7,15 +7,17 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.*;
+import java.text.NumberFormat;
 
 public class SettingsMenu implements ActionListener, KeyListener {
+    // PROPERTIES
     //Static variables for all keybinds
     public static int intKeyHardDrop;
     public static int intKeyLeft;
     public static int intKeyRight;
     public static int intKeyRotateRight;
     public static int intKeyRotateLeft;
-    public static int intKeySoftDrop;
+    public static int intKeyDown;
     public static int intKeyHold;
 
     int intKeyHardDropDefault = KeyEvent.VK_SPACE;
@@ -23,15 +25,15 @@ public class SettingsMenu implements ActionListener, KeyListener {
     int intKeyRightDefault = KeyEvent.VK_RIGHT;
     int intKeyRotateRightDefault = KeyEvent.VK_UP;
     int intKeyRotateLeftDefault = KeyEvent.VK_Z;
-    int intKeySoftDropDefault = KeyEvent.VK_DOWN;
+    int intKeyDownDefault = KeyEvent.VK_DOWN;
     int intKeyHoldDefault = KeyEvent.VK_C;
 
     int intDefaultPort = 2626;
     public static int intPort = 2626;
 
-    public static boolean blnSoundCheck = true;
+    public static boolean blnEnableSound = true;
 
-    private String strBindText = "Please type the key you would like to change to";
+    private String strBindText = "Enter new key";
 
     public static FileReader settingsFile;
     public static BufferedReader settingsFileData;
@@ -39,40 +41,44 @@ public class SettingsMenu implements ActionListener, KeyListener {
     public static FileWriter settingsOutput;
     public static PrintWriter settingsOutputData;
 
-    JPanel settingsPanel = new JPanel();
+    SettingsMenuPanel settingsPanel = new SettingsMenuPanel();
+    JLabel labelSettingsTitle = new JLabel("Settings");
     JButton butChangeHardDrop = new JButton(KeyEvent.getKeyText(intKeyHardDrop));
     JButton butChangeMoveLeft = new JButton(KeyEvent.getKeyText(intKeyLeft));
     JButton butChangeMoveRight = new JButton(KeyEvent.getKeyText(intKeyRight));
     JButton butChangeRotateRight = new JButton(KeyEvent.getKeyText(intKeyRotateRight));
     JButton butChangeRotateLeft = new JButton(KeyEvent.getKeyText(intKeyRotateLeft));
-    JButton butChangeSoftDrop = new JButton(KeyEvent.getKeyText(intKeySoftDrop));
+    JButton butChangeMoveDown = new JButton(KeyEvent.getKeyText(intKeyDown));
     JButton butChangeHold = new JButton(KeyEvent.getKeyText(intKeyHold));
 
-    JLabel labelChangeHardDrop = new JLabel("Hard Drop");
-    JLabel labelChangeMoveLeft = new JLabel("Move Left");
-    JLabel labelChangeMoveRight = new JLabel("Move Right");
-    JLabel labelChangeRotateRight = new JLabel("Rotate Right");
-    JLabel labelChangeRotateLeft = new JLabel("Rotate Left");
-    JLabel labelChangeSoftDrop = new JLabel("Soft Drop");
-    JLabel labelChangeHold = new JLabel("Hold");
+    JLabel labelChangeHardDrop = new JLabel("Hard Drop:");
+    JLabel labelChangeMoveLeft = new JLabel("Move Left:");
+    JLabel labelChangeMoveRight = new JLabel("Move Right:");
+    JLabel labelChangeRotateRight = new JLabel("Rotate Right:");
+    JLabel labelChangeRotateLeft = new JLabel("Rotate Left:");
+    JLabel labelChangeMoveDown = new JLabel("Move Down:");
+    JLabel labelChangeHold = new JLabel("Hold block");
 
-    JButton butBack = new JButton("Return to main menu");
+    JButton butBack = new JButton("Return to menu");
+    JButton butReset = new JButton("Reset all to default");
 
-    JButton butRevert = new JButton("Revert to default settings");
+    public static JCheckBox boxSound = new JCheckBox("Enable sound effects");
 
-    public static JCheckBox soundCheck = new JCheckBox("Enable sound");
-
-    JTextField portField = new JTextField(5);
+    JTextField fieldPort = new JTextField(6);
     JLabel labelPort = new JLabel("Port Number:");
-    JButton butPort = new JButton("Apply port number");
+    JButton butPort = new JButton("Apply");
+    JLabel labelPortError = new JLabel("Enter a valid port between 0-65535!", SwingConstants.CENTER);
 
+    // METHODS
+    public JPanel getPanel() {
+        return settingsPanel;
+    }
 
-    @Override
     public void actionPerformed(ActionEvent evt) {
         if (evt.getSource() == butChangeHardDrop) {
             butChangeHardDrop.setText(strBindText);
-        } else if (evt.getSource() == butChangeSoftDrop) {
-            butChangeSoftDrop.setText(strBindText);
+        } else if (evt.getSource() == butChangeMoveDown) {
+            butChangeMoveDown.setText(strBindText);
         } else if (evt.getSource() == butChangeMoveLeft) {
             butChangeMoveLeft.setText(strBindText);
         } else if (evt.getSource() == butChangeMoveRight) {
@@ -86,9 +92,9 @@ public class SettingsMenu implements ActionListener, KeyListener {
         } else if (evt.getSource() == butBack) {
             saveControls();
             Utility.setPanel(new MainMenu().getPanel());
-        } else if (evt.getSource() == butRevert) {
+        } else if (evt.getSource() == butReset) {
             intKeyHardDrop = intKeyHardDropDefault;
-            intKeySoftDrop = intKeySoftDropDefault;
+            intKeyDown = intKeyDownDefault;
             intKeyLeft = intKeyLeftDefault;
             intKeyRight = intKeyRightDefault;
             intKeyRotateLeft = intKeyRotateLeftDefault;
@@ -96,7 +102,7 @@ public class SettingsMenu implements ActionListener, KeyListener {
             intKeyHold = intKeyHoldDefault;
 
             butChangeHardDrop.setText(KeyEvent.getKeyText(intKeyHardDrop));
-            butChangeSoftDrop.setText(KeyEvent.getKeyText(intKeySoftDrop));
+            butChangeMoveDown.setText(KeyEvent.getKeyText(intKeyDown));
             butChangeMoveLeft.setText(KeyEvent.getKeyText(intKeyLeft));
             butChangeMoveRight.setText(KeyEvent.getKeyText(intKeyRight));
             butChangeMoveRight.setText(KeyEvent.getKeyText(intKeyRight));
@@ -104,93 +110,80 @@ public class SettingsMenu implements ActionListener, KeyListener {
             butChangeRotateRight.setText(KeyEvent.getKeyText(intKeyRotateRight));
             butChangeHold.setText(KeyEvent.getKeyText(intKeyHold));
 
-            blnSoundCheck = true;
-            this.soundCheck.setSelected(true);
+            blnEnableSound = true;
+            this.boxSound.setSelected(true);
 
             intPort = intDefaultPort;
-            portField.setText(String.valueOf(intDefaultPort));
+            fieldPort.setText(String.valueOf(intDefaultPort));
 
             settingsPanel.requestFocus();
             saveControls();
-        } else if (evt.getSource() == soundCheck) {
-            blnSoundCheck = !blnSoundCheck;
+        } else if (evt.getSource() == boxSound) {
+            blnEnableSound = !blnEnableSound;
             saveControls();
         } else if (evt.getSource() == butPort) {
             try {
-                if (0 <= Integer.parseInt(portField.getText()) && Integer.parseInt(portField.getText()) <= 65535) {
-                    intPort = Integer.parseInt(portField.getText());
+                if (0 <= Integer.parseInt(fieldPort.getText()) && Integer.parseInt(fieldPort.getText()) <= 65535) {
+                    intPort = Integer.parseInt(fieldPort.getText());
+                    labelPortError.setVisible(false);
                 } else {
-                    intPort = intDefaultPort;
-                    portField.setText(String.valueOf(intDefaultPort));
-                    System.out.println("Erorr: Number must be between 0 and 65535");
-
+                    labelPortError.setVisible(true);
                 }
-            } catch (NumberFormatException e) {
-                intPort = intDefaultPort;
-                portField.setText(String.valueOf(intDefaultPort));
-                System.out.println("Must be a number!");
+            } catch (NumberFormatException e) { // Port is blank or user entered in letters
+                labelPortError.setVisible(true);
             }
             saveControls();
         }
     }
-
-    public JPanel getPanel() {
-        return settingsPanel;
-
-    }
     public static void getControls() {
         try {
-            settingsFile = new FileReader("Tetriduels/assets/textfiles/settings.csv");
+            settingsFile = new FileReader("assets/textfiles/settings.csv");
 
             settingsFileData = new BufferedReader(settingsFile);
             String strSplit;
 
             while (settingsFileData != null) {
                 strSplit = settingsFileData.readLine();
-
                 String strData[] = strSplit.split(",");
+
                 intKeyHardDrop = Integer.parseInt(strData[0]);
-                intKeySoftDrop = Integer.parseInt(strData[1]);
+                intKeyDown = Integer.parseInt(strData[1]);
                 intKeyLeft = Integer.parseInt(strData[2]);
                 intKeyRight = Integer.parseInt(strData[3]);
                 intKeyRotateLeft = Integer.parseInt(strData[4]);
                 intKeyRotateRight = Integer.parseInt(strData[5]);
                 intKeyHold = Integer.parseInt(strData[6]);
                 intPort = Integer.parseInt(strData[7]);
-                soundCheck.setSelected(Boolean.parseBoolean(strData[8]));
-                blnSoundCheck = Boolean.parseBoolean(strData[8]);
+                boxSound.setSelected(Boolean.parseBoolean(strData[8]));
+                blnEnableSound = Boolean.parseBoolean(strData[8]);
                 settingsFileData.close();
                 settingsFile.close();
-
             }
-        } catch (FileNotFoundException e) {
-        } catch (IOException e) {
-        } catch (NullPointerException e){
+        } catch (Exception e) { // Catch exception (the code throws an IO exception when the file closes and it tries to loop again)
+            //e.printStackTrace();
         }
     }
     public static void saveControls() {
         try {
-            settingsOutput = new FileWriter("Tetriduels/assets/textfiles/settings.csv");
-        }catch(IOException e) {
+            settingsOutput = new FileWriter("assets/textfiles/settings.csv");
+        } catch(IOException e) {
+            e.printStackTrace();
         }
         settingsOutputData = new PrintWriter(settingsOutput);
-        settingsOutputData.println(intKeyHardDrop+","+intKeySoftDrop+","+intKeyLeft+","+intKeyRight+","+intKeyRotateLeft+","+intKeyRotateRight+","+intKeyHold+","+intPort+","+blnSoundCheck);
+        settingsOutputData.println(intKeyHardDrop+","+ intKeyDown +","+intKeyLeft+","+intKeyRight+","+intKeyRotateLeft+","+intKeyRotateRight+","+intKeyHold+","+intPort+","+ blnEnableSound);
         settingsOutputData.close();
         try {
             settingsOutput.close();
-        }catch(IOException e) {
+        } catch(IOException e) {
         }
     }
 
-
-    @Override
     public void keyTyped(KeyEvent evt) {
-        if(portField.getText().length()>=5) {
+        if(fieldPort.getText().length()>=5) {
             evt.consume();
         }
     }
 
-    @Override
     public void keyPressed(KeyEvent evt) {
         if (evt.getSource() == butChangeHardDrop) {
             intKeyHardDrop = evt.getKeyCode();
@@ -199,9 +192,9 @@ public class SettingsMenu implements ActionListener, KeyListener {
             settingsPanel.requestFocus(); // Return focus back to the panel
             saveControls();
 
-        } else if (evt.getSource() == butChangeSoftDrop) {
-            intKeySoftDrop = evt.getKeyCode();
-            butChangeSoftDrop.setText(KeyEvent.getKeyText(intKeySoftDrop));
+        } else if (evt.getSource() == butChangeMoveDown) {
+            intKeyDown = evt.getKeyCode();
+            butChangeMoveDown.setText(KeyEvent.getKeyText(intKeyDown));
             settingsPanel.requestFocus(); // Return focus back to the panel
             saveControls();
         } else if (evt.getSource() == butChangeMoveLeft) {
@@ -232,96 +225,143 @@ public class SettingsMenu implements ActionListener, KeyListener {
             saveControls();
         }
     }
-    @Override
-    public void keyReleased(KeyEvent evt) {
 
+    public void formatKeyBinds(JLabel labelFormat, JButton butFormat, int intXPos, int intYPos) { // Method to format key bind label/button
+        labelFormat.setForeground(Color.BLACK);
+        labelFormat.setBounds(intXPos, intYPos,230,35);
+        labelFormat.setFont(Utility.loadFont("zorque"));
+        Utility.setFontSize(labelFormat, 30);
+
+        butFormat.addActionListener(this);
+        butFormat.addKeyListener(this);
+        butFormat.setBounds(intXPos + 235, intYPos-10, 200, 60);
+        butFormat.setBackground(Color.DARK_GRAY);
+        butFormat.setForeground(Color.WHITE);
+        butFormat.setFont(Utility.loadFont("fannabella"));
+        Utility.setFontSize(butFormat,35);
+        butFormat.getInputMap().put(KeyStroke.getKeyStroke("SPACE"), "none"); // Disable space bar from activating JButtons
     }
 
+    public void keyReleased(KeyEvent evt) {
+    }
+
+    // CONSTRUCTOR
     public SettingsMenu() {
         this.settingsPanel.setPreferredSize(new Dimension(GUI.FRAME_WIDTH, GUI.FRAME_HEIGHT));
         this.settingsPanel.setLayout(null);
+        this.settingsPanel.setBackground(Color.LIGHT_GRAY);
+
+        // Title
+        this.labelSettingsTitle.setBounds(515,2,250,100);
+        this.labelSettingsTitle.setForeground(Color.BLACK);
+        this.labelSettingsTitle.setFont(Utility.loadFont("fannabella"));
+        Utility.setFontSize(labelSettingsTitle, 80);
+        this.settingsPanel.add(this.labelSettingsTitle);
 
         //Buttons for changing keybinds
-        this.labelChangeHardDrop.setBounds(5,5,100,35);
-        this.butChangeHardDrop.addActionListener(this);
-        this.butChangeHardDrop.addKeyListener(this);
-        this.butChangeHardDrop.setBounds(100, 5, 305, 35);
-        this.butChangeHardDrop.getInputMap().put(KeyStroke.getKeyStroke("SPACE"), "none");
+        // Hard Drop
+        formatKeyBinds(this.labelChangeHardDrop,this.butChangeHardDrop,105,125);
         this.settingsPanel.add(butChangeHardDrop);
         this.settingsPanel.add(labelChangeHardDrop);
 
-        this.labelChangeSoftDrop.setBounds(5,60,100,35);
-        this.butChangeSoftDrop.addActionListener(this);
-        this.butChangeSoftDrop.addKeyListener(this);
-        this.butChangeSoftDrop.setBounds(100, 60, 305, 35);
-        this.butChangeSoftDrop.getInputMap().put(KeyStroke.getKeyStroke("SPACE"), "none");
-        this.settingsPanel.add(butChangeSoftDrop);
-        this.settingsPanel.add(labelChangeSoftDrop);
+        // Move Down
+        formatKeyBinds(this.labelChangeMoveDown,this.butChangeMoveDown,105,125+65);
+        this.settingsPanel.add(butChangeMoveDown);
+        this.settingsPanel.add(labelChangeMoveDown);
 
-        this.labelChangeMoveLeft.setBounds(5,105,100,35);
-        this.butChangeMoveLeft.addActionListener(this);
-        this.butChangeMoveLeft.addKeyListener(this);
-        this.butChangeMoveLeft.setBounds(100, 105, 305, 35);
-        this.butChangeMoveLeft.getInputMap().put(KeyStroke.getKeyStroke("SPACE"), "none");
+        // Move Left
+        formatKeyBinds(this.labelChangeMoveLeft,this.butChangeMoveLeft,105,125+(65*2));
         this.settingsPanel.add(butChangeMoveLeft);
         this.settingsPanel.add(labelChangeMoveLeft);
 
-        this.labelChangeMoveRight.setBounds(5,160,100,35);
-        this.butChangeMoveRight.addActionListener(this);
-        this.butChangeMoveRight.addKeyListener(this);
-        this.butChangeMoveRight.setBounds(100, 160, 305, 35);
-        this.butChangeMoveRight.getInputMap().put(KeyStroke.getKeyStroke("SPACE"), "none");
+        // Move Right
+        formatKeyBinds(this.labelChangeMoveRight,this.butChangeMoveRight,105,125+(65*3));
         this.settingsPanel.add(butChangeMoveRight);
         this.settingsPanel.add(labelChangeMoveRight);
 
-        this.labelChangeRotateLeft.setBounds(5,205,100,35);
-        this.butChangeRotateLeft.addActionListener(this);
-        this.butChangeRotateLeft.addKeyListener(this);
-        this.butChangeRotateLeft.setBounds(100, 205, 305, 35);
-        this.butChangeRotateLeft.getInputMap().put(KeyStroke.getKeyStroke("SPACE"), "none");
+        // Rotate left
+        formatKeyBinds(this.labelChangeRotateLeft,this.butChangeRotateLeft,105,125+(65*4));
         this.settingsPanel.add(butChangeRotateLeft);
         this.settingsPanel.add(labelChangeRotateLeft);
 
-        this.labelChangeRotateRight.setBounds(5,260,100,35);
-        this.butChangeRotateRight.addActionListener(this);
-        this.butChangeRotateRight.addKeyListener(this);
-        this.butChangeRotateRight.setBounds(100, 260, 305, 35);
-        this.butChangeRotateRight.getInputMap().put(KeyStroke.getKeyStroke("SPACE"), "none");
+        // Rotate right
+        formatKeyBinds(this.labelChangeRotateRight,this.butChangeRotateRight,105,125+(65*5));
         this.settingsPanel.add(butChangeRotateRight);
         this.settingsPanel.add(labelChangeRotateRight);
 
-        this.labelChangeHold.setBounds(5,305,100,35);
-        this.butChangeHold.addActionListener(this);
-        this.butChangeHold.addKeyListener(this);
-        this.butChangeHold.setBounds(100, 305, 305, 35);
-        this.butChangeHold.getInputMap().put(KeyStroke.getKeyStroke("SPACE"), "none");
+        // Hold block
+        formatKeyBinds(this.labelChangeHold,this.butChangeHold,105,125+(65*6));
         this.settingsPanel.add(butChangeHold);
         this.settingsPanel.add(labelChangeHold);
 
-        this.butBack.setBounds(500,5,200,100);
+        // Return to main menu
+        this.butBack.setBounds(460,600,360,100);
+        this.butBack.setFont(Utility.loadFont("zorque"));
+        Utility.setFontSize(this.butBack,35);
+        this.butBack.setBackground(Color.BLACK);
+        this.butBack.setForeground(Color.WHITE);
         this.butBack.addActionListener(this);
         this.settingsPanel.add(this.butBack);
 
-        this.butRevert.setBounds(500,120,200,100);
-        this.butRevert.addActionListener(this);
-        this.settingsPanel.add(this.butRevert);
+        // Revert to default settings
+        this.butReset.setBounds(735,510,450,60);
+        this.butReset.setFont(Utility.loadFont("zorque"));
+        Utility.setFontSize(this.butReset,30);
+        this.butReset.setBackground(Color.DARK_GRAY);
+        this.butReset.setForeground(Color.WHITE);
+        this.butReset.addActionListener(this);
+        this.settingsPanel.add(this.butReset);
 
-        this.soundCheck.setBounds(500,230,125,30);
-        this.soundCheck.setSelected(blnSoundCheck);
-        this.soundCheck.addActionListener(this);
-        this.settingsPanel.add(this.soundCheck);
+        // Enable/disable sound
+        this.boxSound.setBounds(790,430,340,30);
+        this.boxSound.setSelected(blnEnableSound);
+        this.boxSound.setFont(Utility.loadFont("zorque"));
+        Utility.setFontSize(boxSound,25);
+        this.boxSound.setBackground(Color.GRAY);
+        this.boxSound.setForeground(Color.BLACK);
+        this.boxSound.addActionListener(this);
+        this.settingsPanel.add(this.boxSound);
 
-        this.portField.setBounds(580,270,55,30);
-        this.portField.addKeyListener(this);
-        this.portField.setText(String.valueOf(intPort));
-        this.settingsPanel.add(this.portField);
-
-        this.labelPort.setBounds(500,270,100,30);
+        // Port number
+        this.labelPort.setBounds(740,120,230,40);
+        this.labelPort.setFont(Utility.loadFont("zorque"));
+        Utility.setFontSize(this.labelPort,30);
+        this.labelPort.setForeground(Color.BLACK);
         this.settingsPanel.add(this.labelPort);
 
-        this.butPort.setBounds(645,270,150,30);
+        this.fieldPort.setBounds(975,120,55,40);
+        this.fieldPort.setFont(Utility.loadFont("fannabella"));
+        Utility.setFontSize(this.fieldPort,20);
+        this.fieldPort.addKeyListener(this);
+        this.fieldPort.setText(String.valueOf(intPort));
+        this.settingsPanel.add(this.fieldPort);
+
+        this.butPort.setBounds(1040,120,100,40);
+        this.butPort.setFont(Utility.loadFont("fannabella"));
+        Utility.setFontSize(this.butPort,30);
+        this.butPort.setBackground(Color.DARK_GRAY);
+        this.butPort.setForeground(Color.WHITE);
         this.butPort.addActionListener(this);
         this.settingsPanel.add(this.butPort);
 
+        this.labelPortError.setBounds(725,170,470,40);
+        this.labelPortError.setFont(Utility.loadFont("zorque"));
+        Utility.setFontSize(this.labelPortError,20);
+        this.labelPortError.setForeground(new Color(153,0,0)); // Dark red
+        this.settingsPanel.add(this.labelPortError);
+        this.labelPortError.setVisible(false);
+
+        this.settingsPanel.repaint(); // Draw background rectangles
+    }
+} class SettingsMenuPanel extends JPanel {
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        g.setColor(Color.GRAY); // Rectangles
+        g.fillRect(85,100,470,480); // Left rectangle
+        g.fillRect(85+640,100,470,480); // Right rectangle
+
+        g.setColor(Color.BLACK); // Outlines
+        g.drawRect(85,100,470,480); // Left rectangle outline
+        g.drawRect(85+640,100,470,480); // Right rectangle outline
     }
 }

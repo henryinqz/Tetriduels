@@ -322,6 +322,8 @@ public class BoardPanel extends JPanel {
     // CONSTRUCTOR
     public BoardPanel() {
         super();
+        this.intGrid = new int[intYMax / BLOCKSIZE][intXMax / BLOCKSIZE]; // Reset 10x20 array grid of board
+        this.intEnemyGrid = new int[intYMax / BLOCKSIZE][intXMax / BLOCKSIZE]; // Reset 10x20 array grid of board (Enemy)
         blockCurrent = Controller.generateBlock(); // Generate a new block
         this.intGrid = new int[intYMax / BLOCKSIZE][intXMax / BLOCKSIZE]; // Reset 10x20 array grid of board
         this.intEnemyGrid = new int[intYMax / BLOCKSIZE][intXMax / BLOCKSIZE]; // Reset 10x20 array grid of board (Enemy)

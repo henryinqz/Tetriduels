@@ -13,12 +13,11 @@ public class Utility {
         GUI.theframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         GUI.theframe.setContentPane(changePanel);
         GUI.theframe.pack();
-        //GUI.theframe.setLocationRelativeTo(null);
         GUI.theframe.setResizable(false);
         GUI.theframe.setVisible(true);
     }
     public static void playSound (File Sound) {
-        if(SettingsMenu.blnSoundCheck == true) {
+        if(SettingsMenu.blnEnableSound == true) {
             try {
                 Clip clip = AudioSystem.getClip();
                 clip.open(AudioSystem.getAudioInputStream(Sound));
@@ -37,19 +36,25 @@ public class Utility {
         }
         return null;
     }
-    public static Font loadFont() {
+    public static Font loadFont(String strFontName) {
         Font font = null;
         try {
-            font = Font.createFont(Font.PLAIN, new File("Tetriduels/assets/font/zorque.ttf"));
+            font = Font.createFont(Font.PLAIN, new File("assets/font/"+strFontName+".ttf"));
         } catch (Exception e) {
             e.printStackTrace();
         }
         return font;
     }
-    public static void setFontSize (JLabel labelFont, int intSize) {
+    public static void setFontSize (JLabel labelFont, int intSize) { // JLabel font size
         labelFont.setFont(labelFont.getFont().deriveFont(Font.PLAIN,intSize));
     }
-    public static void setFontSize (JButton buttonFont, int intSize) {
-        buttonFont.setFont(buttonFont.getFont().deriveFont(Font.PLAIN,intSize));
+    public static void setFontSize (JButton butFont, int intSize) { // JButton font size
+        butFont.setFont(butFont.getFont().deriveFont(Font.PLAIN,intSize));
+    }
+    public static void setFontSize (JCheckBox boxFont, int intSize) { // JButton font size
+        boxFont.setFont(boxFont.getFont().deriveFont(Font.PLAIN,intSize));
+    }
+    public static void setFontSize (JTextField fieldFont, int intSize) { // JButton font size
+        fieldFont.setFont(fieldFont.getFont().deriveFont(Font.PLAIN,intSize));
     }
 }
