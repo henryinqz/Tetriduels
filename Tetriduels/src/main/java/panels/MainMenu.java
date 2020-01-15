@@ -3,6 +3,7 @@ package panels;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.*;
@@ -16,6 +17,7 @@ public class MainMenu implements ActionListener, MouseListener {
     JButton butHelp = new JButton("Help");
     JButton butSettings = new JButton("Settings");
     JButton butExit = new JButton("Exit");
+    JButton butAbout = new JButton("About");
     JLabel labelGitHubLink  = new JLabel("Github");
 
     int intPurpleCheck = 0;
@@ -35,6 +37,8 @@ public class MainMenu implements ActionListener, MouseListener {
             Utility.setPanel(new HelpMenu().getPanel());
         } else if (evt.getSource() == butSettings) {
             Utility.setPanel(new SettingsMenu().getPanel());
+        } else if (evt.getSource() == butAbout){
+            Utility.setPanel(new About().getPanel());
         } else if (evt.getSource() == butExit) {
             System.exit(1); // Exit game
         }
@@ -114,6 +118,15 @@ public class MainMenu implements ActionListener, MouseListener {
         this.butSettings.setForeground(Color.WHITE);
         this.mainMenuPanel.add(butSettings);
 
+        //About button
+        this.butAbout.addActionListener(this);
+        this.butAbout.setBounds(925 , 200+(5*4)+(120*3), 300,120);
+        this.butAbout.setFont(Utility.loadFont("zorque"));
+        Utility.setFontSize(this.butAbout,40);
+        this.butAbout.setBackground(Color.BLACK);
+        this.butAbout.setForeground(Color.WHITE);
+        this.mainMenuPanel.add(butAbout);
+
         // Exit button
         this.butExit.addActionListener(this);
         this.butExit.setBounds(125,200+(5*4)+(120*3),300,120);
@@ -123,7 +136,7 @@ public class MainMenu implements ActionListener, MouseListener {
         this.butExit.setForeground(Color.WHITE);
         this.mainMenuPanel.add(butExit);
 
-        this.labelGitHubLink.setBounds(1160,650,100,50);
+        this.labelGitHubLink.setBounds(785,650,100,50);
         Color hyperlinkBlue = new Color(51,102,187);
         this.labelGitHubLink.setForeground(hyperlinkBlue);
         Utility.setFontSize(this.labelGitHubLink,30);
