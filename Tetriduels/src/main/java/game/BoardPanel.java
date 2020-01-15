@@ -23,6 +23,8 @@ public class BoardPanel extends JPanel {
     public static Integer[] pieceArray = new Integer[]{1, 2, 3, 4, 5, 6, 7};
     public static Integer[] pieceArrayNext = new Integer[]{1, 2, 3, 4, 5, 6, 7};
 
+    public static int intPreviouslyRemovedLine = 0; // Checks if the previous block placed was a line clear
+
     Thread threadTotalGroundTimer = new Thread(new TotalGroundTimer());
     Thread threadGroundTimer = new Thread(new GroundTimer());
 
@@ -276,18 +278,28 @@ public class BoardPanel extends JPanel {
 
     private void removeFullLines(int[][] intGrid) {
         int intRemovedLines = 0; // Variable that determines how many rows/lines were removed after 1 block placement
+
         for (int y = 0; y < (intYMax / BLOCKSIZE); y++) {
             if (intGrid[y][0] != 0 && intGrid[y][1] != 0 && intGrid[y][2] != 0 && intGrid[y][3] != 0 && intGrid[y][4] != 0 && intGrid[y][5] != 0 && intGrid[y][6] != 0 && intGrid[y][7] != 0 && intGrid[y][8] != 0 && intGrid[y][9] != 0) { // Full Row
+                intPreviouslyRemovedLine = intPreviouslyRemovedLine+1;
+
                 for (int a = 0; a < y; a++) {
                     //intGrid[y - a] = intGrid[y - a - 1];  // Shift all blocks above down 1 block (DOESN'T WORK, SINCE intGrid[y-a] SIMPLY BECOMES A REFERENCE FOR intGrid[y-a-1]
                     System.arraycopy(intGrid[y - a - 1], 0, intGrid[y - a], 0, 10); // Shift all blocks above down 1 block, by copying the array
                 }
                 intRemovedLines++; // increase # of removes lines by 1
                 Connections.sendMessage(Connections.GRID, "remove," + y); // Tell enemy to clear line of our board
+
             }
+
         }
         if (intRemovedLines > 1) { // Only send if 2 or more lines were cleared
             sendGarbageLines(intRemovedLines-1); // Call method to send garbage lines to opposite side
+        }else if(intPreviouslyRemovedLine > 1 && intRemovedLines>0){ //Only send if previous placed block was a line clear
+            sendGarbageLines(intRemovedLines); // Call method to send garbage lines to opposite side
+
+        }else if(intRemovedLines < 1) { // If there were no lines sent
+            intPreviouslyRemovedLine = 0;
         }
     }
 
