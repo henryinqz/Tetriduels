@@ -29,10 +29,13 @@ public class About implements ActionListener{
         this.aboutPanel.setPreferredSize(new Dimension(GUI.FRAME_WIDTH,GUI.FRAME_HEIGHT));
         this.aboutPanel.setLayout(null);
 
-        this.butMenu.setSize(200,100);
-        this.butMenu.setLocation(500,600);
+        this.butMenu.setBounds(460,600,360,100);
+        this.butMenu.setFont(Utility.loadFont("zorque"));
+        Utility.setFontSize(this.butMenu,35);
+        this.butMenu.setBackground(Color.BLACK);
+        this.butMenu.setForeground(Color.WHITE);
         this.butMenu.addActionListener(this);
-
+        this.aboutPanel.add(butMenu);
         this.aboutPanel.add(butMenu);
 
         this.aboutPanel.repaint();
