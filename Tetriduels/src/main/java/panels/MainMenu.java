@@ -3,11 +3,10 @@ package panels;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
-import java.net.*;
 
-public class MainMenu implements ActionListener, MouseListener {
+public class MainMenu implements ActionListener {
     // PROPERTIES
     JPanel mainMenuPanel = new JPanel();
 
@@ -16,6 +15,7 @@ public class MainMenu implements ActionListener, MouseListener {
     JButton butHelp = new JButton("Help");
     JButton butSettings = new JButton("Settings");
     JButton butExit = new JButton("Exit");
+    JButton butAbout = new JButton("About");
     JLabel labelGitHubLink  = new JLabel("Github");
 
     int intPurpleCheck = 0;
@@ -38,40 +38,6 @@ public class MainMenu implements ActionListener, MouseListener {
         } else if (evt.getSource() == butExit) {
             System.exit(1); // Exit game
         }
-    }
-    public void mouseClicked(MouseEvent e) {
-
-    }
-
-    public void mousePressed(MouseEvent e) {
-
-    }
-
-
-    public void mouseReleased(MouseEvent evt) {
-        if(evt.getSource() == labelGitHubLink) {
-            intPurpleCheck = 1;
-            if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
-                try {
-                    Desktop.getDesktop().browse(new URI("http://www.github.com/henryinqz/Tetriduels"));
-                } catch (IOException e) {
-                } catch (URISyntaxException e) {
-                }
-
-            }
-            if(intPurpleCheck == 1) {
-                this.labelGitHubLink.setForeground(hyperlinkPurple);
-            }
-
-            }
-    }
-
-    public void mouseEntered(MouseEvent e) {
-
-    }
-
-    public void mouseExited(MouseEvent e) {
-
     }
 
     // CONSTRUCTOR
@@ -123,18 +89,7 @@ public class MainMenu implements ActionListener, MouseListener {
         this.butExit.setForeground(Color.WHITE);
         this.mainMenuPanel.add(butExit);
 
-        this.labelGitHubLink.setBounds(1160,650,100,50);
-        Color hyperlinkBlue = new Color(51,102,187);
-        this.labelGitHubLink.setForeground(hyperlinkBlue);
-        Utility.setFontSize(this.labelGitHubLink,30);
-        this.labelGitHubLink.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        this.mainMenuPanel.add(this.labelGitHubLink);
-        this.labelGitHubLink.addMouseListener(this);
-
-
     }
-
-
 } class SplashMenu implements KeyListener, MouseListener {
     // PROPERTIES
     SplashMenuPanel splashMenuPanel = new SplashMenuPanel();
@@ -193,6 +148,6 @@ public class MainMenu implements ActionListener, MouseListener {
 } class SplashMenuPanel extends JPanel {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.drawImage(Utility.loadImage(new File("Tetriduels/assets/images/SplashScreen.png")),0,0,null); // Draw splash screen picture
+        g.drawImage(Utility.loadImage(new File("assets/images/SplashScreen.png")),0,0,null); // Draw splash screen picture
     }
 }

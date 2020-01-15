@@ -22,6 +22,7 @@ public class ConnectMenu implements ActionListener {
     JTextField fieldPort = new JTextField();
     JButton butConnect = new JButton("Connect");
     JLabel labelError = new JLabel("",SwingConstants.CENTER);
+    JLabel labelReady = new JLabel("Host must click ready first");
 
     public String strServerPort;
     public int intPort;
@@ -175,11 +176,16 @@ public class ConnectMenu implements ActionListener {
         this.connectPanel.add(butReady);
 
         // Initialize error label
-        this.labelError.setLocation(900,5);
-        this.labelError.setSize(300,300);
+        this.labelError.setLocation(850,30);
+        this.labelError.setSize(300,25);
         this.labelError.setForeground(Color.RED);
         this.labelError.setVisible(false);
         this.connectPanel.add(labelError);
+
+        //Tell users who needs to click ready first
+        this.labelReady.setLocation(875,375);
+        this.labelReady.setSize(300,25);
+        this.connectPanel.add(labelReady);
 
         // Chat
         this.areaChat.setEditable(false);
