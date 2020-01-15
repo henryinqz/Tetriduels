@@ -24,7 +24,6 @@ public class ConnectMenu implements ActionListener {
     JLabel labelError = new JLabel("",SwingConstants.CENTER);
     JLabel labelReady = new JLabel("Host must click ready first");
 
-    public String strServerPort;
     public int intPort;
 
     JButton butReady = new JButton("Ready");
@@ -131,21 +130,34 @@ public class ConnectMenu implements ActionListener {
     // CONSTRUCTOR
     public ConnectMenu() {
         this.connectPanel.setPreferredSize(new Dimension(GUI.FRAME_WIDTH,GUI.FRAME_HEIGHT));
+        this.connectPanel.setBackground(Color.gray);
         this.connectPanel.setLayout(null);
 
         // (Server) Host button
         this.butHost.addActionListener(this);
         this.butHost.setBounds(5,5,400,150);
+        this.butHost.setFont(Utility.loadFont("zorque"));
+        Utility.setFontSize(butHost,40);
+        this.butHost.setBackground(Color.BLACK);
+        this.butHost.setForeground(Color.WHITE);
         this.connectPanel.add(butHost);
 
         // (Client) Join game button
         this.butClient.addActionListener(this);
         this.butClient.setBounds(5,(5*2)+150,400,150);
+        this.butClient.setFont(Utility.loadFont("zorque"));
+        Utility.setFontSize(butClient,40);
+        this.butClient.setBackground(Color.BLACK);
+        this.butClient.setForeground(Color.WHITE);
         this.connectPanel.add(butClient);
 
         // Exit button
         this.butBack.addActionListener(this);
         this.butBack.setBounds(5,(5*4)+(150*3),400,150);
+        this.butBack.setFont(Utility.loadFont("zorque"));
+        Utility.setFontSize(butBack,40);
+        this.butBack.setBackground(Color.BLACK);
+        this.butBack.setForeground(Color.WHITE);
         this.connectPanel.add(butBack);
 
         // ServerIP
@@ -166,12 +178,20 @@ public class ConnectMenu implements ActionListener {
         this.butConnect.addActionListener(this);
         this.butConnect.setEnabled(false);
         this.butConnect.setBounds(500,120,110,30);
+        this.butConnect.setFont(Utility.loadFont("zorque"));
+        Utility.setFontSize(butConnect,15);
+        this.butConnect.setBackground(Color.WHITE);
+        this.butConnect.setForeground(Color. BLACK);
         this.connectPanel.add(butConnect);
 
         // Initialize ready button
         this.butReady.addActionListener(this);
-        this.butReady.setLocation(900,400);
-        this.butReady.setSize(110,30);
+        this.butReady.setLocation(875,400);
+        this.butReady.setSize(155,50);
+        this.butReady.setFont(Utility.loadFont("zorque"));
+        Utility.setFontSize(butReady,25);
+        this.butReady.setBackground(Color.WHITE);
+        this.butReady.setForeground(Color.BLACK);
         this.butReady.setVisible(false);
         this.connectPanel.add(butReady);
 
@@ -203,6 +223,10 @@ public class ConnectMenu implements ActionListener {
         this.butChatMessageSend.setEnabled(false);
         this.butChatMessageSend.setSize(80,50);
         this.butChatMessageSend.setLocation(720,600);
+        this.butChatMessageSend.setFont(Utility.loadFont("zorque"));
+        Utility.setFontSize(butChatMessageSend,15);
+        this.butChatMessageSend.setBackground(Color.WHITE);
+        this.butChatMessageSend.setForeground(Color.BLACK);
         this.connectPanel.add(butChatMessageSend);
 
     }

@@ -7,7 +7,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.*;
-import java.text.NumberFormat;
 
 public class SettingsMenu implements ActionListener, KeyListener {
     // PROPERTIES
