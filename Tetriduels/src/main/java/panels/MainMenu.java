@@ -10,7 +10,7 @@ import java.net.*;
 
 public class MainMenu implements ActionListener, MouseListener {
     // PROPERTIES
-    JPanel mainMenuPanel = new JPanel();
+    MainMenuPanel mainMenuPanel = new MainMenuPanel();
 
     JLabel labelMainTitle = new JLabel("Tetriduels");
     JButton butPlay = new JButton("Play");
@@ -145,6 +145,17 @@ public class MainMenu implements ActionListener, MouseListener {
         this.labelGitHubLink.addMouseListener(this);
 
 
+    }
+
+    class MainMenuPanel extends JPanel {
+        public void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            Image icon = null;
+                icon = new ImageIcon("Tetriduels/assets/images/dmc5.gif").getImage();
+            g.drawImage(icon, 600, 20, this);
+
+
+        }
     }
 
 
