@@ -38,13 +38,21 @@ public class GameOver implements ActionListener{
         this.overPanel.setPreferredSize(new Dimension(GUI.FRAME_WIDTH,GUI.FRAME_HEIGHT));
         this.overPanel.setLayout(null);
 
-        this.butRestart.setSize(200,100);
-        this.butRestart.setLocation(700,600);
+        this.butRestart.setSize(250,100);
+        this.butRestart.setLocation(615,600);
         this.butRestart.addActionListener(this);
+        this.butRestart.setFont(Utility.loadFont("zorque"));
+        this.butRestart.setBackground(Color.BLACK);
+        this.butRestart.setForeground(Color.WHITE);
+        Utility.setFontSize(butRestart,30);
 
-        this.butEnd.setSize(200,100);
-        this.butEnd.setLocation(350,600);
+        this.butEnd.setSize(250,100);
+        this.butEnd.setLocation(390,600);
         this.butEnd.addActionListener(this);
+        this.butEnd.setFont(Utility.loadFont("zorque"));
+        this.butEnd.setBackground(Color.BLACK);
+        this.butEnd.setForeground(Color.WHITE);
+        Utility.setFontSize(butEnd,30);
 
         this.winner.setSize(200,100);
         this.winner.setLocation(100,600);
