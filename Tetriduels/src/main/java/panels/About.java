@@ -9,7 +9,7 @@ import java.io.File;
 public class About implements ActionListener{
     // PROPERTIES
     AboutPanel aboutPanel = new AboutPanel();
-    JButton butMenu = new JButton("Main Menu");
+    JButton butMenu = new JButton("Return to Menu");
 
     //Include a method when connecting to the game that allows user to type in their name
     //Name will be put into JLabel showing who won, after game over.
