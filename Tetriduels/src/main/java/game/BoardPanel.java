@@ -61,11 +61,15 @@ public class BoardPanel extends JPanel {
         g2.fillRect(0,0, intXMax+6,BLOCKSIZE*2); // Player board
         g2.fillRect(500,0, intXMax+2,BLOCKSIZE*2); // Enemy board
 
+        g2.setColor(Color.BLACK);
+        g2.drawString("COMBO:"+intPreviouslyRemovedLine, intXMax+20,650);
         // Checks for if block is landed
         if (Controller.checkCollision(blockCurrent, "down") == true) { // Block hits bottom
             if (TotalGroundTimer.blnTotalGroundAllow == false || GroundTimer.blnGroundAllow == false || Controller.blnHardDrop == true) {
                 storeOldBlocks(blockCurrent);
                 removeFullLines(intGrid);
+
+
                 if (blockCurrent.intY <= BLOCKSIZE*1 && blockCurrent.intX == BLOCKSIZE * 3) { // Collision at block spawn point
                     Tetriduels.blnGameLoop = false; // end game
                     Connections.sendMessage(Connections.GAME_OVER,"loss");
@@ -341,6 +345,7 @@ public class BoardPanel extends JPanel {
         this.intGrid = new int[intYMax / BLOCKSIZE][intXMax / BLOCKSIZE]; // Reset 10x20 array grid of board
         this.intEnemyGrid = new int[intYMax / BLOCKSIZE][intXMax / BLOCKSIZE]; // Reset 10x20 array grid of board (Enemy)
         this.blockHeld = null; // Reset held block
+        this.intPreviouslyRemovedLine = 0;
         blockCurrent = Controller.generateBlock(); // Generate a new block
 
     }
