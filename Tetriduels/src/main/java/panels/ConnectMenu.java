@@ -143,10 +143,12 @@ public class ConnectMenu implements ActionListener, KeyListener {
     public void keyReleased(KeyEvent evt) {
     }
     public void keyPressed(KeyEvent evt) {
-        if(evt.getKeyCode() == KeyEvent.VK_ENTER) {
+        if(evt.getKeyCode() == KeyEvent.VK_ENTER) { // Enter key to send message
             if (!fieldChatMessage.getText().equals("")) {
                 butChatMessageSend.doClick();
             }
+        } else if (evt.getKeyCode() == KeyEvent.VK_ESCAPE) { // Escape key to exit chat
+            Game.blnChatOpen = false;
         }
     }
     public void keyTyped(KeyEvent evt) {

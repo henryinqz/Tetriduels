@@ -81,13 +81,9 @@ public class Connections implements ActionListener {
             } else if (intMessageType == GAME_OVER) {
                 if (strMessageSegment[1].equalsIgnoreCase("loss")) { // Enemy lost
                     Tetriduels.blnGameLoop = false;
+                    Game.intGameOverResult = Game.WINNER; // Set to loser
                     Game.endGame();
-                    // print game over
-                    //wait 5 seconds
-                    // stats
-                    // rematch
-                    // close/leave server
-                }// else if (strMessageSegment[1].equalsIgnoreCase("win"))
+                }
             }
         }
     }

@@ -26,6 +26,9 @@ public class Game implements ActionListener, KeyListener {
     // Chat
     public static boolean blnChatOpen = false;
 
+    public static final int LOSER = 0, WINNER = 1;
+    public static int intGameOverResult = -1;
+
     // METHODS
     public JPanel getPanel() {
         return boardPanel;

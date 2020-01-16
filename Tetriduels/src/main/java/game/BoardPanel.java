@@ -5,6 +5,7 @@ import network.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.io.File;
 
 public class BoardPanel extends JPanel {
@@ -70,9 +71,11 @@ public class BoardPanel extends JPanel {
         // Chat
         g2.setColor(Color.GRAY);
         g2.fillRect((intXMax*2)+240,0,440, GUI.FRAME_HEIGHT); // Chat background
+        g2.setColor(Color.BLACK);
+        Utility.setFontSize(g2,30);
+        g2.drawString("Press '" + KeyEvent.getKeyText(SettingsMenu.intKeyChat) + "' to open chat", 845,600);
 
         // Distinguish boards between player/enemy/chat
-        g2.setColor(Color.BLACK);
         Utility.setFontSize(g2, 40);
         g2.drawString("Your board",10,40);
         g2.drawString("Enemy board", 510,40);
@@ -91,6 +94,7 @@ public class BoardPanel extends JPanel {
                     Tetriduels.blnGameLoop = false; // end game
                     Connections.sendMessage(Connections.GAME_OVER,"loss");
                     Game.endGame();
+                    Game.intGameOverResult = Game.LOSER; // Set to loser
                 } else { // If no collision at spawn point, generate a new block
                     blockCurrent = Controller.generateBlock();
                     Controller.updateGhostBlock(blockCurrent); // Update position of ghost block
@@ -331,10 +335,8 @@ public class BoardPanel extends JPanel {
 
     private void sendGarbageLines(int intRemovedLines) {
         Connections.sendMessage(Connections.GRID, "garbage," + intRemovedLines);
-        Utility.playSound(new File("Tetriduels/assets/audio/blocks/GarbageNoise.wav")); // Play hard drop sound
+        Utility.playSound(new File("assets/audio/blocks/GarbageNoise.wav")); // Play hard drop sound
     }
-
-
 
     private void drawGridlines(int intX1, int intY1, int intX2, int intY2, int intAmountVert, int intAmountHoriz, Graphics2D g2) { // Draw gridlines on board. intAmountX & Y determine how many gridlines to draw
         g2.setColor(Color.BLACK);

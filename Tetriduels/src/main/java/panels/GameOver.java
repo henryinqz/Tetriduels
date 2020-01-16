@@ -1,5 +1,7 @@
 package panels;
 
+import game.Game;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -11,9 +13,6 @@ public class GameOver implements ActionListener{
     GameOverPanel overPanel = new GameOverPanel();
     JButton butRestart = new JButton("Play Again");
     JButton butEnd = new JButton("Quit");
-    String strPlayer1 = "jeremy";
-    String strPlayer2 = "selwin";
-    JLabel winner = new JLabel(strPlayer1 + " won the game");
 
     //Include a method when connecting to the game that allows user to type in their name
     //Name will be put into JLabel showing who won, after game over.
@@ -38,34 +37,36 @@ public class GameOver implements ActionListener{
         this.overPanel.setPreferredSize(new Dimension(GUI.FRAME_WIDTH,GUI.FRAME_HEIGHT));
         this.overPanel.setLayout(null);
 
-        this.butRestart.setSize(250,100);
-        this.butRestart.setLocation(615,600);
+        this.butRestart.setBounds(390,600,250,100);
+        //this.butRestart.setSize(250,100);
+        //this.butRestart.setLocation(615,600);
         this.butRestart.addActionListener(this);
         this.butRestart.setFont(Utility.loadFont("zorque"));
         this.butRestart.setBackground(Color.BLACK);
         this.butRestart.setForeground(Color.WHITE);
         Utility.setFontSize(butRestart,30);
+        this.overPanel.add(butRestart);
 
-        this.butEnd.setSize(250,100);
-        this.butEnd.setLocation(390,600);
+        this.butEnd.setBounds(615,600,250,100);
+        //this.butEnd.setSize(250,100);
+        //this.butEnd.setLocation(390,600);
         this.butEnd.addActionListener(this);
         this.butEnd.setFont(Utility.loadFont("zorque"));
         this.butEnd.setBackground(Color.BLACK);
         this.butEnd.setForeground(Color.WHITE);
         Utility.setFontSize(butEnd,30);
-
-        this.winner.setSize(200,100);
-        this.winner.setLocation(100,600);
-
-        this.overPanel.add(butRestart);
         this.overPanel.add(butEnd);
-        this.overPanel.add(winner);
 
         this.overPanel.repaint();
     }
 } class GameOverPanel extends JPanel {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.drawImage(Utility.loadImage(new File("assets/images/GameOver.jpg")),0,0,null); // Draw splash screen picture
+        if (Game.intGameOverResult == Game.WINNER) { // Winner
+            g.drawString("You won!",300,300);
+        } else if (Game.intGameOverResult == Game.LOSER) { // Loser
+            g.drawString("You lost!",300,300);
+            //g.drawImage(Utility.loadImage(new File("assets/images/GameOver.jpg")), 0, 0, null); // Draw splash screen picture
+        }
     }
 }
