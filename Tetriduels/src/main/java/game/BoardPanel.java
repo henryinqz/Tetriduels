@@ -5,6 +5,7 @@ import network.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 
 public class BoardPanel extends JPanel {
     // PROPERTIES
@@ -317,6 +318,7 @@ public class BoardPanel extends JPanel {
 
     private void sendGarbageLines(int intRemovedLines) {
         Connections.sendMessage(Connections.GRID, "garbage," + intRemovedLines);
+        Utility.playSound(new File("Tetriduels/assets/audio/blocks/GarbageNoise.wav")); // Play hard drop sound
     }
 
 
