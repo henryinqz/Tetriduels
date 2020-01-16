@@ -149,7 +149,7 @@ public class BoardPanel extends JPanel {
         g2.setFont(Utility.loadFont("zorque"));
         Utility.setFontSize(g2,20);
         g2.drawString("HOLD", intHeldX, intHeldY - 28);
-        drawGridlines(intHeldX, intHeldY-20, intHeldX + (BLOCKSIZE * 4), intHeldY -20+ (BLOCKSIZE * 4), 4, 4, g2);
+        drawGridlines(intHeldX, intHeldY-28, intHeldX + (BLOCKSIZE * 4), intHeldY -28+ (BLOCKSIZE * 4), 4, 4, g2);
     }
 
     private void drawNextBlocks(Graphics2D g2) { // Draw next 3 blocks on sidebar
