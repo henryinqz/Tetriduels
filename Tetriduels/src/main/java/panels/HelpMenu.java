@@ -40,6 +40,6 @@ public class HelpMenu implements ActionListener{
 } class HelpMenuPanel extends JPanel {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.drawImage(Utility.loadImage(new File("assets/images/help.png")),0,0,null); // Draw splash screen picture
+        g.drawImage(Utility.loadImage(new File("Tetriduels/assets/images/help.png")),0,0,null); // Draw splash screen picture
     }
 }

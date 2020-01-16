@@ -103,7 +103,7 @@ public class MainMenu implements ActionListener {
 } class MainMenuPanel extends JPanel {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.drawImage(Utility.loadImage(new File("assets/images/MainMenuImage.png")),555,50,null); // Draw splash screen picture
+        g.drawImage(Utility.loadImage(new File("Tetriduels/assets/images/MainMenuImage.png")),555,50,null); // Draw splash screen picture
     }
 
 } class SplashMenu implements KeyListener, MouseListener {
@@ -164,6 +164,6 @@ public class MainMenu implements ActionListener {
 } class SplashMenuPanel extends JPanel {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.drawImage(Utility.loadImage(new File("assets/images/splash.png")),0,0,null); // Draw splash screen picture
+        g.drawImage(Utility.loadImage(new File("Tetriduels/assets/images/splash.png")),0,0,null); // Draw splash screen picture
     }
 }

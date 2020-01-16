@@ -335,7 +335,7 @@ public class BoardPanel extends JPanel {
 
     private void sendGarbageLines(int intRemovedLines) {
         Connections.sendMessage(Connections.GRID, "garbage," + intRemovedLines);
-        Utility.playSound(new File("assets/audio/blocks/GarbageNoise.wav")); // Play hard drop sound
+        Utility.playSound(new File("Tetriduels/assets/audio/blocks/GarbageNoise.wav")); // Play hard drop sound
     }
 
     private void drawGridlines(int intX1, int intY1, int intX2, int intY2, int intAmountVert, int intAmountHoriz, Graphics2D g2) { // Draw gridlines on board. intAmountX & Y determine how many gridlines to draw
