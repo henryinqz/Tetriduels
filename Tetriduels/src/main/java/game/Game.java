@@ -137,5 +137,7 @@ public class Game implements ActionListener, KeyListener {
         this.timerGame.start(); // 60FPS timer
         this.threadBlockFall.start(); // Auto fall timer
 
+        this.intGameOverResult = -1; // Reset game over result
+
     }
 }

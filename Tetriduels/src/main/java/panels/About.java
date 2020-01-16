@@ -101,7 +101,7 @@ public class About implements ActionListener, MouseListener {
 } class AboutPanel extends JPanel {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.drawImage(Utility.loadImage(new File("assets/images/About.jpg")),0,0,null);
+        g.drawImage(Utility.loadImage(new File("assets/images/about.jpg")),0,0,null);
     }
 }
 

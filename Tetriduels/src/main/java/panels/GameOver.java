@@ -12,20 +12,17 @@ public class GameOver implements ActionListener{
     // PROPERTIES
     GameOverPanel overPanel = new GameOverPanel();
     JButton butRestart = new JButton("Play Again");
-    JButton butEnd = new JButton("Quit");
-
-    //Include a method when connecting to the game that allows user to type in their name
-    //Name will be put into JLabel showing who won, after game over.
+    JButton butBack = new JButton("Return to menu");
 
     // METHODS
     public void actionPerformed(ActionEvent evt){
-        if(evt.getSource() == butRestart){
+        if (evt.getSource() == butRestart){
             ConnectMenu.blnReady = false;
             ConnectMenu.blnEnemyReady = false;
             Utility.setPanel(new ConnectMenu().getPanel());
         }
-        if(evt.getSource() == butEnd){
-            System.exit(0);
+        if (evt.getSource() == butBack){ // Return to main menu
+            Utility.setPanel(new MainMenu().getPanel());
         }
     }
     public JPanel getPanel() {
@@ -37,36 +34,39 @@ public class GameOver implements ActionListener{
         this.overPanel.setPreferredSize(new Dimension(GUI.FRAME_WIDTH,GUI.FRAME_HEIGHT));
         this.overPanel.setLayout(null);
 
-        this.butRestart.setBounds(390,600,250,100);
-        //this.butRestart.setSize(250,100);
-        //this.butRestart.setLocation(615,600);
-        this.butRestart.addActionListener(this);
+        // Play again (go back to connectmenu)
+        this.butRestart.setBounds(640-50-360,450,360,100);
         this.butRestart.setFont(Utility.loadFont("zorque"));
-        this.butRestart.setBackground(Color.BLACK);
+        Utility.setFontSize(butRestart,35);
+        this.butRestart.setBackground(Color.DARK_GRAY);
         this.butRestart.setForeground(Color.WHITE);
-        Utility.setFontSize(butRestart,30);
+        this.butRestart.addActionListener(this);
         this.overPanel.add(butRestart);
 
-        this.butEnd.setBounds(615,600,250,100);
-        //this.butEnd.setSize(250,100);
-        //this.butEnd.setLocation(390,600);
-        this.butEnd.addActionListener(this);
-        this.butEnd.setFont(Utility.loadFont("zorque"));
-        this.butEnd.setBackground(Color.BLACK);
-        this.butEnd.setForeground(Color.WHITE);
-        Utility.setFontSize(butEnd,30);
-        this.overPanel.add(butEnd);
+        // Return to main menu
+        this.butBack.setBounds(640+50,450,360,100);
+        this.butBack.setFont(Utility.loadFont("zorque"));
+        Utility.setFontSize(this.butBack,35);
+        this.butBack.setBackground(Color.DARK_GRAY);
+        this.butBack.setForeground(Color.WHITE);
+        this.butBack.addActionListener(this);
+        this.overPanel.add(this.butBack);
 
         this.overPanel.repaint();
     }
 } class GameOverPanel extends JPanel {
     public void paintComponent(Graphics g) {
-        super.paintComponent(g);
+        Graphics2D g2 = (Graphics2D) g; // Use Graphics2D instead of regular Graphics
+        super.paintComponent(g2); // Clear previous drawings (Windows only); super JPanel (original) paintComponent method
+
+        g2.drawImage(Utility.loadImage(new File("assets/images/blank.png")), 0, 0, null); // Draw splash screen picture
+        g2.setColor(Color.WHITE);
+        g2.setFont(Utility.loadFont("zorque"));
+        Utility.setFontSize(g2,90);
         if (Game.intGameOverResult == Game.WINNER) { // Winner
-            g.drawString("You won!",300,300);
+            g.drawString("You won!",418,300);
         } else if (Game.intGameOverResult == Game.LOSER) { // Loser
-            g.drawString("You lost!",300,300);
-            //g.drawImage(Utility.loadImage(new File("assets/images/GameOver.jpg")), 0, 0, null); // Draw splash screen picture
+            g.drawString("You lost!",418,300);
         }
     }
 }
