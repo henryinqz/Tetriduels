@@ -58,6 +58,6 @@ public class GameOver implements ActionListener{
 } class GameOverPanel extends JPanel {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.drawImage(Utility.loadImage(new File("Tetriduels/assets/images/GameOver.jpg")),0,0,null); // Draw splash screen picture
+        g.drawImage(Utility.loadImage(new File("assets/images/GameOver.jpg")),0,0,null); // Draw splash screen picture
     }
 }

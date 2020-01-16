@@ -7,8 +7,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
-public class ConnectMenu implements ActionListener {
+public class ConnectMenu implements ActionListener, KeyListener {
     // PROPERTIES
     ConnectMenuPanel connectPanel = new ConnectMenuPanel();
 
@@ -34,9 +36,9 @@ public class ConnectMenu implements ActionListener {
 
     // Chat
     public static JTextArea areaChat = new JTextArea();
-    JScrollPane scrollChat = new JScrollPane(areaChat);
-    JTextField fieldChatMessage = new JTextField();
-    JButton butChatMessageSend = new JButton("Send");
+    public static JScrollPane scrollChat = new JScrollPane(areaChat);
+    public static JTextField fieldChatMessage = new JTextField();
+    public static JButton butChatMessageSend = new JButton("Send");
 
     // METHODS
     public JPanel getPanel() {
@@ -131,10 +133,23 @@ public class ConnectMenu implements ActionListener {
             Connections.sendMessage(Connections.CHAT_MESSAGE, fieldChatMessage.getText());
             areaChat.append("<You>: " + fieldChatMessage.getText() + "\n"); // Add player chat message to chat
             fieldChatMessage.setText(""); // Clear send message box
+            Game.blnChatOpen = false; // If user sends message in game, close chat
         }
         JScrollBar scrollBarChat = scrollChat.getVerticalScrollBar(); // Always scroll bottom
         scrollBarChat.setValue(scrollBarChat.getMaximum());
 
+    }
+
+    public void keyReleased(KeyEvent evt) {
+    }
+    public void keyPressed(KeyEvent evt) {
+        if(evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            if (!fieldChatMessage.getText().equals("")) {
+                butChatMessageSend.doClick();
+            }
+        }
+    }
+    public void keyTyped(KeyEvent evt) {
     }
 
     // CONSTRUCTOR
@@ -247,6 +262,7 @@ public class ConnectMenu implements ActionListener {
 
         this.fieldChatMessage.setEnabled(false);
         this.fieldChatMessage.setBounds(60+(400*2)+10,520,300,50);
+        this.fieldChatMessage.addKeyListener(this);
         this.connectPanel.add(fieldChatMessage);
 
         this.butChatMessageSend.addActionListener(this);

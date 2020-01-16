@@ -26,7 +26,6 @@ public class BoardPanel extends JPanel {
     public static int intPreviouslyRemovedLine = 0; // Checks if the previous block placed was a line clear
     public static int intGarbageLinesSent = 0; //Calculates total amount of garbage sent
 
-
     Thread threadTotalGroundTimer = new Thread(new TotalGroundTimer());
     Thread threadGroundTimer = new Thread(new GroundTimer());
 
@@ -38,7 +37,6 @@ public class BoardPanel extends JPanel {
         //Background of board
         g2.setColor(Color.LIGHT_GRAY);
         g2.fillRect(0,0,GUI.FRAME_WIDTH,GUI.FRAME_HEIGHT);
-        g2.fillRect(0,0,GUI.FRAME_WIDTH,BLOCKSIZE*3);
 
         // Player Board
         g2.setColor(Color.DARK_GRAY); // Fill in board background
@@ -63,9 +61,24 @@ public class BoardPanel extends JPanel {
         g2.fillRect(0,0, intXMax+6,BLOCKSIZE*2); // Player board
         g2.fillRect(500,0, intXMax+2,BLOCKSIZE*2); // Enemy board
 
+        // Combo & total lines sent
         g2.setColor(Color.BLACK);
-        g2.drawString("COMBO:"+intPreviouslyRemovedLine, intXMax+5,630);
-        g2.drawString("LINES SENT:"+intGarbageLinesSent,intXMax+5,660);
+        g2.drawString("COMBO:"+intPreviouslyRemovedLine, intXMax+5,630); // Draw combo text
+        g2.drawString("LINES SENT:"+intGarbageLinesSent,intXMax+5,660); // Draw total lines sent text
+
+        // Chat
+        g2.setColor(Color.GRAY);
+        g2.fillRect((intXMax*2)+240,0,440, GUI.FRAME_HEIGHT); // Chat background
+
+        // Distinguish boards between player/enemy/chat
+        g2.setColor(Color.BLACK);
+        Utility.setFontSize(g2, 40);
+        g2.drawString("Your board",10,40);
+        g2.drawString("Enemy board", 510,40);
+        g2.drawString("CHAT", 1000,40);
+        g2.drawLine(intXMax+160,0,intXMax+160,GUI.FRAME_HEIGHT); // Player/Enemy border
+        g2.drawLine((intXMax*2)+240,0,(intXMax*2)+240,GUI.FRAME_HEIGHT); // Enemy/Chat border
+
         // Checks for if block is landed
         if (Controller.checkCollision(blockCurrent, "down") == true) { // Block hits bottom
             if (TotalGroundTimer.blnTotalGroundAllow == false || GroundTimer.blnGroundAllow == false || Controller.blnHardDrop == true) {
@@ -139,7 +152,7 @@ public class BoardPanel extends JPanel {
 
     private void drawHeldBlock(Graphics2D g2) { // Draw held block on sidebar
         int intHeldX = intXMax + 5;
-        int intHeldY = 15+(BLOCKSIZE*3);
+        int intHeldY = (BLOCKSIZE*3)-5;
 
         if (blockHeld != null) { // Run if there is a held block
             drawBlock(blockHeld, intHeldX, intHeldY, g2); // Draws held block
@@ -148,13 +161,13 @@ public class BoardPanel extends JPanel {
         g2.setColor(Color.BLACK);
         g2.setFont(Utility.loadFont("zorque"));
         Utility.setFontSize(g2,20);
-        g2.drawString("HOLD", intHeldX, intHeldY - 28);
-        drawGridlines(intHeldX, intHeldY-28, intHeldX + (BLOCKSIZE * 4), intHeldY -28+ (BLOCKSIZE * 4), 4, 4, g2);
+        g2.drawString("HOLD", intHeldX, intHeldY - 8);
+        drawGridlines(intHeldX, intHeldY, intHeldX + (BLOCKSIZE * 4), intHeldY + (BLOCKSIZE * 4), 4, 4, g2);
     }
 
     private void drawNextBlocks(Graphics2D g2) { // Draw next 3 blocks on sidebar
         int intNextX = intXMax + 5;
-        int intNextY = 160+(BLOCKSIZE*3);
+        int intNextY = (BLOCKSIZE*3)+145;
         Block blockNext1;
         Block blockNext2;
         Block blockNext3;
@@ -177,13 +190,13 @@ public class BoardPanel extends JPanel {
 
         g2.setStroke(new BasicStroke(1)); // Thin line stroke
         drawBlock(blockNext1, intNextX, intNextY, g2);
-        drawBlock(blockNext2, intNextX, intNextY + (BLOCKSIZE * 4) + 0, g2);
-        drawBlock(blockNext3, intNextX, intNextY + (2 * ((BLOCKSIZE * 4) + 00)), g2);
+        drawBlock(blockNext2, intNextX, intNextY + (BLOCKSIZE * 4), g2);
+        drawBlock(blockNext3, intNextX, intNextY + (2 * ((BLOCKSIZE * 4))), g2);
 
         g2.setColor(Color.BLACK);
         g2.setFont(Utility.loadFont("zorque"));
         Utility.setFontSize(g2,20);
-        g2.drawString("NEXT", intNextX, intNextY - 8);
+        g2.drawString("NEXT", intNextX, intNextY-8);
         //drawGridlines(intNextX, intNextY, intNextX + (intBlockSize*4), intNextY + (intBlockSize*12), 4, 12, g2);
         drawGridlines(intNextX, intNextY, intNextX + (BLOCKSIZE * 4), intNextY + (BLOCKSIZE * 4), 4, 4, g2);
         drawGridlines(intNextX, intNextY + (BLOCKSIZE * 4), intNextX + (BLOCKSIZE * 4), intNextY + (BLOCKSIZE * 8), 4, 4, g2);
