@@ -21,6 +21,8 @@ public class GameOver implements ActionListener{
     // METHODS
     public void actionPerformed(ActionEvent evt){
         if(evt.getSource() == butRestart){
+            ConnectMenu.blnReady = false;
+            ConnectMenu.blnEnemyReady = false;
             Utility.setPanel(new ConnectMenu().getPanel());
         }
         if(evt.getSource() == butEnd){

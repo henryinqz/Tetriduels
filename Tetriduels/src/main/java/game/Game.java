@@ -52,21 +52,10 @@ public class Game implements ActionListener, KeyListener {
             this.boardPanel.requestFocus();
         }
 
-
         if (evt.getSource() == timerGame) {
             this.boardPanel.repaint();
         }
-        /*else if (evt.getSource() == butRotateLeft) {
-            Controller.rotate(BoardPanel.blockCurrent, "left");
-        } else if (evt.getSource() == butRotateRight) {
-            Controller.rotate(BoardPanel.blockCurrent, "right");
-        } else if (evt.getSource() == butMoveLeft) {
-            Controller.moveLeft(BoardPanel.blockCurrent);
-        } else if (evt.getSource() == butMoveRight) {
-            Controller.moveRight(BoardPanel.blockCurrent);
-        } else if (evt.getSource() == butMoveDown) {
-            Controller.moveDown(BoardPanel.blockCurrent);
-        } else if (evt.getSource() == butMoveUp) {
+        /*} else if (evt.getSource() == butMoveUp) {
             Controller.moveUp(BoardPanel.blockCurrent);
         }*/
     }

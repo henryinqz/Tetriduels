@@ -139,6 +139,8 @@ public class BoardPanel extends JPanel {
         }
 
         g2.setColor(Color.BLACK);
+        g2.setFont(Utility.loadFont("zorque"));
+        Utility.setFontSize(g2,20);
         g2.drawString("HOLD", intHeldX, intHeldY - 8);
         drawGridlines(intHeldX, intHeldY, intHeldX + (BLOCKSIZE * 4), intHeldY + (BLOCKSIZE * 4), 4, 4, g2);
     }
@@ -172,6 +174,8 @@ public class BoardPanel extends JPanel {
         drawBlock(blockNext3, intNextX, intNextY + (2 * ((BLOCKSIZE * 4) + 00)), g2);
 
         g2.setColor(Color.BLACK);
+        g2.setFont(Utility.loadFont("zorque"));
+        Utility.setFontSize(g2,20);
         g2.drawString("NEXT", intNextX, intNextY - 8);
         //drawGridlines(intNextX, intNextY, intNextX + (intBlockSize*4), intNextY + (intBlockSize*12), 4, 12, g2);
         drawGridlines(intNextX, intNextY, intNextX + (BLOCKSIZE * 4), intNextY + (BLOCKSIZE * 4), 4, 4, g2);
@@ -336,8 +340,8 @@ public class BoardPanel extends JPanel {
         super();
         this.intGrid = new int[intYMax / BLOCKSIZE][intXMax / BLOCKSIZE]; // Reset 10x20 array grid of board
         this.intEnemyGrid = new int[intYMax / BLOCKSIZE][intXMax / BLOCKSIZE]; // Reset 10x20 array grid of board (Enemy)
+        this.blockHeld = null; // Reset held block
         blockCurrent = Controller.generateBlock(); // Generate a new block
-        this.intGrid = new int[intYMax / BLOCKSIZE][intXMax / BLOCKSIZE]; // Reset 10x20 array grid of board
-        this.intEnemyGrid = new int[intYMax / BLOCKSIZE][intXMax / BLOCKSIZE]; // Reset 10x20 array grid of board (Enemy)
+
     }
 }
