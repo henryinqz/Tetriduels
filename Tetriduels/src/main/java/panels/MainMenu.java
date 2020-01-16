@@ -18,12 +18,6 @@ public class MainMenu implements ActionListener, MouseListener {
     JButton butSettings = new JButton("Settings");
     JButton butExit = new JButton("Exit");
     JButton butAbout = new JButton("About");
-    JLabel labelGitHubLink  = new JLabel("Github");
-
-    int intPurpleCheck = 0;
-    Color hyperlinkBlue = new Color(51,102,187);
-    Color hyperlinkPurple = new Color(70, 0, 128);
-
 
 
     // METHODS
@@ -53,21 +47,7 @@ public class MainMenu implements ActionListener, MouseListener {
 
 
     public void mouseReleased(MouseEvent evt) {
-        if(evt.getSource() == labelGitHubLink) {
-            intPurpleCheck = 1;
-            if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
-                try {
-                    Desktop.getDesktop().browse(new URI("http://www.github.com/henryinqz/Tetriduels"));
-                } catch (IOException e) {
-                } catch (URISyntaxException e) {
-                }
 
-            }
-            if(intPurpleCheck == 1) {
-                this.labelGitHubLink.setForeground(hyperlinkPurple);
-            }
-
-            }
     }
 
     public void mouseEntered(MouseEvent e) {
@@ -135,16 +115,6 @@ public class MainMenu implements ActionListener, MouseListener {
         this.butExit.setBackground(Color.BLACK);
         this.butExit.setForeground(Color.WHITE);
         this.mainMenuPanel.add(butExit);
-
-        this.labelGitHubLink.setBounds(785,650,100,50);
-        Color hyperlinkBlue = new Color(51,102,187);
-        this.labelGitHubLink.setForeground(hyperlinkBlue);
-        Utility.setFontSize(this.labelGitHubLink,30);
-        this.labelGitHubLink.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        this.mainMenuPanel.add(this.labelGitHubLink);
-        this.labelGitHubLink.addMouseListener(this);
-
-
     }
 
 
