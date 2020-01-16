@@ -24,6 +24,8 @@ public class BoardPanel extends JPanel {
     public static Integer[] pieceArrayNext = new Integer[]{1, 2, 3, 4, 5, 6, 7};
 
     public static int intPreviouslyRemovedLine = 0; // Checks if the previous block placed was a line clear
+    public static int intGarbageLinesSent = 0; //Calculates total amount of garbage sent
+
 
     Thread threadTotalGroundTimer = new Thread(new TotalGroundTimer());
     Thread threadGroundTimer = new Thread(new GroundTimer());
@@ -62,7 +64,8 @@ public class BoardPanel extends JPanel {
         g2.fillRect(500,0, intXMax+2,BLOCKSIZE*2); // Enemy board
 
         g2.setColor(Color.BLACK);
-        g2.drawString("COMBO:"+intPreviouslyRemovedLine, intXMax+20,650);
+        g2.drawString("COMBO:"+intPreviouslyRemovedLine, intXMax+5,630);
+        g2.drawString("LINES SENT:"+intGarbageLinesSent,intXMax+5,660);
         // Checks for if block is landed
         if (Controller.checkCollision(blockCurrent, "down") == true) { // Block hits bottom
             if (TotalGroundTimer.blnTotalGroundAllow == false || GroundTimer.blnGroundAllow == false || Controller.blnHardDrop == true) {
@@ -135,7 +138,7 @@ public class BoardPanel extends JPanel {
     }
 
     private void drawHeldBlock(Graphics2D g2) { // Draw held block on sidebar
-        int intHeldX = intXMax + 20;
+        int intHeldX = intXMax + 5;
         int intHeldY = 15+(BLOCKSIZE*3);
 
         if (blockHeld != null) { // Run if there is a held block
@@ -150,7 +153,7 @@ public class BoardPanel extends JPanel {
     }
 
     private void drawNextBlocks(Graphics2D g2) { // Draw next 3 blocks on sidebar
-        int intNextX = intXMax + 20;
+        int intNextX = intXMax + 5;
         int intNextY = 160+(BLOCKSIZE*3);
         Block blockNext1;
         Block blockNext2;
@@ -303,6 +306,7 @@ public class BoardPanel extends JPanel {
         }
         if (intRemovedLines > 1) { // Only send if 2 or more lines were cleared
             sendGarbageLines(intRemovedLines-1); // Call method to send garbage lines to opposite side
+            intGarbageLinesSent = intGarbageLinesSent+(intRemovedLines-1);
         }else if(intPreviouslyRemovedLine > 1 && intRemovedLines>0){ //Only send if previous placed block was a line clear
             sendGarbageLines(intRemovedLines); // Call method to send garbage lines to opposite side
 
@@ -346,6 +350,7 @@ public class BoardPanel extends JPanel {
         this.intEnemyGrid = new int[intYMax / BLOCKSIZE][intXMax / BLOCKSIZE]; // Reset 10x20 array grid of board (Enemy)
         this.blockHeld = null; // Reset held block
         this.intPreviouslyRemovedLine = 0;
+        this.intGarbageLinesSent = 0;
         blockCurrent = Controller.generateBlock(); // Generate a new block
 
     }
