@@ -39,11 +39,11 @@ public class GameOver implements ActionListener{
         this.overPanel.setLayout(null);
 
         this.butRestart.setSize(200,100);
-        this.butRestart.setLocation(800,600);
+        this.butRestart.setLocation(700,600);
         this.butRestart.addActionListener(this);
 
         this.butEnd.setSize(200,100);
-        this.butEnd.setLocation(400,600);
+        this.butEnd.setLocation(350,600);
         this.butEnd.addActionListener(this);
 
         this.winner.setSize(200,100);
@@ -58,6 +58,6 @@ public class GameOver implements ActionListener{
 } class GameOverPanel extends JPanel {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.drawImage(Utility.loadImage(new File("assets/images/endGame.png")),0,0,null); // Draw splash screen picture
+        g.drawImage(Utility.loadImage(new File("Tetriduels/assets/images/GameOver.jpg")),0,0,null); // Draw splash screen picture
     }
 }

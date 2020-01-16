@@ -210,7 +210,7 @@ public class Controller {
         while (checkCollision(blockCurrent, "down") == false) { // Moves block down until collision, then ends loop
             moveDown(blockCurrent);
         }
-        Utility.playSound(new File("assets/audio/blocks/harddrop.wav")); // Play hard drop sound
+        Utility.playSound(new File("Tetriduels/assets/audio/blocks/harddrop.wav")); // Play hard drop sound
         blnHardDrop = true;
     }
 

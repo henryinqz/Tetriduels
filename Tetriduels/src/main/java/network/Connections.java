@@ -34,7 +34,7 @@ public class Connections implements ActionListener {
             } else if (intMessageType == CHAT_MESSAGE) {
                 ConnectMenu.areaChat.append("<Enemy>: " + strMessageSegment[1] + "\n"); // Add new chat message to chat
             } else if (intMessageType == GRID) {
-                if (strMessageSegment[1].equalsIgnoreCase("add")) { // Add blocks to grind
+                if (strMessageSegment[1].equalsIgnoreCase("add")) { // Add blocks to grid
                     int intSquareY = Integer.parseInt(strMessageSegment[2]);
                     int intSquareX = Integer.parseInt(strMessageSegment[3]);
                     int intBlockType = Integer.parseInt(strMessageSegment[4]);
@@ -46,6 +46,8 @@ public class Connections implements ActionListener {
                     }
                 } else if (strMessageSegment[1].equalsIgnoreCase("garbage")) { // Add garbage to player grid
                     int intGarbageLines = Integer.parseInt(strMessageSegment[2]); // Store # of garbage lines being received
+
+                    //Show in a JLabel how many lines are being sent
 
                     if (intGarbageLines > 0) { // Only run if garbage lines sent was above 0
                         for (int a = 0; a < intGarbageLines; a++) { // Loop for # of garbage lines being received

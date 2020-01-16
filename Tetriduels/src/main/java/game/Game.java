@@ -14,7 +14,7 @@ public class Game implements ActionListener, KeyListener {
     BoardPanel boardPanel = new BoardPanel();
     GameOver gameOver = new GameOver();
     Thread threadBlockFall = new Thread(new BlockFallTimer());
-
+    JLabel labelLinesSent = new JLabel("Lines Sent:");
     /*// Debug buttons
     JButton butRotateLeft = new JButton("Rotate Left");
     JButton butRotateRight = new JButton("Rotate Right");
@@ -162,6 +162,10 @@ public class Game implements ActionListener, KeyListener {
         this.boardPanel.setFocusable(true);
         this.boardPanel.requestFocus();
         this.boardPanel.addKeyListener(this);
+
+        this.labelLinesSent.setLocation(100,25);
+        this.labelLinesSent.setSize(300,25);
+        this.boardPanel.add(labelLinesSent);
 
         /*this.theframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.theframe.setContentPane(boardPanel);

@@ -43,7 +43,7 @@ public class About implements ActionListener{
 } class AboutPanel extends JPanel {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.drawImage(Utility.loadImage(new File("assets/images/about.png")),0,0,null); // Draw splash screen picture
+        g.drawImage(Utility.loadImage(new File("Tetriduels/assets/images/AboutPage.jpg")),0,0,null); // Draw splash screen picture
     }
 }
 
