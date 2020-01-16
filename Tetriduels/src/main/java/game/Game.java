@@ -60,7 +60,7 @@ public class Game implements ActionListener, KeyListener {
             Controller.moveRight(BoardPanel.blockCurrent);
         } else if (intKeyCode == SettingsMenu.intKeyDown){
             Controller.moveDown(BoardPanel.blockCurrent);
-        } else if (intKeyCode == KeyEvent.VK_T) {
+        } else if (intKeyCode == SettingsMenu.intKeyChat) {
            if (blnChatOpen == true) { // If chat is open, close chat
                this.boardPanel.requestFocus();
                blnChatOpen = false;

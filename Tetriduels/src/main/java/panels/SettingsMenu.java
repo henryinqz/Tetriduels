@@ -18,6 +18,7 @@ public class SettingsMenu implements ActionListener, KeyListener {
     public static int intKeyRotateLeft;
     public static int intKeyDown;
     public static int intKeyHold;
+    public static int intKeyChat;
 
     int intKeyHardDropDefault = KeyEvent.VK_SPACE;
     int intKeyLeftDefault = KeyEvent.VK_LEFT;
@@ -26,6 +27,7 @@ public class SettingsMenu implements ActionListener, KeyListener {
     int intKeyRotateLeftDefault = KeyEvent.VK_Z;
     int intKeyDownDefault = KeyEvent.VK_DOWN;
     int intKeyHoldDefault = KeyEvent.VK_C;
+    int intKeyChatDefault = KeyEvent.VK_T;
 
     int intDefaultPort = 2626;
     public static int intPort = 2626;
@@ -49,6 +51,7 @@ public class SettingsMenu implements ActionListener, KeyListener {
     JButton butChangeRotateLeft = new JButton(KeyEvent.getKeyText(intKeyRotateLeft));
     JButton butChangeMoveDown = new JButton(KeyEvent.getKeyText(intKeyDown));
     JButton butChangeHold = new JButton(KeyEvent.getKeyText(intKeyHold));
+    JButton butChangeChatKey = new JButton(KeyEvent.getKeyText(intKeyChat));
 
     JLabel labelChangeHardDrop = new JLabel("Hard Drop:");
     JLabel labelChangeMoveLeft = new JLabel("Move Left:");
@@ -57,6 +60,7 @@ public class SettingsMenu implements ActionListener, KeyListener {
     JLabel labelChangeRotateLeft = new JLabel("Rotate Left:");
     JLabel labelChangeMoveDown = new JLabel("Move Down:");
     JLabel labelChangeHold = new JLabel("Hold block");
+    JLabel labelChangeChatKey = new JLabel("Open Chat:");
 
     JButton butBack = new JButton("Return to menu");
     JButton butReset = new JButton("Reset all to default");
@@ -88,6 +92,8 @@ public class SettingsMenu implements ActionListener, KeyListener {
             butChangeRotateLeft.setText(strBindText);
         } else if (evt.getSource() == butChangeHold) {
             butChangeHold.setText(strBindText);
+        } else if (evt.getSource() == butChangeChatKey) {
+            butChangeChatKey.setText(strBindText);
         } else if (evt.getSource() == butBack) {
             saveControls();
             Utility.setPanel(new MainMenu().getPanel());
@@ -99,6 +105,7 @@ public class SettingsMenu implements ActionListener, KeyListener {
             intKeyRotateLeft = intKeyRotateLeftDefault;
             intKeyRotateRight = intKeyRotateRightDefault;
             intKeyHold = intKeyHoldDefault;
+            intKeyChat = intKeyChatDefault;
 
             butChangeHardDrop.setText(KeyEvent.getKeyText(intKeyHardDrop));
             butChangeMoveDown.setText(KeyEvent.getKeyText(intKeyDown));
@@ -108,6 +115,7 @@ public class SettingsMenu implements ActionListener, KeyListener {
             butChangeRotateLeft.setText(KeyEvent.getKeyText(intKeyRotateLeft));
             butChangeRotateRight.setText(KeyEvent.getKeyText(intKeyRotateRight));
             butChangeHold.setText(KeyEvent.getKeyText(intKeyHold));
+            butChangeChatKey.setText(KeyEvent.getKeyText(intKeyChat));
 
             blnEnableSound = true;
             this.boxSound.setSelected(true);
@@ -136,7 +144,7 @@ public class SettingsMenu implements ActionListener, KeyListener {
     }
     public static void getControls() {
         try {
-            settingsFile = new FileReader("assets/textfiles/settings.csv");
+            settingsFile = new FileReader("Tetriduels/assets/textfiles/settings.csv");
 
             settingsFileData = new BufferedReader(settingsFile);
             String strSplit;
@@ -152,9 +160,10 @@ public class SettingsMenu implements ActionListener, KeyListener {
                 intKeyRotateLeft = Integer.parseInt(strData[4]);
                 intKeyRotateRight = Integer.parseInt(strData[5]);
                 intKeyHold = Integer.parseInt(strData[6]);
-                intPort = Integer.parseInt(strData[7]);
-                boxSound.setSelected(Boolean.parseBoolean(strData[8]));
-                blnEnableSound = Boolean.parseBoolean(strData[8]);
+                intKeyChat = Integer.parseInt(strData[7]);
+                intPort = Integer.parseInt(strData[8]);
+                boxSound.setSelected(Boolean.parseBoolean(strData[9]));
+                blnEnableSound = Boolean.parseBoolean(strData[9]);
                 settingsFileData.close();
                 settingsFile.close();
             }
@@ -164,12 +173,12 @@ public class SettingsMenu implements ActionListener, KeyListener {
     }
     public static void saveControls() {
         try {
-            settingsOutput = new FileWriter("assets/textfiles/settings.csv");
+            settingsOutput = new FileWriter("Tetriduels/assets/textfiles/settings.csv");
         } catch(IOException e) {
             e.printStackTrace();
         }
         settingsOutputData = new PrintWriter(settingsOutput);
-        settingsOutputData.println(intKeyHardDrop+","+ intKeyDown +","+intKeyLeft+","+intKeyRight+","+intKeyRotateLeft+","+intKeyRotateRight+","+intKeyHold+","+intPort+","+ blnEnableSound);
+        settingsOutputData.println(intKeyHardDrop+","+ intKeyDown +","+intKeyLeft+","+intKeyRight+","+intKeyRotateLeft+","+intKeyRotateRight+","+intKeyHold+","+intKeyChat+","+intPort+","+blnEnableSound);
         settingsOutputData.close();
         try {
             settingsOutput.close();
@@ -221,6 +230,11 @@ public class SettingsMenu implements ActionListener, KeyListener {
             intKeyHold = evt.getKeyCode();
             butChangeHold.setText(KeyEvent.getKeyText(intKeyHold));
             settingsPanel.requestFocus(); // Return focus back to the panel
+            saveControls();
+        } else if (evt.getSource() == butChangeChatKey) {
+            intKeyChat = evt.getKeyCode();
+            butChangeChatKey.setText(KeyEvent.getKeyText(intKeyChat));
+            settingsPanel.requestFocus();
             saveControls();
         }
     }
@@ -293,6 +307,11 @@ public class SettingsMenu implements ActionListener, KeyListener {
         this.settingsPanel.add(butChangeHold);
         this.settingsPanel.add(labelChangeHold);
 
+        //Chat
+        formatKeyBinds(this.labelChangeChatKey,this.butChangeChatKey,740,120);
+        this.settingsPanel.add(butChangeChatKey);
+        this.settingsPanel.add(labelChangeChatKey);
+
         // Return to main menu
         this.butBack.setBounds(460,600,360,100);
         this.butBack.setFont(Utility.loadFont("zorque"));
@@ -322,20 +341,20 @@ public class SettingsMenu implements ActionListener, KeyListener {
         this.settingsPanel.add(this.boxSound);
 
         // Port number
-        this.labelPort.setBounds(740,120,230,40);
+        this.labelPort.setBounds(740,190,230,40);
         this.labelPort.setFont(Utility.loadFont("zorque"));
         Utility.setFontSize(this.labelPort,30);
         this.labelPort.setForeground(Color.BLACK);
         this.settingsPanel.add(this.labelPort);
 
-        this.fieldPort.setBounds(975,120,55,40);
+        this.fieldPort.setBounds(975,190,55,40);
         this.fieldPort.setFont(Utility.loadFont("fannabella"));
         Utility.setFontSize(this.fieldPort,20);
         this.fieldPort.addKeyListener(this);
         this.fieldPort.setText(String.valueOf(intPort));
         this.settingsPanel.add(this.fieldPort);
 
-        this.butPort.setBounds(1040,120,100,40);
+        this.butPort.setBounds(1040,190,100,40);
         this.butPort.setFont(Utility.loadFont("fannabella"));
         Utility.setFontSize(this.butPort,30);
         this.butPort.setBackground(Color.DARK_GRAY);
@@ -343,7 +362,7 @@ public class SettingsMenu implements ActionListener, KeyListener {
         this.butPort.addActionListener(this);
         this.settingsPanel.add(this.butPort);
 
-        this.labelPortError.setBounds(725,170,470,40);
+        this.labelPortError.setBounds(725,240,470,40);
         this.labelPortError.setFont(Utility.loadFont("zorque"));
         Utility.setFontSize(this.labelPortError,20);
         this.labelPortError.setForeground(new Color(153,0,0)); // Dark red
