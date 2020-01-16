@@ -8,9 +8,9 @@ import java.io.File;
 import java.io.IOException;
 import java.net.*;
 
-public class MainMenu implements ActionListener, MouseListener {
+public class MainMenu implements ActionListener {
     // PROPERTIES
-    JPanel mainMenuPanel = new JPanel();
+    MainMenuPanel mainMenuPanel = new MainMenuPanel();
 
     JLabel labelMainTitle = new JLabel("Tetriduels");
     JButton butPlay = new JButton("Play");
@@ -24,6 +24,7 @@ public class MainMenu implements ActionListener, MouseListener {
     public JPanel getPanel() {
         return mainMenuPanel;
     }
+
     public void actionPerformed(ActionEvent evt) {
         if (evt.getSource() == butPlay) {
             Utility.setPanel(new ConnectMenu().getPanel());
@@ -31,41 +32,22 @@ public class MainMenu implements ActionListener, MouseListener {
             Utility.setPanel(new HelpMenu().getPanel());
         } else if (evt.getSource() == butSettings) {
             Utility.setPanel(new SettingsMenu().getPanel());
-        } else if (evt.getSource() == butAbout){
+        } else if (evt.getSource() == butAbout) {
             Utility.setPanel(new About().getPanel());
         } else if (evt.getSource() == butExit) {
             System.exit(1); // Exit game
         }
     }
-    public void mouseClicked(MouseEvent e) {
 
-    }
-
-    public void mousePressed(MouseEvent e) {
-
-    }
-
-
-    public void mouseReleased(MouseEvent evt) {
-
-    }
-
-    public void mouseEntered(MouseEvent e) {
-
-    }
-
-    public void mouseExited(MouseEvent e) {
-
-    }
 
     // CONSTRUCTOR
     public MainMenu() {
-        this.mainMenuPanel.setPreferredSize(new Dimension(GUI.FRAME_WIDTH,GUI.FRAME_HEIGHT));
+        this.mainMenuPanel.setPreferredSize(new Dimension(GUI.FRAME_WIDTH, GUI.FRAME_HEIGHT));
         this.mainMenuPanel.setLayout(null);
         this.mainMenuPanel.setBackground(Color.DARK_GRAY);
 
         // Title
-        this.labelMainTitle.setBounds(55,25,500,150);
+        this.labelMainTitle.setBounds(55, 25, 500, 150);
         this.labelMainTitle.setForeground(Color.WHITE);
         this.labelMainTitle.setFont(Utility.loadFont("fannabella"));
         Utility.setFontSize(this.labelMainTitle, 140);
@@ -73,52 +55,56 @@ public class MainMenu implements ActionListener, MouseListener {
 
         // Play button
         this.butPlay.addActionListener(this);
-        this.butPlay.setBounds(75,180,400,140);
+        this.butPlay.setBounds(75, 180, 400, 140);
         this.butPlay.setFont(Utility.loadFont("zorque"));
-        Utility.setFontSize(this.butPlay,60);
+        Utility.setFontSize(this.butPlay, 60);
         this.butPlay.setBackground(Color.BLACK);
         this.butPlay.setForeground(Color.WHITE);
         this.mainMenuPanel.add(butPlay);
 
         // Help button
         this.butHelp.addActionListener(this);
-        this.butHelp.setBounds(125,200+(5*2)+120,300,120);
+        this.butHelp.setBounds(125, 200 + (5 * 2) + 120, 300, 120);
         this.butHelp.setFont(Utility.loadFont("zorque"));
-        Utility.setFontSize(this.butHelp,40);
+        Utility.setFontSize(this.butHelp, 40);
         this.butHelp.setBackground(Color.BLACK);
         this.butHelp.setForeground(Color.WHITE);
         this.mainMenuPanel.add(butHelp);
 
         // Settings button
         this.butSettings.addActionListener(this);
-        this.butSettings.setBounds(125,200+(5*3)+(120*2),300,120);
+        this.butSettings.setBounds(125, 200 + (5 * 3) + (120 * 2), 300, 120);
         this.butSettings.setFont(Utility.loadFont("zorque"));
-        Utility.setFontSize(this.butSettings,40);
+        Utility.setFontSize(this.butSettings, 40);
         this.butSettings.setBackground(Color.BLACK);
         this.butSettings.setForeground(Color.WHITE);
         this.mainMenuPanel.add(butSettings);
 
         //About button
         this.butAbout.addActionListener(this);
-        this.butAbout.setBounds(925 , 200+(5*4)+(120*3), 300,120);
+        this.butAbout.setBounds(925, 200 + (5 * 4) + (120 * 3), 300, 120);
         this.butAbout.setFont(Utility.loadFont("zorque"));
-        Utility.setFontSize(this.butAbout,40);
+        Utility.setFontSize(this.butAbout, 40);
         this.butAbout.setBackground(Color.BLACK);
         this.butAbout.setForeground(Color.WHITE);
         this.mainMenuPanel.add(butAbout);
 
         // Exit button
         this.butExit.addActionListener(this);
-        this.butExit.setBounds(125,200+(5*4)+(120*3),300,120);
+        this.butExit.setBounds(125, 200 + (5 * 4) + (120 * 3), 300, 120);
         this.butExit.setFont(Utility.loadFont("zorque"));
-        Utility.setFontSize(this.butExit,40);
+        Utility.setFontSize(this.butExit, 40);
         this.butExit.setBackground(Color.BLACK);
         this.butExit.setForeground(Color.WHITE);
         this.mainMenuPanel.add(butExit);
     }
 
 
-
+} class MainMenuPanel extends JPanel {
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        g.drawImage(Utility.loadImage(new File("Tetriduels/assets/images/MainMenuImage.png")),555,50,null); // Draw splash screen picture
+    }
 
 } class SplashMenu implements KeyListener, MouseListener {
     // PROPERTIES
