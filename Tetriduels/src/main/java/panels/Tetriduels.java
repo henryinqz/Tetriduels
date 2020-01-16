@@ -11,8 +11,13 @@ public class Tetriduels {
         } catch (Exception e) {
             e.printStackTrace(); // Print where error is
         }*/
+        try {
+            UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName()); // Fixes Mac devices showing native JComponent styles (and making text not visible)
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-        GUI.theframe = new JFrame("Tetris");
+        GUI.theframe = new JFrame("Tetriduels");
         SettingsMenu.getControls();
         Utility.setPanel(new SplashMenu().getPanel());
         GUI.theframe.setLocationRelativeTo(null);

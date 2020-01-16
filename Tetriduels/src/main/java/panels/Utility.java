@@ -39,7 +39,7 @@ public class Utility {
     public static Font loadFont(String strFontName) {
         Font font = null;
         try {
-            font = Font.createFont(Font.PLAIN, new File("Tetriduels/assets/font/"+strFontName+".ttf"));
+            font = Font.createFont(Font.PLAIN, new File("assets/font/"+strFontName+".ttf"));
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -25,14 +25,14 @@ public class Connections implements ActionListener {
 
             if (intMessageType == READY) { // Opponent is ready to start game
                 ConnectMenu.blnEnemyReady = true; // Player is ready to start game
-                if (blnIsServer == true && ConnectMenu.blnReady == true) {
+                if (ConnectMenu.blnReady == true) {
                     Connections.sendMessage(START);
                     panels.Utility.setPanel(new Game().getPanel());
                 }
             } else if (intMessageType == START) {
                 panels.Utility.setPanel(new Game().getPanel());
             } else if (intMessageType == CHAT_MESSAGE) {
-                ConnectMenu.areaChat.append(strMessageSegment[1] + "\n"); // Add new chat message to chat
+                ConnectMenu.areaChat.append("<Enemy>: " + strMessageSegment[1] + "\n"); // Add new chat message to chat
             } else if (intMessageType == GRID) {
                 if (strMessageSegment[1].equalsIgnoreCase("add")) { // Add blocks to grind
                     int intSquareY = Integer.parseInt(strMessageSegment[2]);

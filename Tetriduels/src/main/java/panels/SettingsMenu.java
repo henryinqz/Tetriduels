@@ -136,7 +136,7 @@ public class SettingsMenu implements ActionListener, KeyListener {
     }
     public static void getControls() {
         try {
-            settingsFile = new FileReader("Tetriduels/assets/textfiles/settings.csv");
+            settingsFile = new FileReader("assets/textfiles/settings.csv");
 
             settingsFileData = new BufferedReader(settingsFile);
             String strSplit;
@@ -164,7 +164,7 @@ public class SettingsMenu implements ActionListener, KeyListener {
     }
     public static void saveControls() {
         try {
-            settingsOutput = new FileWriter("Tetriduels/assets/textfiles/settings.csv");
+            settingsOutput = new FileWriter("assets/textfiles/settings.csv");
         } catch(IOException e) {
             e.printStackTrace();
         }
@@ -254,7 +254,7 @@ public class SettingsMenu implements ActionListener, KeyListener {
         this.labelSettingsTitle.setBounds(515,2,250,100);
         this.labelSettingsTitle.setForeground(Color.BLACK);
         this.labelSettingsTitle.setFont(Utility.loadFont("fannabella"));
-        Utility.setFontSize(labelSettingsTitle, 80);
+        Utility.setFontSize(this.labelSettingsTitle, 80);
         this.settingsPanel.add(this.labelSettingsTitle);
 
         //Buttons for changing keybinds
