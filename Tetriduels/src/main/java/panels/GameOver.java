@@ -11,25 +11,25 @@ import java.io.File;
 
 public class GameOver implements ActionListener{
     // PROPERTIES
-    GameOverPanel overPanel = new GameOverPanel();
+    GameOverPanel overPanel = new GameOverPanel(); // Create new overPanel JPanel object
     JButton butRestart = new JButton("Play Again");
     JButton butBack = new JButton("Return to menu");
 
     // METHODS
     public void actionPerformed(ActionEvent evt){
         if (evt.getSource() == butRestart){ // Play again (return to connect menu)
-            ConnectMenu.blnReady = false;
+            ConnectMenu.blnReady = false; // Reset ready states
             ConnectMenu.blnEnemyReady = false;
-            Utility.setPanel(new ConnectMenu().getPanel());
+            Utility.setPanel(new ConnectMenu().getPanel()); // Return to connect menu
         }
         if (evt.getSource() == butBack){ // Return to main menu
             Utility.setPanel(new MainMenu().getPanel());
-            if (Connections.ssm != null) {
+            if (Connections.ssm != null) { // If user is already connected to a server
                 Connections.disconnect(); // Disconnect from server
             }
         }
     }
-    public JPanel getPanel() {
+    public JPanel getPanel() { // Return current panel
         return overPanel;
     }
 
@@ -63,7 +63,7 @@ public class GameOver implements ActionListener{
         Graphics2D g2 = (Graphics2D) g; // Use Graphics2D instead of regular Graphics
         super.paintComponent(g2); // Clear previous drawings (Windows only); super JPanel (original) paintComponent method
 
-        g2.drawImage(Utility.loadImage(new File("assets/images/blank.png")), 0, 0, null); // Draw splash screen picture
+        g2.drawImage(Utility.loadImage(new File("assets/images/blank.png")), 0, 0, null); // Draw blank template picture
         g2.setColor(Color.WHITE);
         g2.setFont(Utility.loadFont("zorque"));
         if (Game.intGameOverResult == Game.WINNER) { // Winner
@@ -72,7 +72,7 @@ public class GameOver implements ActionListener{
         } else if (Game.intGameOverResult == Game.LOSER) { // Loser
             Utility.setFontSize(g2,90);
             g.drawString("You lost!",418,300);
-        } else if (Game.intGameOverResult == Game.NONE) { // No winner/host disconnected
+        } else if (Game.intGameOverResult == Game.NONE) { // No winner/opponent disconnected
             Utility.setFontSize(g2,70);
             g.drawString("Opponent left the game.",164,300);
         }

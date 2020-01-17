@@ -3,16 +3,15 @@ package panels;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
-import java.net.*;
 
 public class MainMenu implements ActionListener {
     // PROPERTIES
-    MainMenuPanel mainMenuPanel = new MainMenuPanel();
+    MainMenuPanel mainMenuPanel = new MainMenuPanel(); // Create new mainMenuPanel JPanel object
 
-    JLabel labelMainTitle = new JLabel("Tetriduels");
+    JLabel labelMainTitle = new JLabel("Tetriduels"); // Title bar
+
+    // Buttons
     JButton butPlay = new JButton("Play");
     JButton butHelp = new JButton("Help");
     JButton butSettings = new JButton("Settings");
@@ -21,20 +20,20 @@ public class MainMenu implements ActionListener {
 
 
     // METHODS
-    public JPanel getPanel() {
+    public JPanel getPanel() { // Return current panel
         return mainMenuPanel;
     }
 
     public void actionPerformed(ActionEvent evt) {
-        if (evt.getSource() == butPlay) {
-            Utility.setPanel(new ConnectMenu().getPanel());
-        } else if (evt.getSource() == butHelp) {
-            Utility.setPanel(new HelpMenu().getPanel());
-        } else if (evt.getSource() == butSettings) {
-            Utility.setPanel(new SettingsMenu().getPanel());
-        } else if (evt.getSource() == butAbout) {
-            Utility.setPanel(new About().getPanel());
-        } else if (evt.getSource() == butExit) {
+        if (evt.getSource() == butPlay) { // Play button pressed
+            Utility.setPanel(new ConnectMenu().getPanel()); // Switch to connect menu panel
+        } else if (evt.getSource() == butHelp) { // Help button pressed
+            Utility.setPanel(new HelpMenu().getPanel()); // Switch to help menu panel
+        } else if (evt.getSource() == butSettings) { // Settings button pressed
+            Utility.setPanel(new SettingsMenu().getPanel()); // Switch to settings menu panel
+        } else if (evt.getSource() == butAbout) { // About button pressed
+            Utility.setPanel(new About().getPanel()); // Switch to about panel
+        } else if (evt.getSource() == butExit) { // Exit button pressed
             System.exit(1); // Exit game
         }
     }
@@ -103,14 +102,14 @@ public class MainMenu implements ActionListener {
 } class MainMenuPanel extends JPanel {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.drawImage(Utility.loadImage(new File("assets/images/MainMenuImage.png")),910,80,null);
-        g.drawImage(Utility.loadImage(new File("assets/images/MainMenuImage2.png")),40,80,null);
+        g.drawImage(Utility.loadImage(new File("assets/images/MainMenuImage2.png")),40,80,null); // Draw left side board on menu
+        g.drawImage(Utility.loadImage(new File("assets/images/MainMenuImage.png")),910,80,null); // Draw right side board on menu
 
     }
 
 } class SplashMenu implements KeyListener, MouseListener {
     // PROPERTIES
-    SplashMenuPanel splashMenuPanel = new SplashMenuPanel();
+    SplashMenuPanel splashMenuPanel = new SplashMenuPanel(); // Create new splashMenuPanel JPanel object
     JLabel labelContinue = new JLabel("Press any key to continue...");
 
     // METHODS
@@ -142,7 +141,7 @@ public class MainMenu implements ActionListener {
         Utility.setPanel(new MainMenu().getPanel()); // Go to main menu
     }
 
-    public JPanel getPanel() {
+    public JPanel getPanel() { // Return current panel
         return splashMenuPanel;
     }
 
@@ -151,6 +150,7 @@ public class MainMenu implements ActionListener {
         this.splashMenuPanel.setPreferredSize(new Dimension(GUI.FRAME_WIDTH,GUI.FRAME_HEIGHT));
         this.splashMenuPanel.setLayout(null);
 
+        // Continue label
         this.labelContinue.setBounds(400,530,470,70);
         this.labelContinue.setForeground(Color.WHITE);
         this.labelContinue.setFont(Utility.loadFont("zorque"));

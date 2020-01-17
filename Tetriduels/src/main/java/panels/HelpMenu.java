@@ -8,16 +8,16 @@ import java.io.File;
 
 public class HelpMenu implements ActionListener{
     // PROPERTIES
-    HelpMenuPanel helpPanel = new HelpMenuPanel();
+    HelpMenuPanel helpPanel = new HelpMenuPanel(); // Create new helpPanel JPanel object
     JButton butBack = new JButton("Return to menu");
 
     // METHODS
     public void actionPerformed(ActionEvent evt){
-        if(evt.getSource() == butBack){
+        if(evt.getSource() == butBack) { // Return to menu button pressed
             Utility.setPanel(new MainMenu().getPanel()); // Return to main menu
         }
     }
-    public JPanel getPanel() {
+    public JPanel getPanel() { // Return current panel
         return helpPanel;
     }
 

@@ -12,14 +12,16 @@ import java.awt.event.KeyListener;
 
 public class ConnectMenu implements ActionListener, KeyListener {
     // PROPERTIES
-    ConnectMenuPanel connectPanel = new ConnectMenuPanel();
+    ConnectMenuPanel connectPanel = new ConnectMenuPanel(); // Create new connectPanel JPanel object
 
-    JLabel labelConnectTitle = new JLabel("Multiplayer");
+    JLabel labelConnectTitle = new JLabel("Multiplayer"); // Title bar
 
+    // Buttons
     JButton butHost = new JButton("Host game");
     JButton butClient = new JButton("Join game");
     JButton butBack = new JButton("Return to menu");
 
+    // IP & Port
     JLabel labelServerIP = new JLabel("Server IP:");
     JLabel labelPort = new JLabel("Port number:");
     JTextField fieldServerIP = new JTextField();
@@ -30,6 +32,7 @@ public class ConnectMenu implements ActionListener, KeyListener {
 
     public int intPort;
 
+    // Ready
     JButton butReady = new JButton("Ready");
     public static boolean blnReady = false;
     public static boolean blnEnemyReady = false;
@@ -41,17 +44,19 @@ public class ConnectMenu implements ActionListener, KeyListener {
     public static JButton butChatMessageSend = new JButton("Send");
 
     // METHODS
-    public JPanel getPanel() {
+    public JPanel getPanel() { // Return current panel
         return connectPanel;
     }
     public void actionPerformed(ActionEvent evt) {
         if (evt.getSource() == butHost) { // Host button
-            labelError.setVisible(false);
-            if (Connections.ssm != null) {
+            if (Connections.ssm != null) { // If user is already connected to a server
                 Connections.disconnect(); // Disconnect from server
             }
             new Connections(SettingsMenu.intPort); // Server; create SuperSocketMaster object
             areaChat.append("> Server is now online.\n"); // Show that server is online in chat
+
+            // Activate host features/UI
+            labelError.setVisible(false);
             fieldServerIP.setEditable(false);
             fieldServerIP.setText(Connections.ssm.getMyAddress());
             fieldPort.setEditable(false);
@@ -61,20 +66,26 @@ public class ConnectMenu implements ActionListener, KeyListener {
             butReady.setEnabled(true);
             labelReady.setVisible(true);
 
+            // Enable chat
             fieldChatMessage.setEnabled(true);
             butChatMessageSend.setEnabled(true);
-        } else if (evt.getSource() == butClient) { // Client button
+
+        } else if (evt.getSource() == butClient) { // Join/Client button
+            if (Connections.ssm != null) { // If user is already connected to a server
+                Connections.disconnect(); // Disconnect from server
+            }
+
+            // Activate partial client features/UI (IP, Port, Connect)
             labelError.setVisible(false);
             butReady.setVisible(false);
             labelReady.setVisible(false);
-            if (Connections.ssm != null) {
-                Connections.disconnect(); // Disconnect from server
-            }
             fieldServerIP.setEditable(true);
             fieldServerIP.setText("");
             fieldPort.setEditable(true);
             fieldPort.setText("");
             butConnect.setEnabled(true);
+
+            // Disable chat
             fieldChatMessage.setEnabled(false);
             butChatMessageSend.setEnabled(false);
 
@@ -82,7 +93,7 @@ public class ConnectMenu implements ActionListener, KeyListener {
             if (!fieldServerIP.getText().equals("") && !fieldPort.getText().equals("")) { // Check if server IP & port are blank
                 String strServerIP = fieldServerIP.getText();
                 try {
-                    intPort = Integer.parseInt(fieldPort.getText());
+                    intPort = Integer.parseInt(fieldPort.getText()); // Try to set parse port as an integer
                 } catch (NumberFormatException e) { // User did not input numbers
                     intPort = -1;
                 }
@@ -90,35 +101,46 @@ public class ConnectMenu implements ActionListener, KeyListener {
                 if (intPort >= 0 && intPort <= 65535) { // Check if port entered is within range of all ports
                     new Connections(strServerIP, intPort); // Client; create SuperSocketMaster object
                     if (Connections.blnConnected == true) { // Connected to server
-                        Connections.sendMessage(Connections.CONNECT);
+                        Connections.sendMessage(Connections.CONNECT); // Send connect message
                         areaChat.append("> Connected to server.\n"); // Show that server is online in chat
+
+                        // Enable client features/UI
                         labelError.setVisible(false);
                         butConnect.setEnabled(false);
                         butReady.setVisible(true);
                         butReady.setEnabled(true);
                         labelReady.setVisible(true);
+
+                        //Enable chat
                         fieldChatMessage.setEnabled(true);
                         butChatMessageSend.setEnabled(true);
+
                     } else { // Failed to connect to server
                         butConnect.setEnabled(true);
-                        labelError.setText("Could not connect to server.");
+                        labelError.setText("Could not connect to server."); // Error text
                         labelError.setVisible(true);
+
+                        // Disable chat
                         fieldChatMessage.setEnabled(false);
                         butChatMessageSend.setEnabled(false);
                     }
                 } else { // Port out of range
-                    labelError.setText("Enter valid port from 0-65535!");
+                    labelError.setText("Enter valid port from 0-65535!"); // Error text
                     labelError.setVisible(true);
                     butReady.setVisible(false);
                     labelReady.setVisible(false);
+
+                    // Disable chat
                     fieldChatMessage.setEnabled(false);
                     butChatMessageSend.setEnabled(false);
                 }
             } else { // Blank server IP or port
-                labelError.setText("Enter a valid IP and port!");
+                labelError.setText("Enter a valid IP and port!"); // Error text
                 labelError.setVisible(true);
                 butReady.setVisible(false);
                 labelReady.setVisible(false);
+
+                // Disable chat
                 fieldChatMessage.setEnabled(false);
                 butChatMessageSend.setEnabled(false);
             }
@@ -127,8 +149,8 @@ public class ConnectMenu implements ActionListener, KeyListener {
         } else if (evt.getSource() == butReady) { // Ready button
             butReady.setEnabled(false);
             blnReady = true;
-            Tetriduels.blnGameLoop = true;
-            Connections.sendMessage(Connections.READY);
+            //Tetriduels.blnGameLoop = true; // Added to READY & START messages in Connections
+            Connections.sendMessage(Connections.READY); // Tell enemy that user is ready
         }
 
         // Chat
@@ -140,15 +162,15 @@ public class ConnectMenu implements ActionListener, KeyListener {
                 Game.blnChatOpen = false; // If user sends message in game, close chat
             }
         }
-        JScrollBar scrollBarChat = scrollChat.getVerticalScrollBar(); // Always scroll bottom
+        JScrollBar scrollBarChat = scrollChat.getVerticalScrollBar(); // Always scroll chat to bottom
         scrollBarChat.setValue(scrollBarChat.getMaximum());
 
     }
 
     public void keyPressed(KeyEvent evt) {
         if(evt.getKeyCode() == KeyEvent.VK_ENTER) { // Enter key to send message
-            if (!fieldChatMessage.getText().equals("")) {
-                butChatMessageSend.doClick();
+            if (!fieldChatMessage.getText().equals("")) { // If text is not blank
+                butChatMessageSend.doClick(); // Send message
             }
         } else if (evt.getKeyCode() == KeyEvent.VK_ESCAPE) { // Escape key to exit chat
             Game.blnChatOpen = false;

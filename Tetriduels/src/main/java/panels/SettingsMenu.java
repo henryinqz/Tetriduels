@@ -20,6 +20,7 @@ public class SettingsMenu implements ActionListener, KeyListener {
     public static int intKeyHold;
     public static int intKeyChat;
 
+    // Default keybinds
     int intKeyHardDropDefault = KeyEvent.VK_SPACE;
     int intKeyLeftDefault = KeyEvent.VK_LEFT;
     int intKeyRightDefault = KeyEvent.VK_RIGHT;
@@ -29,21 +30,28 @@ public class SettingsMenu implements ActionListener, KeyListener {
     int intKeyHoldDefault = KeyEvent.VK_C;
     int intKeyChatDefault = KeyEvent.VK_T;
 
+    // Port
     int intDefaultPort = 2626;
     public static int intPort = 2626;
 
+    // Sound toggle/checkbox
     public static boolean blnEnableSound = true;
+    public static JCheckBox boxSound = new JCheckBox("Enable sound effects");
 
-    private String strBindText = "Enter new key";
+    private String strBindText = "Enter new key"; // String that shows when user is changing a keybind
 
+    // BufferedReader to read settings.csv
     public static FileReader settingsFile;
     public static BufferedReader settingsFileData;
 
+    // PrintWriter to print to settings.csv
     public static FileWriter settingsOutput;
     public static PrintWriter settingsOutputData;
 
-    SettingsMenuPanel settingsPanel = new SettingsMenuPanel();
-    JLabel labelSettingsTitle = new JLabel("Settings");
+    SettingsMenuPanel settingsPanel = new SettingsMenuPanel(); // Create new settingsPanel JPanel object
+    JLabel labelSettingsTitle = new JLabel("Settings"); // Title bar
+
+    // Keybind buttons & labels
     JButton butChangeHardDrop = new JButton(KeyEvent.getKeyText(intKeyHardDrop));
     JButton butChangeMoveLeft = new JButton(KeyEvent.getKeyText(intKeyLeft));
     JButton butChangeMoveRight = new JButton(KeyEvent.getKeyText(intKeyRight));
@@ -65,39 +73,40 @@ public class SettingsMenu implements ActionListener, KeyListener {
     JButton butBack = new JButton("Return to menu");
     JButton butReset = new JButton("Reset all to default");
 
-    public static JCheckBox boxSound = new JCheckBox("Enable sound effects");
-
+    // Port
     JTextField fieldPort = new JTextField(6);
     JLabel labelPort = new JLabel("Port Number:");
     JButton butPort = new JButton("Apply");
     JLabel labelPortError = new JLabel("Enter a valid port between 0-65535!", SwingConstants.CENTER);
 
     // METHODS
-    public JPanel getPanel() {
+    public JPanel getPanel() { // Return current panel
         return settingsPanel;
     }
 
     public void actionPerformed(ActionEvent evt) {
-        if (evt.getSource() == butChangeHardDrop) {
+        if (evt.getSource() == butChangeHardDrop) { // Hard drop keybind button is pressed
             butChangeHardDrop.setText(strBindText);
-        } else if (evt.getSource() == butChangeMoveDown) {
+        } else if (evt.getSource() == butChangeMoveDown) { // Move down keybind button is pressed
             butChangeMoveDown.setText(strBindText);
-        } else if (evt.getSource() == butChangeMoveLeft) {
+        } else if (evt.getSource() == butChangeMoveLeft) { // Move left keybind button is pressed
             butChangeMoveLeft.setText(strBindText);
-        } else if (evt.getSource() == butChangeMoveRight) {
+        } else if (evt.getSource() == butChangeMoveRight) { // Move right keybind button is pressed
             butChangeMoveRight.setText(strBindText);
-        } else if (evt.getSource() == butChangeRotateRight) {
+        } else if (evt.getSource() == butChangeRotateRight) { // Rotate right keybind button is pressed
             butChangeRotateRight.setText(strBindText);
-        } else if (evt.getSource() == butChangeRotateLeft) {
+        } else if (evt.getSource() == butChangeRotateLeft) { // Rotate left keybind button is pressed
             butChangeRotateLeft.setText(strBindText);
-        } else if (evt.getSource() == butChangeHold) {
+        } else if (evt.getSource() == butChangeHold) { // Hold keybind button is pressed
             butChangeHold.setText(strBindText);
-        } else if (evt.getSource() == butChangeChatKey) {
+        } else if (evt.getSource() == butChangeChatKey) { // Open chat keybind button is pressed
             butChangeChatKey.setText(strBindText);
-        } else if (evt.getSource() == butBack) {
-            saveControls();
-            Utility.setPanel(new MainMenu().getPanel());
-        } else if (evt.getSource() == butReset) {
+        } else if (evt.getSource() == butBack) { // Return to main menu button pressed
+            saveControls(); // Save changes
+            Utility.setPanel(new MainMenu().getPanel()); // Set panel to main menu panle
+        } else if (evt.getSource() == butReset) { // Reset button pressed
+            // Reset all settings to default values
+            // Keybinds
             intKeyHardDrop = intKeyHardDropDefault;
             intKeyDown = intKeyDownDefault;
             intKeyLeft = intKeyLeftDefault;
@@ -117,42 +126,45 @@ public class SettingsMenu implements ActionListener, KeyListener {
             butChangeHold.setText(KeyEvent.getKeyText(intKeyHold));
             butChangeChatKey.setText(KeyEvent.getKeyText(intKeyChat));
 
+            // Sound
             blnEnableSound = true;
             this.boxSound.setSelected(true);
 
+            // Port
             intPort = intDefaultPort;
             fieldPort.setText(String.valueOf(intDefaultPort));
 
             settingsPanel.requestFocus();
-            saveControls();
-        } else if (evt.getSource() == boxSound) {
+            saveControls(); // Save to settings.csv
+        } else if (evt.getSource() == boxSound) { // Sound toggle checkbox pressed
             blnEnableSound = !blnEnableSound;
             saveControls();
-        } else if (evt.getSource() == butPort) {
+        } else if (evt.getSource() == butPort) { // Port apply button pressed
             try {
-                if (0 <= Integer.parseInt(fieldPort.getText()) && Integer.parseInt(fieldPort.getText()) <= 65535) {
-                    intPort = Integer.parseInt(fieldPort.getText());
-                    labelPortError.setVisible(false);
+                if (0 <= Integer.parseInt(fieldPort.getText()) && Integer.parseInt(fieldPort.getText()) <= 65535) { // Check if port is within range & able to be parsed into integer
+                    intPort = Integer.parseInt(fieldPort.getText()); // Set port
+                    labelPortError.setVisible(false); // Hide error text
                 } else {
-                    labelPortError.setVisible(true);
+                    labelPortError.setVisible(true); // Show error text
                 }
             } catch (NumberFormatException e) { // Port is blank or user entered in letters
-                labelPortError.setVisible(true);
+                labelPortError.setVisible(true); // Show error text
             }
-            saveControls();
+            saveControls(); // Write controls to settings.csv
         }
     }
-    public static void getControls() {
+    public static void getControls() { // Read settings from settings.csv
         try {
+            // Load FileReader & BufferedReader
             settingsFile = new FileReader("assets/textfiles/settings.csv");
-
             settingsFileData = new BufferedReader(settingsFile);
             String strSplit;
 
-            while (settingsFileData != null) {
+            while (settingsFileData != null) { // Loop while file is not empty
                 strSplit = settingsFileData.readLine();
-                String strData[] = strSplit.split(",");
+                String strData[] = strSplit.split(","); // Split line into array
 
+                // Set binds/settings
                 intKeyHardDrop = Integer.parseInt(strData[0]);
                 intKeyDown = Integer.parseInt(strData[1]);
                 intKeyLeft = Integer.parseInt(strData[2]);
@@ -164,6 +176,8 @@ public class SettingsMenu implements ActionListener, KeyListener {
                 intPort = Integer.parseInt(strData[8]);
                 boxSound.setSelected(Boolean.parseBoolean(strData[9]));
                 blnEnableSound = Boolean.parseBoolean(strData[9]);
+
+                // Close file
                 settingsFileData.close();
                 settingsFile.close();
             }
@@ -171,80 +185,29 @@ public class SettingsMenu implements ActionListener, KeyListener {
             //e.printStackTrace();
         }
     }
-    public static void saveControls() {
+    public static void saveControls() { // Write settings to settings.csv
         try {
-            settingsOutput = new FileWriter("assets/textfiles/settings.csv");
+            settingsOutput = new FileWriter("assets/textfiles/settings.csv"); // Load FileWriter
         } catch(IOException e) {
             e.printStackTrace();
         }
-        settingsOutputData = new PrintWriter(settingsOutput);
-        settingsOutputData.println(intKeyHardDrop+","+ intKeyDown +","+intKeyLeft+","+intKeyRight+","+intKeyRotateLeft+","+intKeyRotateRight+","+intKeyHold+","+intKeyChat+","+intPort+","+blnEnableSound);
-        settingsOutputData.close();
+        settingsOutputData = new PrintWriter(settingsOutput); // Load PrintWriter
+        settingsOutputData.println(intKeyHardDrop+","+ intKeyDown +","+intKeyLeft+","+intKeyRight+","+intKeyRotateLeft+","+intKeyRotateRight+","+intKeyHold+","+intKeyChat+","+intPort+","+blnEnableSound); // Print settings based on current variable values
+        settingsOutputData.close(); // Close file
         try {
-            settingsOutput.close();
+            settingsOutput.close(); // Close file
         } catch(IOException e) {
-        }
-    }
-
-    public void keyTyped(KeyEvent evt) {
-        if(fieldPort.getText().length()>=5) {
-            evt.consume();
-        }
-    }
-
-    public void keyPressed(KeyEvent evt) {
-        if (evt.getSource() == butChangeHardDrop) {
-            intKeyHardDrop = evt.getKeyCode();
-
-            butChangeHardDrop.setText(KeyEvent.getKeyText(intKeyHardDrop));
-            settingsPanel.requestFocus(); // Return focus back to the panel
-            saveControls();
-
-        } else if (evt.getSource() == butChangeMoveDown) {
-            intKeyDown = evt.getKeyCode();
-            butChangeMoveDown.setText(KeyEvent.getKeyText(intKeyDown));
-            settingsPanel.requestFocus(); // Return focus back to the panel
-            saveControls();
-        } else if (evt.getSource() == butChangeMoveLeft) {
-            intKeyLeft = evt.getKeyCode();
-            butChangeMoveLeft.setText(KeyEvent.getKeyText(intKeyLeft));
-            settingsPanel.requestFocus(); // Return focus back to the panel
-        } else if (evt.getSource() == butChangeMoveRight) {
-            intKeyRight = evt.getKeyCode();
-            butChangeMoveRight.setText(KeyEvent.getKeyText(intKeyRight));
-            settingsPanel.requestFocus(); // Return focus back to the panel
-            saveControls();
-        } else if (evt.getSource() == butChangeRotateLeft) {
-            intKeyRotateLeft = evt.getKeyCode();
-            butChangeRotateLeft.setText(KeyEvent.getKeyText(intKeyRotateLeft));
-            settingsPanel.requestFocus(); // Return focus back to the panel
-            saveControls();
-
-        } else if (evt.getSource() == butChangeRotateRight) {
-            intKeyRotateRight = evt.getKeyCode();
-            butChangeRotateRight.setText(KeyEvent.getKeyText(intKeyRotateRight));
-            settingsPanel.requestFocus(); // Return focus back to the panel
-            saveControls();
-
-        } else if (evt.getSource() == butChangeHold) {
-            intKeyHold = evt.getKeyCode();
-            butChangeHold.setText(KeyEvent.getKeyText(intKeyHold));
-            settingsPanel.requestFocus(); // Return focus back to the panel
-            saveControls();
-        } else if (evt.getSource() == butChangeChatKey) {
-            intKeyChat = evt.getKeyCode();
-            butChangeChatKey.setText(KeyEvent.getKeyText(intKeyChat));
-            settingsPanel.requestFocus();
-            saveControls();
         }
     }
 
     public void formatKeyBinds(JLabel labelFormat, JButton butFormat, int intXPos, int intYPos) { // Method to format key bind label/button
+        // Format label that specifies what the bind does
         labelFormat.setForeground(Color.BLACK);
         labelFormat.setBounds(intXPos, intYPos,230,35);
         labelFormat.setFont(Utility.loadFont("zorque"));
         Utility.setFontSize(labelFormat, 30);
 
+        // Format button that allows for keybind change
         butFormat.addActionListener(this);
         butFormat.addKeyListener(this);
         butFormat.setBounds(intXPos + 235, intYPos-10, 200, 60);
@@ -253,6 +216,57 @@ public class SettingsMenu implements ActionListener, KeyListener {
         butFormat.setFont(Utility.loadFont("fannabella"));
         Utility.setFontSize(butFormat,35);
         butFormat.getInputMap().put(KeyStroke.getKeyStroke("SPACE"), "none"); // Disable space bar from activating JButtons
+    }
+
+    public void keyPressed(KeyEvent evt) {
+        if (evt.getSource() == butChangeHardDrop) { // Keypress while hard drop button has focus
+            intKeyHardDrop = evt.getKeyCode(); // Set keypress to local variable
+            butChangeHardDrop.setText(KeyEvent.getKeyText(intKeyHardDrop));
+            settingsPanel.requestFocus(); // Return focus back to the panel
+            saveControls();
+
+        } else if (evt.getSource() == butChangeMoveDown) { // Keypress while move down button has focus
+            intKeyDown = evt.getKeyCode(); // Set keypress to local variable
+            butChangeMoveDown.setText(KeyEvent.getKeyText(intKeyDown));
+            settingsPanel.requestFocus(); // Return focus back to the panel
+            saveControls(); // Update settings.csv
+        } else if (evt.getSource() == butChangeMoveLeft) { // Keypress while move left button has focus
+            intKeyLeft = evt.getKeyCode(); // Set keypress to local variable
+            butChangeMoveLeft.setText(KeyEvent.getKeyText(intKeyLeft));
+            settingsPanel.requestFocus(); // Return focus back to the panel
+            saveControls(); // Update settings.csv
+        } else if (evt.getSource() == butChangeMoveRight) { // Keypress while move right button has focus
+            intKeyRight = evt.getKeyCode(); // Set keypress to local variable
+            butChangeMoveRight.setText(KeyEvent.getKeyText(intKeyRight));
+            settingsPanel.requestFocus(); // Return focus back to the panel
+            saveControls(); // Update settings.csv
+        } else if (evt.getSource() == butChangeRotateLeft) { // Keypress while rotate left button has focus
+            intKeyRotateLeft = evt.getKeyCode(); // Set keypress to local variable
+            butChangeRotateLeft.setText(KeyEvent.getKeyText(intKeyRotateLeft));
+            settingsPanel.requestFocus(); // Return focus back to the panel
+            saveControls(); // Update settings.csv
+        } else if (evt.getSource() == butChangeRotateRight) { // Keypress while rotate right button has focus
+            intKeyRotateRight = evt.getKeyCode(); // Set keypress to local variable
+            butChangeRotateRight.setText(KeyEvent.getKeyText(intKeyRotateRight));
+            settingsPanel.requestFocus(); // Return focus back to the panel
+            saveControls(); // Update settings.csv
+        } else if (evt.getSource() == butChangeHold) { // Keypress while hold button has focus
+            intKeyHold = evt.getKeyCode(); // Set keypress to local variable
+            butChangeHold.setText(KeyEvent.getKeyText(intKeyHold));
+            settingsPanel.requestFocus(); // Return focus back to the panel
+            saveControls(); // Update settings.csv
+        } else if (evt.getSource() == butChangeChatKey) { // Keypress while open chat button has focus
+            intKeyChat = evt.getKeyCode(); // Set keypress to local variable
+            butChangeChatKey.setText(KeyEvent.getKeyText(intKeyChat));
+            settingsPanel.requestFocus();
+            saveControls(); // Update settings.csv
+        }
+    }
+
+    public void keyTyped(KeyEvent evt) {
+        if(fieldPort.getText().length()>=6) { // Prevent typing too many characters into port
+            evt.consume();
+        }
     }
 
     public void keyReleased(KeyEvent evt) {
