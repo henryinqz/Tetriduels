@@ -1,49 +1,77 @@
 package game;
 
 import panels.*;
-import network.*;
 import java.io.File;
 import java.util.Collections;
 import java.util.Arrays;
 import java.util.List;
 
 public class Controller {
-    // Properties
+    // PROPERTIES
+    /** Static variable to determine if block was hard dropped. Default = false.*/
     public static boolean blnHardDrop = false;
 
-    // Methods
+    // METHODS
+    /** Moves block left by one grid column on the BoardPanel
+     * If no collision detected, allow move left
+     *
+     * @param blockCurrent Current block you want to move left
+     */
     public static void moveLeft(Block blockCurrent) {
-        if (checkCollision(blockCurrent, "left") == false) {
+        if (checkCollision(blockCurrent, "left") == false) { // If no collision, allow move
             blockCurrent.intX -= BoardPanel.MOVE; // Move left
             updateGhostBlock(blockCurrent); // Update position of ghost block
         }
         GroundTimer.blnMoving = true;
     }
 
+    /** Moves block right by one grid column on the BoardPanel
+     * If no collision detected, allow move right
+     *
+     * @param blockCurrent Current block you want to move right
+     */
     public static void moveRight(Block blockCurrent) {
-        if (checkCollision(blockCurrent, "right") == false) {
+        if (checkCollision(blockCurrent, "right") == false) { // If no collision, allow move
             blockCurrent.intX += BoardPanel.MOVE; // Move right
             updateGhostBlock(blockCurrent); // Update position of ghost block
         }
         GroundTimer.blnMoving = true;
     }
 
+    /** Moves block down by one grid row on the BoardPanel
+     * If no collision detected, allow move down
+     *
+     * @param blockCurrent Current block you want to move down
+     */
     public static void moveDown(Block blockCurrent) {
-        if (checkCollision(blockCurrent, "down") == false) {
+        if (checkCollision(blockCurrent, "down") == false) { // If no collision, allow move
             blockCurrent.intY += BoardPanel.MOVE; // Move down
             updateGhostBlock(blockCurrent); // Update position of ghost block
         }
         GroundTimer.blnMoving = true;
     }
 
+    /** Moves block up by one grid row on the BoardPanel
+     * If no collision detected, allow move up
+     *
+     * @param blockCurrent Current block you want to move up
+     */
     public static void moveUp(Block blockCurrent) {
-        if (checkCollision(blockCurrent, "up") == false) {
+        if (checkCollision(blockCurrent, "up") == false) { // If no collision, allow move
             blockCurrent.intY -= BoardPanel.MOVE; // Move up
             updateGhostBlock(blockCurrent); // Update position of ghost block
         }
         GroundTimer.blnMoving = true;
     }
 
+    /** Checks collision of block on given side
+     * Block collision checks - Checks if sides of current block touching a block on specified side
+     * Wall collision checks - Checks if sides of current block touching wall on specified side
+     *
+     * @param blockCurrent Current block you want to check for collision on
+     * @param strSide Direction to check for collision ("up", "right", "left", "down")
+     * @return Returns true if collision detected
+     */
     public static boolean checkCollision(Block blockCurrent, String strSide) { // Method to check block collision (side = "up", "right", "left", "down"). True = collides, false = no collision
         // Directional checks
         if (strSide.equalsIgnoreCase("left")) {
@@ -206,14 +234,24 @@ public class Controller {
         return true;
     }
 
+    /** Moves block straight down to lowest empty grid space on the BoardPanel
+     * Plays audio clip of hard drop
+     *
+     * @param blockCurrent Current block you want to drop to lowest empty grid space
+     */
     public static void hardDrop(Block blockCurrent) {
         while (checkCollision(blockCurrent, "down") == false) { // Moves block down until collision, then ends loop
             moveDown(blockCurrent);
         }
-        Utility.playSound(new File("Tetriduels/assets/audio/blocks/harddrop.wav")); // Play hard drop sound
+        Utility.playSound(new File("assets/audio/blocks/harddrop.wav")); // Play hard drop sound
         blnHardDrop = true;
     }
 
+    /** Updates ghost block to show lowest empty grid space current block can go down to on the BoardPanel
+     * Uses current block and moves ghost block down until collision
+     *
+     * @param blockCurrent Current block you want the ghost block to use for update
+     */
     public static void updateGhostBlock(Block blockCurrent) {
         // Set properties of ghost block to match current block
         BoardPanel.blockGhost.intX = blockCurrent.intX;
@@ -225,6 +263,40 @@ public class Controller {
         }
     }
 
+    /** Hold the current block, returns a block that will become the new current block
+     * If no block is currently held - Generates a new block
+     * If a block is already being held - Swap with current block
+     *
+     * @param blockCurrent Current block you want to hold
+     * @return Returns either a new block or the block currently being held
+     * */
+    public static Block holdBlock(Block blockCurrent) { // Hold the current block, and return a block that will become the new current block
+        if (BoardPanel.blockHeld == null) { // If no block currently held
+            BoardPanel.blockHeld = blockCurrent;
+            return (generateBlock()); // Return a newly generated block
+        } else { // Block already being held; swap w/ current block
+            int intHeldType; // Temporary integer to allow for switching between blockCurrent <--> blockHeld
+
+            intHeldType = BoardPanel.blockHeld.intType; // Store the type of 'held' block (to generate a new current block)
+            BoardPanel.blockHeld = blockCurrent; // Set 'held' block to the 'current' block
+            BoardPanel.blockHeld.rotatePiece("default"); // Rotate 'held' block to default positioning
+            //BoardPanel.blockHeld = generateBlock(blockCurrent.intType); // Set 'held' block to the 'current' block
+
+            blockCurrent = generateBlock(intHeldType); // Set 'current' block to the 'temp' block ('held' block)
+            blockCurrent.blnHeldBefore = true; // Boolean to prevent holding the same block multiple times
+
+            return (blockCurrent); // Returns generated block instead of just blockCurrent to reset X,Y,rotation,etc of block
+        }
+    }
+
+    /** Rotates block in given direction on the BoardPanel
+     * Stuck check - If current block is trying to rotate into a wall or blocks and there is no space to move, deny rotate
+     * Wallkicks - If current block is trying to rotate into a wall, move current block in opposite direction of wall to stay inside the board
+     * Blockkicks - If current block is trying to rotate into another block, move current block in opposite direction of block to prevent overlapping
+     *
+     * @param blockCurrent Current block you want to rotate
+     * @param strDirection Direction to rotate block in ("left", "right")
+     */
     public static void rotate(Block blockCurrent, String strDirection) {
         GroundTimer.blnMoving = true;
         boolean blnStuckCheck = false; // Default allow true
@@ -504,6 +576,13 @@ public class Controller {
         }
     }
 
+    /** Spawns a randomly-generated Tetronimo block
+     * Uses "Bag of 7" guidline for randomly generating blocks
+     * - Shuffles all 7 block types before giving the player
+     * - Prevents getting repeats/lack of block types
+     *
+     * @return Returns newly created Tetronimo block
+     */
     public static Block generateBlock() { // Generate a new Tetromino block
         Block blockCurrent = new Block(-1); // Default to -1 for return statement
 
@@ -556,6 +635,11 @@ public class Controller {
         return (blockCurrent);
     }
 
+    /** Spawns a specific Tetronimo block
+     *
+     * @param intBlockType Type of block you want to generate (final types specified in Block class)
+     * @return Returns newly created Tetronimo block
+     */
     public static Block generateBlock(int intBlockType) { // Generate a specific Tetromino block
         try { // Try catch incase incorrect block type entered
             Block blockCurrent = new Block(intBlockType); // Create new block w/ specific block type
@@ -565,25 +649,6 @@ public class Controller {
             e.printStackTrace();
             System.out.println("Incorrect blockType used to generateBlock");
             return null;
-        }
-    }
-
-    public static Block holdBlock(Block blockCurrent) { // Hold the current block, and return a block that will become the new current block
-        if (BoardPanel.blockHeld == null) { // If no block currently held
-            BoardPanel.blockHeld = blockCurrent;
-            return (generateBlock()); // Return a newly generated block
-        } else { // Block already being held; swap w/ current block
-            int intHeldType; // Temporary integer to allow for switching between blockCurrent <--> blockHeld
-
-            intHeldType = BoardPanel.blockHeld.intType; // Store the type of 'held' block (to generate a new current block)
-            BoardPanel.blockHeld = blockCurrent; // Set 'held' block to the 'current' block
-            BoardPanel.blockHeld.rotatePiece("default"); // Rotate 'held' block to default positioning
-            //BoardPanel.blockHeld = generateBlock(blockCurrent.intType); // Set 'held' block to the 'current' block
-
-            blockCurrent = generateBlock(intHeldType); // Set 'current' block to the 'temp' block ('held' block)
-            blockCurrent.blnHeldBefore = true; // Boolean to prevent holding the same block multiple times
-
-            return (blockCurrent); // Returns generated block instead of just blockCurrent to reset X,Y,rotation,etc of block
         }
     }
 }

@@ -124,9 +124,6 @@ public class Connections implements ActionListener {
         ConnectMenu.areaChat.append("> Disconnected from server.\n");
     }
 
-
-
-
     // CONSTRUCTORS
     // Server Constructor
     public Connections(int intPort) {
