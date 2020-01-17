@@ -144,7 +144,7 @@ public class SettingsMenu implements ActionListener, KeyListener {
     }
     public static void getControls() {
         try {
-            settingsFile = new FileReader("assets/textfiles/settings.csv");
+            settingsFile = new FileReader("Tetriduels/assets/textfiles/settings.csv");
 
             settingsFileData = new BufferedReader(settingsFile);
             String strSplit;
@@ -173,7 +173,7 @@ public class SettingsMenu implements ActionListener, KeyListener {
     }
     public static void saveControls() {
         try {
-            settingsOutput = new FileWriter("assets/textfiles/settings.csv");
+            settingsOutput = new FileWriter("Tetriduels/assets/textfiles/settings.csv");
         } catch(IOException e) {
             e.printStackTrace();
         }
@@ -197,6 +197,7 @@ public class SettingsMenu implements ActionListener, KeyListener {
             intKeyHardDrop = evt.getKeyCode();
 
             butChangeHardDrop.setText(KeyEvent.getKeyText(intKeyHardDrop));
+            System.out.println(KeyEvent.getKeyText(intKeyHardDrop));
             settingsPanel.requestFocus(); // Return focus back to the panel
             saveControls();
 
@@ -250,7 +251,7 @@ public class SettingsMenu implements ActionListener, KeyListener {
         butFormat.setBounds(intXPos + 235, intYPos-10, 200, 60);
         butFormat.setBackground(Color.DARK_GRAY);
         butFormat.setForeground(Color.WHITE);
-        butFormat.setFont(Utility.loadFont("fannabella"));
+        butFormat.setFont(Utility.loadFont("FannabellaCustom"));
         Utility.setFontSize(butFormat,35);
         butFormat.getInputMap().put(KeyStroke.getKeyStroke("SPACE"), "none"); // Disable space bar from activating JButtons
     }
@@ -267,7 +268,7 @@ public class SettingsMenu implements ActionListener, KeyListener {
         // Title
         this.labelSettingsTitle.setBounds(515,2,250,100);
         this.labelSettingsTitle.setForeground(Color.BLACK);
-        this.labelSettingsTitle.setFont(Utility.loadFont("fannabella"));
+        this.labelSettingsTitle.setFont(Utility.loadFont("FannabellaCustom"));
         Utility.setFontSize(this.labelSettingsTitle, 80);
         this.settingsPanel.add(this.labelSettingsTitle);
 
@@ -348,14 +349,14 @@ public class SettingsMenu implements ActionListener, KeyListener {
         this.settingsPanel.add(this.labelPort);
 
         this.fieldPort.setBounds(975,190,55,40);
-        this.fieldPort.setFont(Utility.loadFont("fannabella"));
+        this.fieldPort.setFont(Utility.loadFont("FannabellaCustom"));
         Utility.setFontSize(this.fieldPort,20);
         this.fieldPort.addKeyListener(this);
         this.fieldPort.setText(String.valueOf(intPort));
         this.settingsPanel.add(this.fieldPort);
 
         this.butPort.setBounds(1040,190,100,40);
-        this.butPort.setFont(Utility.loadFont("fannabella"));
+        this.butPort.setFont(Utility.loadFont("FannabellaCustom"));
         Utility.setFontSize(this.butPort,30);
         this.butPort.setBackground(Color.DARK_GRAY);
         this.butPort.setForeground(Color.WHITE);
