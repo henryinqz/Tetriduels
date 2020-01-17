@@ -11,39 +11,17 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-public class About implements ActionListener, MouseListener {
+public class About implements ActionListener {
     // PROPERTIES
     AboutPanel aboutPanel = new AboutPanel();
     JButton butMenu = new JButton("Return to Menu");
-    JLabel labelGitHubLink  = new JLabel("Click Here");
-
-    int intPurpleCheck = 0;
-    Color hyperlinkBlue = new Color(51,102,187);
-    Color hyperlinkPurple = new Color(70, 0, 128);
-    //Include a method when connecting to the game that allows user to type in their name
-    //Name will be put into JLabel showing who won, after game over.
+    JButton butGitHubLink  = new JButton("GitHub");
 
     // METHODS
-    public void actionPerformed(ActionEvent evt){
-        if(evt.getSource() == butMenu){
+    public void actionPerformed(ActionEvent evt) {
+        if (evt.getSource() == butMenu) {
             Utility.setPanel(new MainMenu().getPanel());
-        }
-    }
-
-    @Override
-    public void mouseClicked(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mousePressed(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent evt) {
-        if(evt.getSource() == labelGitHubLink) {
-            intPurpleCheck = 1;
+        } else if (evt.getSource() == butGitHubLink) {
             if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
                 try {
                     Desktop.getDesktop().browse(new URI("http://www.github.com/henryinqz/Tetriduels"));
@@ -52,21 +30,7 @@ public class About implements ActionListener, MouseListener {
                 }
 
             }
-            if(intPurpleCheck == 1) {
-                this.labelGitHubLink.setForeground(hyperlinkPurple);
-            }
-
         }
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseExited(MouseEvent e) {
-
     }
 
     public JPanel getPanel() {
@@ -80,20 +44,20 @@ public class About implements ActionListener, MouseListener {
 
         this.butMenu.setBounds(460,600,360,100);
         this.butMenu.setFont(Utility.loadFont("zorque"));
-        Utility.setFontSize(this.butMenu,35);
+        Utility.setFontSize(this.butMenu,36);
         this.butMenu.setBackground(Color.BLACK);
         this.butMenu.setForeground(Color.WHITE);
         this.butMenu.addActionListener(this);
         this.aboutPanel.add(butMenu);
         this.aboutPanel.add(butMenu);
 
-        this.labelGitHubLink.setBounds(100,275,200,50);
-        Color hyperlinkBlue = new Color(51,102,187);
-        this.labelGitHubLink.setForeground(hyperlinkBlue);
-        Utility.setFontSize(this.labelGitHubLink,30);
-        this.labelGitHubLink.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        this.aboutPanel.add(this.labelGitHubLink);
-        this.labelGitHubLink.addMouseListener(this);
+        this.butGitHubLink.setBounds(460,30,360,50);
+        this.butGitHubLink.setFont(Utility.loadFont("zorque"));
+        this.butGitHubLink.setForeground(Color.WHITE);
+        this.butGitHubLink.setBackground(Color.BLACK);
+        Utility.setFontSize(this.butGitHubLink,35);
+        this.butGitHubLink.addActionListener(this);
+        this.aboutPanel.add(this.butGitHubLink);
 
         this.aboutPanel.repaint();
     }
@@ -101,7 +65,7 @@ public class About implements ActionListener, MouseListener {
 } class AboutPanel extends JPanel {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.drawImage(Utility.loadImage(new File("assets/images/about.jpg")),0,0,null);
+        g.drawImage(Utility.loadImage(new File("Tetriduels/assets/images/about.png")),0,0,null);
     }
 }
 

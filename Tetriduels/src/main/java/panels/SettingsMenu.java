@@ -144,7 +144,7 @@ public class SettingsMenu implements ActionListener, KeyListener {
     }
     public static void getControls() {
         try {
-            settingsFile = new FileReader("assets/textfiles/settings.csv");
+            settingsFile = new FileReader("Tetriduels/assets/textfiles/settings.csv");
 
             settingsFileData = new BufferedReader(settingsFile);
             String strSplit;
@@ -173,7 +173,7 @@ public class SettingsMenu implements ActionListener, KeyListener {
     }
     public static void saveControls() {
         try {
-            settingsOutput = new FileWriter("assets/textfiles/settings.csv");
+            settingsOutput = new FileWriter("Tetriduels/assets/textfiles/settings.csv");
         } catch(IOException e) {
             e.printStackTrace();
         }
