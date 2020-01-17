@@ -26,11 +26,10 @@ public class Tetriduels {
         }
 
         GUI.theframe = new JFrame("Tetriduels");
-        GUI.theframe.addWindowListener(new GUI());
-        SettingsMenu.getControls();
-        Utility.setPanel(new SplashMenu().getPanel());
-        GUI.theframe.setLocationRelativeTo(null);
-
+        GUI.theframe.addWindowListener(new GUI()); // Add windowlistener to check if playeer closes the game
+        SettingsMenu.getControls(); // Load saved controls from settings.csv
+        Utility.setPanel(new SplashMenu().getPanel()); // Set frame to splash menu panel
+        GUI.theframe.setLocationRelativeTo(null); // Open the frame in the center of screen
 
     }
 }

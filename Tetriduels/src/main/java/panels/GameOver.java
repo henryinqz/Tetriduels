@@ -1,5 +1,8 @@
 package panels;
 
+import game.Game;
+import network.Connections;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -8,28 +11,25 @@ import java.io.File;
 
 public class GameOver implements ActionListener{
     // PROPERTIES
-    GameOverPanel overPanel = new GameOverPanel();
+    GameOverPanel overPanel = new GameOverPanel(); // Create new overPanel JPanel object
     JButton butRestart = new JButton("Play Again");
-    JButton butEnd = new JButton("Quit");
-    String strPlayer1 = "jeremy";
-    String strPlayer2 = "selwin";
-    JLabel winner = new JLabel(strPlayer1 + " won the game");
-
-    //Include a method when connecting to the game that allows user to type in their name
-    //Name will be put into JLabel showing who won, after game over.
+    JButton butBack = new JButton("Return to menu");
 
     // METHODS
     public void actionPerformed(ActionEvent evt){
-        if(evt.getSource() == butRestart){
-            ConnectMenu.blnReady = false;
+        if (evt.getSource() == butRestart){ // Play again (return to connect menu)
+            ConnectMenu.blnReady = false; // Reset ready states
             ConnectMenu.blnEnemyReady = false;
-            Utility.setPanel(new ConnectMenu().getPanel());
+            Utility.setPanel(new ConnectMenu().getPanel()); // Return to connect menu
         }
-        if(evt.getSource() == butEnd){
-            System.exit(0);
+        if (evt.getSource() == butBack){ // Return to main menu
+            Utility.setPanel(new MainMenu().getPanel());
+            if (Connections.ssm != null) { // If user is already connected to a server
+                Connections.disconnect(); // Disconnect from server
+            }
         }
     }
-    public JPanel getPanel() {
+    public JPanel getPanel() { // Return current panel
         return overPanel;
     }
 
@@ -38,34 +38,43 @@ public class GameOver implements ActionListener{
         this.overPanel.setPreferredSize(new Dimension(GUI.FRAME_WIDTH,GUI.FRAME_HEIGHT));
         this.overPanel.setLayout(null);
 
-        this.butRestart.setSize(250,100);
-        this.butRestart.setLocation(615,600);
-        this.butRestart.addActionListener(this);
+        // Play again (go back to connectmenu)
+        this.butRestart.setBounds(640-50-360,450,360,100);
         this.butRestart.setFont(Utility.loadFont("zorque"));
-        this.butRestart.setBackground(Color.BLACK);
+        Utility.setFontSize(butRestart,35);
+        this.butRestart.setBackground(Color.DARK_GRAY);
         this.butRestart.setForeground(Color.WHITE);
-        Utility.setFontSize(butRestart,30);
-
-        this.butEnd.setSize(250,100);
-        this.butEnd.setLocation(390,600);
-        this.butEnd.addActionListener(this);
-        this.butEnd.setFont(Utility.loadFont("zorque"));
-        this.butEnd.setBackground(Color.BLACK);
-        this.butEnd.setForeground(Color.WHITE);
-        Utility.setFontSize(butEnd,30);
-
-        this.winner.setSize(200,100);
-        this.winner.setLocation(100,600);
-
+        this.butRestart.addActionListener(this);
         this.overPanel.add(butRestart);
-        this.overPanel.add(butEnd);
-        this.overPanel.add(winner);
+
+        // Return to main menu
+        this.butBack.setBounds(640+50,450,360,100);
+        this.butBack.setFont(Utility.loadFont("zorque"));
+        Utility.setFontSize(this.butBack,35);
+        this.butBack.setBackground(Color.DARK_GRAY);
+        this.butBack.setForeground(Color.WHITE);
+        this.butBack.addActionListener(this);
+        this.overPanel.add(this.butBack);
 
         this.overPanel.repaint();
     }
 } class GameOverPanel extends JPanel {
     public void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        g.drawImage(Utility.loadImage(new File("Tetriduels/assets/images/GameOver.jpg")),0,0,null); // Draw splash screen picture
+        Graphics2D g2 = (Graphics2D) g; // Use Graphics2D instead of regular Graphics
+        super.paintComponent(g2); // Clear previous drawings (Windows only); super JPanel (original) paintComponent method
+
+        g2.drawImage(Utility.loadImage(new File("assets/images/blank.png")), 0, 0, null); // Draw blank template picture
+        g2.setColor(Color.WHITE);
+        g2.setFont(Utility.loadFont("zorque"));
+        if (Game.intGameOverResult == Game.WINNER) { // Winner
+            Utility.setFontSize(g2,90);
+            g.drawString("You won!",418,300);
+        } else if (Game.intGameOverResult == Game.LOSER) { // Loser
+            Utility.setFontSize(g2,90);
+            g.drawString("You lost!",418,300);
+        } else if (Game.intGameOverResult == Game.NONE) { // No winner/opponent disconnected
+            Utility.setFontSize(g2,70);
+            g.drawString("Opponent left the game.",164,300);
+        }
     }
 }

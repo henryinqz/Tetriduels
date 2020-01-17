@@ -4,8 +4,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -13,27 +11,28 @@ import java.net.URISyntaxException;
 
 public class About implements ActionListener {
     // PROPERTIES
-    AboutPanel aboutPanel = new AboutPanel();
-    JButton butMenu = new JButton("Return to Menu");
+    AboutPanel aboutPanel = new AboutPanel(); // Create new aboutPanel JPanel object
+
+    // Buttons
+    JButton butBack = new JButton("Return to Menu");
     JButton butGitHubLink  = new JButton("GitHub");
 
     // METHODS
     public void actionPerformed(ActionEvent evt) {
-        if (evt.getSource() == butMenu) {
-            Utility.setPanel(new MainMenu().getPanel());
-        } else if (evt.getSource() == butGitHubLink) {
+        if (evt.getSource() == butBack) { // Return to menu button clicked
+            Utility.setPanel(new MainMenu().getPanel()); // Open main menu
+        } else if (evt.getSource() == butGitHubLink) { // Github button clicked
             if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
                 try {
-                    Desktop.getDesktop().browse(new URI("http://www.github.com/henryinqz/Tetriduels"));
+                    Desktop.getDesktop().browse(new URI("http://www.github.com/henryinqz/Tetriduels")); // Open Tetriduels github repository in webbrowser
                 } catch (IOException e) {
                 } catch (URISyntaxException e) {
                 }
-
             }
         }
     }
 
-    public JPanel getPanel() {
+    public JPanel getPanel() { // Return current panel
         return aboutPanel;
     }
 
@@ -42,15 +41,16 @@ public class About implements ActionListener {
         this.aboutPanel.setPreferredSize(new Dimension(GUI.FRAME_WIDTH,GUI.FRAME_HEIGHT));
         this.aboutPanel.setLayout(null);
 
-        this.butMenu.setBounds(460,600,360,100);
-        this.butMenu.setFont(Utility.loadFont("zorque"));
-        Utility.setFontSize(this.butMenu,36);
-        this.butMenu.setBackground(Color.BLACK);
-        this.butMenu.setForeground(Color.WHITE);
-        this.butMenu.addActionListener(this);
-        this.aboutPanel.add(butMenu);
-        this.aboutPanel.add(butMenu);
+        // Return to menu button
+        this.butBack.setBounds(460,600,360,100);
+        this.butBack.setFont(Utility.loadFont("zorque"));
+        Utility.setFontSize(this.butBack,36);
+        this.butBack.setBackground(Color.BLACK);
+        this.butBack.setForeground(Color.WHITE);
+        this.butBack.addActionListener(this);
+        this.aboutPanel.add(butBack);
 
+        // Github link button
         this.butGitHubLink.setBounds(460,30,360,50);
         this.butGitHubLink.setFont(Utility.loadFont("zorque"));
         this.butGitHubLink.setForeground(Color.WHITE);
@@ -65,7 +65,7 @@ public class About implements ActionListener {
 } class AboutPanel extends JPanel {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.drawImage(Utility.loadImage(new File("Tetriduels/assets/images/about.png")),0,0,null);
+        g.drawImage(Utility.loadImage(new File("assets/images/about.png")),0,0,null); // Draw about picture
     }
 }
 

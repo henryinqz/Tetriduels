@@ -37,7 +37,12 @@ public class Game implements ActionListener, KeyListener {
     public static void endGame() { // End game
         if (Tetriduels.blnGameLoop == false) {
             System.out.println("Game over!");
-            Utility.setPanel(new GameOver().getPanel()); //Show game over panel when the game loop ends
+            try {
+                Thread.sleep(2000); // wait 2 seconds
+            } catch (InterruptedException e) {
+            }
+
+            Utility.setPanel(new GameOver().getPanel());
         }
     }
 
