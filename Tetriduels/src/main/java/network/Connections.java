@@ -8,7 +8,7 @@ import java.awt.event.ActionListener;
 
 public class Connections implements ActionListener {
     // PROPERTIES
-    public static final int READY=0, START=1, CHAT_MESSAGE=2, GRID=3, GAME_OVER=4; // Message types
+    public static final int CONNECT=0, DISCONNECT=1, READY=1, START=2, CHAT_MESSAGE=3, GRID=4, GAME_OVER=5; // Message types
 
     public static SuperSocketMaster ssm; // Create SuperSocketMaster object to communicate over a network (https://github.com/MrCadawas). Wraps BufferedReader & PrintWriter objects.
     public static boolean blnIsServer;
@@ -23,7 +23,11 @@ public class Connections implements ActionListener {
             String strMessageSegment[] = strMessage.split(",");
             int intMessageType = Integer.parseInt(strMessageSegment[0]);
 
-            if (intMessageType == READY) { // Opponent is ready to start game
+            if (intMessageType == CONNECT) { // Opponent connected
+                ConnectMenu.areaChat.append("> Enemy has joined the game.\n"); // Add join message to chat
+            } else if (intMessageType == DISCONNECT) { // Opponent disconnected
+                ConnectMenu.areaChat.append("> Enemy has left the game.\n"); // Add join message to chat
+            } else if (intMessageType == READY) { // Opponent is ready to start game
                 ConnectMenu.blnEnemyReady = true; // Player is ready to start game
                 if (ConnectMenu.blnReady == true) {
                     Connections.sendMessage(START);
@@ -103,6 +107,13 @@ public class Connections implements ActionListener {
             strSendMessage = strSendMessage + "," + strMessage[i];
         }
         ssm.sendText(strSendMessage);
+    }
+
+    public static void disconnect() { // Show that server is offline in chat
+        sendMessage(Connections.DISCONNECT);
+        ssm.disconnect();
+        ssm = null;
+        ConnectMenu.areaChat.append("> Disconnected from server.\n");
     }
 
 

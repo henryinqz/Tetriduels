@@ -45,12 +45,10 @@ public class ConnectMenu implements ActionListener, KeyListener {
         return connectPanel;
     }
     public void actionPerformed(ActionEvent evt) {
-        if (evt.getSource() == butHost) {
+        if (evt.getSource() == butHost) { // Host button
             labelError.setVisible(false);
             if (Connections.ssm != null) {
-                Connections.ssm.disconnect();
-                Connections.ssm = null;
-                areaChat.append("> Disconnected from server.\n"); // Show that server is offline in chat
+                Connections.disconnect(); // Disconnect from server
             }
             new Connections(SettingsMenu.intPort); // Server; create SuperSocketMaster object
             areaChat.append("> Server is now online.\n"); // Show that server is online in chat
@@ -65,14 +63,12 @@ public class ConnectMenu implements ActionListener, KeyListener {
 
             fieldChatMessage.setEnabled(true);
             butChatMessageSend.setEnabled(true);
-        } else if (evt.getSource() == butClient) {
+        } else if (evt.getSource() == butClient) { // Client button
             labelError.setVisible(false);
             butReady.setVisible(false);
             labelReady.setVisible(false);
             if (Connections.ssm != null) {
-                Connections.ssm.disconnect();
-                Connections.ssm = null;
-                areaChat.append("> Disconnected from server.\n"); // Show that server is offline in chat
+                Connections.disconnect(); // Disconnect from server
             }
             fieldServerIP.setEditable(true);
             fieldServerIP.setText("");
@@ -82,7 +78,7 @@ public class ConnectMenu implements ActionListener, KeyListener {
             fieldChatMessage.setEnabled(false);
             butChatMessageSend.setEnabled(false);
 
-        } else if (evt.getSource() == butConnect) { // Client connection
+        } else if (evt.getSource() == butConnect) { // Connect button (Client only)
             if (!fieldServerIP.getText().equals("") && !fieldPort.getText().equals("")) { // Check if server IP & port are blank
                 String strServerIP = fieldServerIP.getText();
                 try {
@@ -94,6 +90,7 @@ public class ConnectMenu implements ActionListener, KeyListener {
                 if (intPort >= 0 && intPort <= 65535) { // Check if port entered is within range of all ports
                     new Connections(strServerIP, intPort); // Client; create SuperSocketMaster object
                     if (Connections.blnConnected == true) { // Connected to server
+                        Connections.sendMessage(Connections.CONNECT);
                         areaChat.append("> Connected to server.\n"); // Show that server is online in chat
                         labelError.setVisible(false);
                         butConnect.setEnabled(false);
@@ -106,22 +103,28 @@ public class ConnectMenu implements ActionListener, KeyListener {
                         butConnect.setEnabled(true);
                         labelError.setText("Could not connect to server.");
                         labelError.setVisible(true);
+                        fieldChatMessage.setEnabled(false);
+                        butChatMessageSend.setEnabled(false);
                     }
                 } else { // Port out of range
                     labelError.setText("Enter valid port from 0-65535!");
                     labelError.setVisible(true);
                     butReady.setVisible(false);
                     labelReady.setVisible(false);
+                    fieldChatMessage.setEnabled(false);
+                    butChatMessageSend.setEnabled(false);
                 }
             } else { // Blank server IP or port
                 labelError.setText("Enter a valid IP and port!");
                 labelError.setVisible(true);
                 butReady.setVisible(false);
                 labelReady.setVisible(false);
+                fieldChatMessage.setEnabled(false);
+                butChatMessageSend.setEnabled(false);
             }
-        } else if (evt.getSource() == butBack) {
+        } else if (evt.getSource() == butBack) { // Return to main menu button
             Utility.setPanel(new MainMenu().getPanel());
-        } else if (evt.getSource() == butReady) {
+        } else if (evt.getSource() == butReady) { // Ready button
             butReady.setEnabled(false);
             blnReady = true;
             Tetriduels.blnGameLoop = true;
@@ -140,8 +143,6 @@ public class ConnectMenu implements ActionListener, KeyListener {
 
     }
 
-    public void keyReleased(KeyEvent evt) {
-    }
     public void keyPressed(KeyEvent evt) {
         if(evt.getKeyCode() == KeyEvent.VK_ENTER) { // Enter key to send message
             if (!fieldChatMessage.getText().equals("")) {
@@ -150,6 +151,8 @@ public class ConnectMenu implements ActionListener, KeyListener {
         } else if (evt.getKeyCode() == KeyEvent.VK_ESCAPE) { // Escape key to exit chat
             Game.blnChatOpen = false;
         }
+    }
+    public void keyReleased(KeyEvent evt) {
     }
     public void keyTyped(KeyEvent evt) {
     }
