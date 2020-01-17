@@ -133,10 +133,12 @@ public class ConnectMenu implements ActionListener, KeyListener {
 
         // Chat
         if(evt.getSource() == butChatMessageSend) { // Send text over network
-            Connections.sendMessage(Connections.CHAT_MESSAGE, fieldChatMessage.getText());
-            areaChat.append("<You>: " + fieldChatMessage.getText() + "\n"); // Add player chat message to chat
-            fieldChatMessage.setText(""); // Clear send message box
-            Game.blnChatOpen = false; // If user sends message in game, close chat
+            if (!fieldChatMessage.getText().equalsIgnoreCase("")) { // If non blank message
+                Connections.sendMessage(Connections.CHAT_MESSAGE, fieldChatMessage.getText());
+                areaChat.append("<You>: " + fieldChatMessage.getText() + "\n"); // Add player chat message to chat
+                fieldChatMessage.setText(""); // Clear send message box
+                Game.blnChatOpen = false; // If user sends message in game, close chat
+            }
         }
         JScrollBar scrollBarChat = scrollChat.getVerticalScrollBar(); // Always scroll bottom
         scrollBarChat.setValue(scrollBarChat.getMaximum());

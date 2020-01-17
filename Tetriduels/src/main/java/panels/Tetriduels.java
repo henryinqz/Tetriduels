@@ -1,4 +1,5 @@
 package panels;
+
 import javax.swing.*;
 
 /* -----------------------------------------------
@@ -18,11 +19,6 @@ public class Tetriduels {
     public static boolean blnGameLoop = true; // Static boolean for game loop
 
     public static void main(String[] args) { // Main Method
-        /*try { // Consider removing since it may mess up over cross platform support
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); // Modern Look&Feel UI
-        } catch (Exception e) {
-            e.printStackTrace(); // Print where error is
-        }*/
         try {
             UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName()); // Fixes Mac devices showing native JComponent styles (and making text not visible)
         } catch (Exception e) {
@@ -30,9 +26,11 @@ public class Tetriduels {
         }
 
         GUI.theframe = new JFrame("Tetriduels");
+        GUI.theframe.addWindowListener(new GUI());
         SettingsMenu.getControls();
         Utility.setPanel(new SplashMenu().getPanel());
         GUI.theframe.setLocationRelativeTo(null);
+
 
     }
 }

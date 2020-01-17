@@ -8,7 +8,7 @@ import java.awt.event.ActionListener;
 
 public class Connections implements ActionListener {
     // PROPERTIES
-    public static final int CONNECT=0, DISCONNECT=1, READY=1, START=2, CHAT_MESSAGE=3, GRID=4, GAME_OVER=5; // Message types
+    public static final int CONNECT=0, DISCONNECT=1, READY=2, START=3, CHAT_MESSAGE=4, GRID=5, GAME_OVER=6; // Message types
 
     public static SuperSocketMaster ssm; // Create SuperSocketMaster object to communicate over a network (https://github.com/MrCadawas). Wraps BufferedReader & PrintWriter objects.
     public static boolean blnIsServer;
@@ -26,15 +26,17 @@ public class Connections implements ActionListener {
             if (intMessageType == CONNECT) { // Opponent connected
                 ConnectMenu.areaChat.append("> Enemy has joined the game.\n"); // Add join message to chat
             } else if (intMessageType == DISCONNECT) { // Opponent disconnected
-                ConnectMenu.areaChat.append("> Enemy has left the game.\n"); // Add join message to chat
+                ConnectMenu.areaChat.append("> Enemy has left the game.\n"); // Add leave message to chat
             } else if (intMessageType == READY) { // Opponent is ready to start game
                 ConnectMenu.blnEnemyReady = true; // Player is ready to start game
                 if (ConnectMenu.blnReady == true) {
                     Connections.sendMessage(START);
                     panels.Utility.setPanel(new Game().getPanel());
+                    Tetriduels.blnGameLoop = true; // set game loop to true
                 }
             } else if (intMessageType == START) {
                 panels.Utility.setPanel(new Game().getPanel());
+                Tetriduels.blnGameLoop = true; // set game loop to true
             } else if (intMessageType == CHAT_MESSAGE) {
                 ConnectMenu.areaChat.append("<Enemy>: " + strMessageSegment[1] + "\n"); // Add new chat message to chat
             } else if (intMessageType == GRID) {
@@ -50,8 +52,6 @@ public class Connections implements ActionListener {
                     }
                 } else if (strMessageSegment[1].equalsIgnoreCase("garbage")) { // Add garbage to player grid
                     int intGarbageLines = Integer.parseInt(strMessageSegment[2]); // Store # of garbage lines being received
-
-                    //Show in a JLabel how many lines are being sent
 
                     if (intGarbageLines > 0) { // Only run if garbage lines sent was above 0
                         for (int a = 0; a < intGarbageLines; a++) { // Loop for # of garbage lines being received
@@ -83,10 +83,14 @@ public class Connections implements ActionListener {
                     Controller.updateGhostBlock(BoardPanel.blockCurrent); // update ghost block
                 }
             } else if (intMessageType == GAME_OVER) {
-                if (strMessageSegment[1].equalsIgnoreCase("loss")) { // Enemy lost
-                    Tetriduels.blnGameLoop = false;
-                    Game.intGameOverResult = Game.WINNER; // Set to loser
-                    Game.endGame();
+                if (Tetriduels.blnGameLoop == true) {
+                    if (strMessageSegment[1].equalsIgnoreCase("loss")) { // Enemy lost
+                        Game.intGameOverResult = Game.WINNER; // Set to loser
+                    } else if (strMessageSegment[1].equalsIgnoreCase("left")) { // Opponent disconnected/closed server
+                        Game.intGameOverResult = Game.NONE; // Set to no winner
+                    }
+                    Tetriduels.blnGameLoop = false; // Stop game loop
+                    Game.endGame(); // Call end game method
                 }
             }
         }
@@ -98,7 +102,6 @@ public class Connections implements ActionListener {
 
     public static void sendMessage(int intMessageType, String strMessage) {
         ssm.sendText(intMessageType + "," + strMessage);
-
     }
 
     public static void sendMessage(int intMessageType, String[] strMessage) {
@@ -110,7 +113,12 @@ public class Connections implements ActionListener {
     }
 
     public static void disconnect() { // Show that server is offline in chat
-        sendMessage(Connections.DISCONNECT);
+        if (blnIsServer == true) { // Server host disconnecting
+            sendMessage(Connections.DISCONNECT,"server");
+        } else { // Client disconnecting
+            sendMessage(Connections.DISCONNECT,"client");
+        }
+        sendMessage(GAME_OVER, "left"); // If player leaves, then other client should game over & disconnect
         ssm.disconnect();
         ssm = null;
         ConnectMenu.areaChat.append("> Disconnected from server.\n");

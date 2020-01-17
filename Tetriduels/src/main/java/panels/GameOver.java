@@ -1,6 +1,7 @@
 package panels;
 
 import game.Game;
+import network.Connections;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,13 +17,16 @@ public class GameOver implements ActionListener{
 
     // METHODS
     public void actionPerformed(ActionEvent evt){
-        if (evt.getSource() == butRestart){
+        if (evt.getSource() == butRestart){ // Play again (return to connect menu)
             ConnectMenu.blnReady = false;
             ConnectMenu.blnEnemyReady = false;
             Utility.setPanel(new ConnectMenu().getPanel());
         }
         if (evt.getSource() == butBack){ // Return to main menu
             Utility.setPanel(new MainMenu().getPanel());
+            if (Connections.ssm != null) {
+                Connections.disconnect(); // Disconnect from server
+            }
         }
     }
     public JPanel getPanel() {
@@ -59,14 +63,18 @@ public class GameOver implements ActionListener{
         Graphics2D g2 = (Graphics2D) g; // Use Graphics2D instead of regular Graphics
         super.paintComponent(g2); // Clear previous drawings (Windows only); super JPanel (original) paintComponent method
 
-        g2.drawImage(Utility.loadImage(new File("Tetriduels/assets/images/blank.png")), 0, 0, null); // Draw splash screen picture
+        g2.drawImage(Utility.loadImage(new File("assets/images/blank.png")), 0, 0, null); // Draw splash screen picture
         g2.setColor(Color.WHITE);
         g2.setFont(Utility.loadFont("zorque"));
-        Utility.setFontSize(g2,90);
         if (Game.intGameOverResult == Game.WINNER) { // Winner
+            Utility.setFontSize(g2,90);
             g.drawString("You won!",418,300);
         } else if (Game.intGameOverResult == Game.LOSER) { // Loser
+            Utility.setFontSize(g2,90);
             g.drawString("You lost!",418,300);
+        } else if (Game.intGameOverResult == Game.NONE) { // No winner/host disconnected
+            Utility.setFontSize(g2,70);
+            g.drawString("Opponent left the game.",164,300);
         }
     }
 }
