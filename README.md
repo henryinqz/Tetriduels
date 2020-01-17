@@ -1,5 +1,6 @@
 # Tetriduels
 Final CPT multiplayer project for ICS4U1.
+https://github.com/henryinqz/Tetriduels
 
 ## Authors
 - Henry Wong
