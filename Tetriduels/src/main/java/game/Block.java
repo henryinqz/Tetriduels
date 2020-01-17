@@ -1,8 +1,5 @@
 package game;
 
-import panels.*;
-import network.*;
-
 import java.awt.*;
 
 public class Block {
@@ -21,7 +18,7 @@ public class Block {
     public boolean blnHeldBefore = false; // Boolean property to prevent holding same block multiple times
 
     // METHODS
-    private void makePiece(int intType) {
+    private void makePiece(int intType) { // Generate block piece based on specified block type
         if (intType == IBLOCK) {
             intCoordsArray = new int[][][]{
                     {{0,0,0,0}, {1,1,1,1}, {0,0,0,0}, {0,0,0,0}}, // Up

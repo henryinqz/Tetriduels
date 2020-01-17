@@ -11,8 +11,8 @@ import java.awt.event.KeyListener;
 
 public class Game implements ActionListener, KeyListener {
     // PROPERTIES
-    BoardPanel boardPanel = new BoardPanel();
-    Thread threadBlockFall = new Thread(new BlockFallTimer());
+    BoardPanel boardPanel = new BoardPanel(); // Create new boardPanel JPanel object
+    Thread threadBlockFall = new Thread(new BlockFallTimer()); // Thread for block to autofall
     //JButton butMoveUp = new JButton("Move Up");
 
     Timer timerGame = new Timer(1000 / 60, this); //60FPS
@@ -26,14 +26,15 @@ public class Game implements ActionListener, KeyListener {
     // Chat
     public static boolean blnChatOpen = false;
 
+    // Game over
     public static final int LOSER=0, WINNER=1, NONE=2;
     public static int intGameOverResult = -1;
 
     // METHODS
-    public JPanel getPanel() {
+    public JPanel getPanel() { // Return current panel
         return boardPanel;
     }
-    public static void endGame() {
+    public static void endGame() { // End game
         if (Tetriduels.blnGameLoop == false) {
             System.out.println("Game over!");
             Utility.setPanel(new GameOver().getPanel());
@@ -42,9 +43,9 @@ public class Game implements ActionListener, KeyListener {
 
     public void actionPerformed(ActionEvent evt) {
         if (this.boardPanel.isFocusOwner() != true && blnChatOpen == false) { // Ensure user can move blocks
-            this.boardPanel.requestFocus();
+            this.boardPanel.requestFocus(); // Need this so that board can move blocks
         }
-        if (evt.getSource() == timerGame) {
+        if (evt.getSource() == timerGame) { //60FPS timer
             this.boardPanel.repaint();
         }
         /*} else if (evt.getSource() == butMoveUp) {
@@ -57,13 +58,14 @@ public class Game implements ActionListener, KeyListener {
     }
     public void keyPressed(KeyEvent evt) {
         int intKeyCode = evt.getKeyCode();
-        if (intKeyCode == SettingsMenu.intKeyLeft) { // Left/right movement
+
+        if (intKeyCode == SettingsMenu.intKeyLeft) { // Left movement
             Controller.moveLeft(BoardPanel.blockCurrent); // Move block left
-        } else if (intKeyCode == SettingsMenu.intKeyRight) {// Right arrow
-            Controller.moveRight(BoardPanel.blockCurrent);
-        } else if (intKeyCode == SettingsMenu.intKeyDown){
-            Controller.moveDown(BoardPanel.blockCurrent);
-        } else if (intKeyCode == SettingsMenu.intKeyChat) {
+        } else if (intKeyCode == SettingsMenu.intKeyRight) { // Right movement
+            Controller.moveRight(BoardPanel.blockCurrent); // Move block right
+        } else if (intKeyCode == SettingsMenu.intKeyDown){ // Down movement
+            Controller.moveDown(BoardPanel.blockCurrent); // Move block down
+        } else if (intKeyCode == SettingsMenu.intKeyChat) { // Chat button
            if (blnChatOpen == true) { // If chat is open, close chat
                this.boardPanel.requestFocus();
                blnChatOpen = false;
@@ -128,7 +130,6 @@ public class Game implements ActionListener, KeyListener {
         this.boardPanel.add(ConnectMenu.fieldChatMessage);
         this.boardPanel.add(ConnectMenu.butChatMessageSend);
 
-
         // Allow for keypresses to move block
         this.boardPanel.setFocusable(true);
         this.boardPanel.requestFocus();
@@ -138,6 +139,5 @@ public class Game implements ActionListener, KeyListener {
         this.threadBlockFall.start(); // Auto fall timer
 
         this.intGameOverResult = -1; // Reset game over result
-
     }
 }

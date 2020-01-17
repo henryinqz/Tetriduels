@@ -1,7 +1,6 @@
 package game;
 
 import panels.*;
-import network.*;
 
 public class BlockFallTimer implements Runnable{
 	// PROPERTIES
@@ -9,14 +8,14 @@ public class BlockFallTimer implements Runnable{
 	
 	// METHODS
 	public void run(){
-		blockDown();
+		blockDown(); // Call method for auto block down sleeps (threaded))
 	}
 	
 	public void blockDown(){
-		while (Tetriduels.blnGameLoop == true){
+		while (Tetriduels.blnGameLoop == true){ // Only run while game loop is running
 			Controller.moveDown(BoardPanel.blockCurrent);
 			try {
-				Thread.sleep(750); // Replace w/ Timer.schedule
+				Thread.sleep(intTimerInterval); // Delay before block moves down by itself
 			} catch(InterruptedException e) {
 			}
 		}

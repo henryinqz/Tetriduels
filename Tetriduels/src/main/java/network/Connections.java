@@ -11,17 +11,17 @@ public class Connections implements ActionListener {
     public static final int CONNECT=0, DISCONNECT=1, READY=2, START=3, CHAT_MESSAGE=4, GRID=5, GAME_OVER=6; // Message types
 
     public static SuperSocketMaster ssm; // Create SuperSocketMaster object to communicate over a network (https://github.com/MrCadawas). Wraps BufferedReader & PrintWriter objects.
-    public static boolean blnIsServer;
-    public static boolean blnConnected;
+    public static boolean blnIsServer; // Boolean to know if user is the host or a client
+    public static boolean blnConnected; // Boolean to know if user is connected to a server
 
-    private String[][] strMessageSegment;
+    private String[][] strMessageSegment; // 2D array to store message segments
 
     // METHODS
     public void actionPerformed(ActionEvent evt) {
         if (evt.getSource() == ssm) { // Incoming message
             String strMessage = ssm.readText();
-            String strMessageSegment[] = strMessage.split(",");
-            int intMessageType = Integer.parseInt(strMessageSegment[0]);
+            String strMessageSegment[] = strMessage.split(","); // Split message into array segments
+            int intMessageType = Integer.parseInt(strMessageSegment[0]); // Set message type from message received
 
             if (intMessageType == CONNECT) { // Opponent connected
                 ConnectMenu.areaChat.append("> Enemy has joined the game.\n"); // Add join message to chat
@@ -34,12 +34,12 @@ public class Connections implements ActionListener {
                     panels.Utility.setPanel(new Game().getPanel());
                     Tetriduels.blnGameLoop = true; // set game loop to true
                 }
-            } else if (intMessageType == START) {
+            } else if (intMessageType == START) { // Opponent is starting game
                 panels.Utility.setPanel(new Game().getPanel());
                 Tetriduels.blnGameLoop = true; // set game loop to true
-            } else if (intMessageType == CHAT_MESSAGE) {
+            } else if (intMessageType == CHAT_MESSAGE) { // Opponent sent chat message
                 ConnectMenu.areaChat.append("<Enemy>: " + strMessageSegment[1] + "\n"); // Add new chat message to chat
-            } else if (intMessageType == GRID) {
+            } else if (intMessageType == GRID) { // Opponent is updating grid (add/remove from enemy grid, or send garbage to player grid)
                 if (strMessageSegment[1].equalsIgnoreCase("add")) { // Add blocks to grid
                     int intSquareY = Integer.parseInt(strMessageSegment[2]);
                     int intSquareX = Integer.parseInt(strMessageSegment[3]);
@@ -82,7 +82,7 @@ public class Connections implements ActionListener {
                     }
                     Controller.updateGhostBlock(BoardPanel.blockCurrent); // update ghost block
                 }
-            } else if (intMessageType == GAME_OVER) {
+            } else if (intMessageType == GAME_OVER) { // Opponent game overs
                 if (Tetriduels.blnGameLoop == true) {
                     if (strMessageSegment[1].equalsIgnoreCase("loss")) { // Enemy lost
                         Game.intGameOverResult = Game.WINNER; // Set to loser
@@ -96,21 +96,21 @@ public class Connections implements ActionListener {
         }
     }
 
-    public static void sendMessage(int intMessageType) {
+    public static void sendMessage(int intMessageType) { // Send message with only message type
         ssm.sendText(intMessageType + ",");
     }
 
-    public static void sendMessage(int intMessageType, String strMessage) {
+    public static void sendMessage(int intMessageType, String strMessage) { // Send message with a string
         ssm.sendText(intMessageType + "," + strMessage);
     }
 
-    public static void sendMessage(int intMessageType, String[] strMessage) {
+    /*public static void sendMessage(int intMessageType, String[] strMessage) { // Send message in a string array (unused)
         String strSendMessage = intMessageType + "";
         for (int i=0; i<strMessage.length;i++) {
             strSendMessage = strSendMessage + "," + strMessage[i];
         }
         ssm.sendText(strSendMessage);
-    }
+    }*/
 
     public static void disconnect() { // Show that server is offline in chat
         if (blnIsServer == true) { // Server host disconnecting

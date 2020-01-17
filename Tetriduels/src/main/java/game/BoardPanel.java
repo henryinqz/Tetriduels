@@ -10,29 +10,33 @@ import java.io.File;
 
 public class BoardPanel extends JPanel {
     // PROPERTIES
+    // Board/Blocks
     public static final int MOVE = 30; // # of pixels moved every time
     public static final int BLOCKSIZE = 30; // game.Block size (25*25px)
     public static int intXMax = BLOCKSIZE * 10; // 10 blocks wide
     public static int intYMax = BLOCKSIZE * 22; // 22 blocks tall (should only show 20 blocks)
     public static int[][] intGrid = new int[intYMax / BLOCKSIZE][intXMax / BLOCKSIZE]; // 10x20 array grid of board
     public static int[][] intEnemyGrid = new int[intYMax / BLOCKSIZE][intXMax / BLOCKSIZE]; // 10x20 array grid of board (Enemy)
-    public static Block blockCurrent;
-    public static Block blockGhost;
-    public static Block blockHeld;
+    public static Block blockCurrent; // Current block (player)
+    public static Block blockGhost; // Ghost block (player)
+    public static Block blockHeld; // Held block (player)
 
+    // Block shuffles
     public static int intBag = -1; // -1 is initial value to generate the 1st & 2nd pieceArrays
     public static int intRandom = -1;
     public static Integer[] pieceArray = new Integer[]{1, 2, 3, 4, 5, 6, 7};
     public static Integer[] pieceArrayNext = new Integer[]{1, 2, 3, 4, 5, 6, 7};
 
+    // Stat counters
     public static int intPreviouslyRemovedLine = 0; // Checks if the previous block placed was a line clear
     public static int intGarbageLinesSent = 0; //Calculates total amount of garbage sent
 
-    Thread threadTotalGroundTimer = new Thread(new TotalGroundTimer());
-    Thread threadGroundTimer = new Thread(new GroundTimer());
+    // Threads
+    Thread threadGroundTimer = new Thread(new GroundTimer()); // (Short) Time that block can continue to move/rotate after it has collided w/ something below it. Resets everytime block is moved/rotated
+    Thread threadTotalGroundTimer = new Thread(new TotalGroundTimer()); // Maximum time that block can continue to move/rotate after it has collided w/ something below it
 
     // METHODS
-    public synchronized void paintComponent(Graphics g) {
+    public synchronized void paintComponent(Graphics g) { // Overrides JPanel paintComponent method to draw/paint
         Graphics2D g2 = (Graphics2D) g; // Use Graphics2D instead of regular Graphics
         super.paintComponent(g2); // Clear previous drawings (Windows only); super JPanel (original) paintComponent method
 
@@ -89,11 +93,10 @@ public class BoardPanel extends JPanel {
                 storeOldBlocks(blockCurrent);
                 removeFullLines(intGrid);
 
-
                 if (blockCurrent.intY <= BLOCKSIZE*1 && blockCurrent.intX == BLOCKSIZE * 3) { // Collision at block spawn point
                     Tetriduels.blnGameLoop = false; // end game
                     Connections.sendMessage(Connections.GAME_OVER,"loss");
-                    Game.endGame();
+                    Game.endGame(); // End game
                     Game.intGameOverResult = Game.LOSER; // Set to loser
                 } else { // If no collision at spawn point, generate a new block
                     blockCurrent = Controller.generateBlock();
@@ -138,7 +141,7 @@ public class BoardPanel extends JPanel {
         }
     }
 
-    private void drawGhostBlock(Graphics2D g2) {
+    private void drawGhostBlock(Graphics2D g2) { // Draw ghost block
         g2.setColor(blockGhost.colBlock);
         g2.setStroke(new BasicStroke(1));
         for (int i = 0; i < 4; i++) {
@@ -208,7 +211,7 @@ public class BoardPanel extends JPanel {
         drawGridlines(intNextX, intNextY + (BLOCKSIZE * 8), intNextX + (BLOCKSIZE * 4), intNextY + (BLOCKSIZE * 12), 4, 4, g2);
     }
 
-    private void storeOldBlocks(Block blockCurrent) {
+    private void storeOldBlocks(Block blockCurrent) { // Store block into an array of 'oldBlocks' after it has been placed
         for (int a = 0; a < 4; a++) { // Loop through entire block coordsArray (all 16 values of the 4x4 array)
             for (int b = 0; b < 4; b++) {
                 if (blockCurrent.intCurrentCoords[a][b] != 0) { // If block coordsArray is not empty
@@ -221,10 +224,9 @@ public class BoardPanel extends JPanel {
                 } // If nothing in block coordsArray, intGrid[(blockCurrent.intY / intBlockSize) + a][(blockCurrent.intX / intBlockSize) + b] remains at 0
             }
         }
-
     }
 
-    private void drawOldBlocks(Graphics2D g2) {
+    private void drawOldBlocks(Graphics2D g2) { // Draw all 'oldBlocks' that are stored in array
         for (int c = 0; c < (intYMax / BLOCKSIZE); c++) {
             for (int d = 0; d < (intXMax / BLOCKSIZE); d++) {
                 if (intGrid[c][d] != 0) {
@@ -264,7 +266,7 @@ public class BoardPanel extends JPanel {
             }
         }
     }
-    private void drawEnemyOldBlocks(Graphics2D g2) {
+    private void drawEnemyOldBlocks(Graphics2D g2) { // Draw all enemy 'oldBlocks' that are stored in array
         for (int c = 0; c < (intYMax / BLOCKSIZE); c++) {
             for (int d = 0; d < (intXMax / BLOCKSIZE); d++) {
                 if (intEnemyGrid[c][d] != 0) { // enemy grid
@@ -305,7 +307,7 @@ public class BoardPanel extends JPanel {
         }
     }
 
-    private void removeFullLines(int[][] intGrid) {
+    private void removeFullLines(int[][] intGrid) { // Clear lines on player board that are full
         int intRemovedLines = 0; // Variable that determines how many rows/lines were removed after 1 block placement
 
         for (int y = 0; y < (intYMax / BLOCKSIZE); y++) {
@@ -333,9 +335,9 @@ public class BoardPanel extends JPanel {
         }
     }
 
-    private void sendGarbageLines(int intRemovedLines) {
+    private void sendGarbageLines(int intRemovedLines) { // Send garbage lines to enemy
         Connections.sendMessage(Connections.GRID, "garbage," + intRemovedLines);
-        Utility.playSound(new File("Tetriduels/assets/audio/blocks/GarbageNoise.wav")); // Play hard drop sound
+        Utility.playSound(new File("assets/audio/blocks/GarbageNoise.wav")); // Play hard drop sound
     }
 
     private void drawGridlines(int intX1, int intY1, int intX2, int intY2, int intAmountVert, int intAmountHoriz, Graphics2D g2) { // Draw gridlines on board. intAmountX & Y determine how many gridlines to draw
@@ -347,7 +349,6 @@ public class BoardPanel extends JPanel {
                 g2.setStroke(new BasicStroke(1));
             }
             g2.drawLine(intX1 + (a * BLOCKSIZE), intY1, intX1 + (a * BLOCKSIZE), intY2); // Vertical gridlines
-            //g2.drawLine(a*intBlockSize, 0, a*intBlockSize, intYMax); // Vertical gridlines (board)
         }
         for (int b = 0; b <= intAmountHoriz; b++) {
             if (b == 0 || b == intAmountHoriz) { // Draw thick outline outside horizontal grid
@@ -356,7 +357,6 @@ public class BoardPanel extends JPanel {
                 g2.setStroke(new BasicStroke(1));
             }
             g2.drawLine(intX1, intY1 + (b * BLOCKSIZE), intX2, intY1 + (b * BLOCKSIZE)); // Horizontal gridlines
-            //g2.drawLine(0, b*intBlockSize, intXMax, b*intBlockSize); // Horizontal gridlines (board)
         }
     }
 
@@ -366,8 +366,8 @@ public class BoardPanel extends JPanel {
         this.intGrid = new int[intYMax / BLOCKSIZE][intXMax / BLOCKSIZE]; // Reset 10x20 array grid of board
         this.intEnemyGrid = new int[intYMax / BLOCKSIZE][intXMax / BLOCKSIZE]; // Reset 10x20 array grid of board (Enemy)
         this.blockHeld = null; // Reset held block
-        this.intPreviouslyRemovedLine = 0;
-        this.intGarbageLinesSent = 0;
+        this.intPreviouslyRemovedLine = 0; // Reset combo meter
+        this.intGarbageLinesSent = 0; // Reset total lines sent
         blockCurrent = Controller.generateBlock(); // Generate a new block
 
     }
