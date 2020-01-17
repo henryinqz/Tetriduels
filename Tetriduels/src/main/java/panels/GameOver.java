@@ -59,7 +59,7 @@ public class GameOver implements ActionListener{
         Graphics2D g2 = (Graphics2D) g; // Use Graphics2D instead of regular Graphics
         super.paintComponent(g2); // Clear previous drawings (Windows only); super JPanel (original) paintComponent method
 
-        g2.drawImage(Utility.loadImage(new File("assets/images/blank.png")), 0, 0, null); // Draw splash screen picture
+        g2.drawImage(Utility.loadImage(new File("Tetriduels/assets/images/blank.png")), 0, 0, null); // Draw splash screen picture
         g2.setColor(Color.WHITE);
         g2.setFont(Utility.loadFont("zorque"));
         Utility.setFontSize(g2,90);

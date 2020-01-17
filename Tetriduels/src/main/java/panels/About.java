@@ -42,7 +42,7 @@ public class About implements ActionListener {
         this.aboutPanel.setPreferredSize(new Dimension(GUI.FRAME_WIDTH,GUI.FRAME_HEIGHT));
         this.aboutPanel.setLayout(null);
 
-        this.butMenu.setBounds(460,650,360,50);
+        this.butMenu.setBounds(460,600,360,100);
         this.butMenu.setFont(Utility.loadFont("zorque"));
         Utility.setFontSize(this.butMenu,36);
         this.butMenu.setBackground(Color.BLACK);
@@ -51,11 +51,11 @@ public class About implements ActionListener {
         this.aboutPanel.add(butMenu);
         this.aboutPanel.add(butMenu);
 
-        this.butGitHubLink.setBounds(460,590,360,50);
+        this.butGitHubLink.setBounds(460,30,360,50);
         this.butGitHubLink.setFont(Utility.loadFont("zorque"));
         this.butGitHubLink.setForeground(Color.WHITE);
         this.butGitHubLink.setBackground(Color.BLACK);
-        Utility.setFontSize(this.butGitHubLink,36);
+        Utility.setFontSize(this.butGitHubLink,35);
         this.butGitHubLink.addActionListener(this);
         this.aboutPanel.add(this.butGitHubLink);
 
