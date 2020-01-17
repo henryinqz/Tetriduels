@@ -40,7 +40,7 @@ public class Utility {
     public static Font loadFont(String strFontName) { // Load font into Font
         Font font = null; // initialize font object
         try {
-            font = Font.createFont(Font.PLAIN, new File("assets/font/"+strFontName+".ttf")); // Try to load font object w/ specified file path
+            font = Font.createFont(Font.PLAIN, new File("Tetriduels/assets/font/"+strFontName+".ttf")); // Try to load font object w/ specified file path
         } catch (Exception e) {
             e.printStackTrace();
         }
