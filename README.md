@@ -10,7 +10,7 @@ https://github.com/henryinqz/Tetriduels/
 4. Execute 'Tetriduels.jar'
 
 # Demo Video
-https://youtu.be/wVy78fO4ZpU
+[![Watch the demo](https://i.imgur.com/G6vRsiJ.png)](https://youtu.be/wVy78fO4ZpU)
 
 ## Authors
 - Henry Wong
