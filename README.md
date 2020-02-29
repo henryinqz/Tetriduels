@@ -9,6 +9,9 @@ https://github.com/henryinqz/Tetriduels/
 3. Ensure you have Java Runtime installed (https://java.com/en/download/)
 4. Execute 'Tetriduels.jar'
 
+# Demo Video
+https://youtu.be/wVy78fO4ZpU
+
 ## Authors
 - Henry Wong
 - Zuhair Siddiqi
