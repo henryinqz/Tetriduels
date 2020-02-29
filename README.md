@@ -1,7 +1,7 @@
 # Tetriduels
-Final CPT multiplayer project for ICS4U1.
+“Tetriduels” is a recreation of Tetris that features online multiplayer functionality. Players are able to host or join servers to battle each other. (ICS4U1 Final CPT)
 
-https://github.com/henryinqz/Tetriduels
+https://github.com/henryinqz/Tetriduels/
 
 ## Instructions
 1. Download 'Tetriduels.zip'
