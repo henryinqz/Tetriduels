@@ -9,7 +9,7 @@ https://github.com/henryinqz/Tetriduels/
 3. Ensure you have Java Runtime installed (https://java.com/en/download/)
 4. Execute 'Tetriduels.jar'
 
-# Click to watch a demo video
+## Watch the demo
 [![Watch the demo](https://i.imgur.com/sZCzrO6.png)](https://youtu.be/wVy78fO4ZpU)
 
 ## Authors
